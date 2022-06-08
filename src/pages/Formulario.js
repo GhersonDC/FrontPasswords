@@ -89,7 +89,7 @@ export const Formulario = () => {
     setpackaging(await getSelects(url,'type_packaging'));
     setEquipment(await getSelects(url,'type_equipment'));
   }
-  
+
 
   async function postData() {
     await fetch(url+'clients/', {
@@ -111,6 +111,7 @@ export const Formulario = () => {
           return Promise.reject("Error: Complete Correctly");
         } else if (response.ok) {
           message.success("Instruction Letter Created");
+          resetDatos();
           getData();
           setIsModalVisible(false);
         }
@@ -118,6 +119,13 @@ export const Formulario = () => {
       .catch((error) => {
         message.error(error);
       });
+  }
+
+  const resetDatos= () =>{
+    setDatos({customerId: cookies.get('clientid'),
+    address: cookies.get('address'),
+    rfc: cookies.get('rfc'),
+    email: cookies.get('email')});
   }
 
   //
@@ -172,11 +180,14 @@ export const Formulario = () => {
       dataIndex: "id",
       key: "1",
       fixed: 'left',
+      defaultSortOrder: 'descend',
+      sorter: (a, b) => a.id - b.id,
     },
     {
       title: "Service Type",
-      dataIndex: "name",
+      dataIndex: "type_service",
       key: "2",
+      width:'15%'
     },
     {
       title: "Reference",
@@ -238,6 +249,13 @@ export const Formulario = () => {
       dataIndex: "quantity",
       key: "14",
     },
+    {
+      title: "Date",
+      dataIndex: "createdAt",
+      key: "15",
+      fixed: 'right',
+      width:'10%'
+    },
   ];
   return (
     <div className="form-menu">
@@ -266,7 +284,7 @@ export const Formulario = () => {
           />
         </div>
         <div className="table-div">
-          <Table key='table1' rowKey={(record) => record.id} loading={loading} dataSource={data} columns={columns} scroll={{ x: 1500 }}/>
+          <Table key='table1' rowKey={(record) => record.id} loading={loading} dataSource={data} columns={columns} scroll={{ x: 2000, y:300 }} />
         </div>
         {/* Formulario Modal */}
         <Modal
@@ -313,10 +331,11 @@ export const Formulario = () => {
                 </label>
                 <label>
                   Reference<p>*</p>
-                  <Input
+                  <InputNumber
+                    className="InputNumber"
                     placeholder="Reference"
                     name="reference"
-                    onChange={handleInputChange}
+                    onChange={(event)=>handleChange(event,'reference')}
                   />
                 </label>
                 <label>
@@ -370,7 +389,7 @@ export const Formulario = () => {
                     </Select>
                 </label>
                 <label>
-                  POL<p>*</p>
+                Port of Load<p>*</p>
                   <Select
                   showSearch
                   placeholder="Select Port of Load"
@@ -384,7 +403,7 @@ export const Formulario = () => {
                   </Select>
                 </label>
                 <label>
-                  POD<p>*</p>
+                Port of discharge<p>*</p>
                   <Select
                   showSearch
                   optionFilterProp="children"
@@ -469,11 +488,12 @@ export const Formulario = () => {
                   />
                 </label>
                 <label>
-                  CBM<p>*</p>
-                  <Input
-                    placeholder="CBM"
-                    name="cbm"
-                    onChange={handleInputChange}
+                  Cubic Meters<p>*</p>
+                  <InputNumber
+                    placeholder="Cubic Meters"
+                    name="length"
+                    onChange={(event)=>handleChange(event,'cbm')}
+                    className='InputNumber'
                   />
                 </label>
                 <label>
@@ -504,7 +524,7 @@ export const Formulario = () => {
                   />
                 </label>
                 <label>
-                  Quantity<p>*</p>
+                  Quantity
                   <InputNumber
                     placeholder="Quantity"
                     name="quantity"
