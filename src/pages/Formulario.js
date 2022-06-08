@@ -47,7 +47,7 @@ export const Formulario = () => {
     quantity: 0,
     length: 0,
     width: 0,
-    heigth: 0,
+    height: 0,
     special_description: "",
     type_equipment: 0,
   });
@@ -89,20 +89,20 @@ export const Formulario = () => {
     setpackaging(await getSelects(url,'type_packaging'));
     setEquipment(await getSelects(url,'type_equipment'));
   }
-  // Ejemplo implementando el metodo POST:
+  
+
   async function postData() {
-    // Opciones por defecto estan marcadas con un *
     await fetch(url+'clients/', {
-      method: "POST", // *GET, POST, PUT, DELETE, etc.
-      cache: "no-cache", // *default, no-cache, reload, force-cache, only-if-cached
-      credentials: "same-origin", // include, *same-origin, omit
+      method: "POST", 
+      cache: "no-cache", 
+      credentials: "same-origin", 
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      redirect: "follow", // manual, *follow, error
-      referrerPolicy: "no-referrer", // no-referrer, *no-referrer-when-downgrade, origin, origin-when-cross-origin, same-origin, strict-origin, strict-origin-when-cross-origin, unsafe-url
-      body: JSON.stringify(datos), // body data type must match "Content-Type" header
+      redirect: "follow", 
+      referrerPolicy: "no-referrer", 
+      body: JSON.stringify(datos), 
     })
       .then(async (response) => {
         // check for error response
@@ -152,7 +152,6 @@ export const Formulario = () => {
 
   //handles para datos
   const handleInputChange = (e) => {
-    console.log(e)
     setDatos({
       ...datos,
       [e.target.name]: e.target.value,
@@ -226,7 +225,7 @@ export const Formulario = () => {
     },
     {
       title: "Height",
-      dataIndex: "weight",
+      dataIndex: "height",
       key: "12",
     },
     {
@@ -296,7 +295,7 @@ export const Formulario = () => {
             <TabPane tab="Tipo de Servicio" key="5">
               <Space direction="vertical" style={{ display:'flex' }} size='middle'>
                 <label>
-                  Service Type
+                  Service Type<p>*</p>
                   <Select
                   showSearch
                     placeholder="Select Service Type"
@@ -313,7 +312,7 @@ export const Formulario = () => {
                   </Select>
                 </label>
                 <label>
-                  Reference
+                  Reference<p>*</p>
                   <Input
                     placeholder="Reference"
                     name="reference"
@@ -321,7 +320,7 @@ export const Formulario = () => {
                   />
                 </label>
                 <label>
-                  Incoterm
+                  Incoterm<p>*</p>
                   <Select
                   showSearch
                     placeholder="Select Incoterm"
@@ -343,7 +342,7 @@ export const Formulario = () => {
                   </Select>
                 </label>
                 <label>
-                  Type equipment
+                  Type equipment<p>*</p>
                   <Select showSearch
                   optionFilterProp="children"
                   placeholder="Type Equipment"
@@ -357,7 +356,7 @@ export const Formulario = () => {
                     </Select>
                 </label>
                 <label>
-                  Pickup Address
+                  Pickup Address<p>*</p>
                   <Select showSearch
                   optionFilterProp="children"
                   placeholder="Pickup Address"
@@ -371,7 +370,7 @@ export const Formulario = () => {
                     </Select>
                 </label>
                 <label>
-                  POL
+                  POL<p>*</p>
                   <Select
                   showSearch
                   placeholder="Select Port of Load"
@@ -385,7 +384,7 @@ export const Formulario = () => {
                   </Select>
                 </label>
                 <label>
-                  POD
+                  POD<p>*</p>
                   <Select
                   showSearch
                   optionFilterProp="children"
@@ -400,7 +399,7 @@ export const Formulario = () => {
                   </Select>
                 </label>
                 <label>
-                  Delivery Address
+                  Delivery Address<p>*</p>
                   <Select showSearch
                   optionFilterProp="children"
                   placeholder="Delivery Address"
@@ -419,7 +418,7 @@ export const Formulario = () => {
             <TabPane tab="Mercancia" key="merchandise">
               <Space direction="vertical" style={{ width: "100%" }}>
                 <label>
-                  Description
+                  Description<p>*</p>
                   <Input
                     placeholder="Description"
                     name="description"
@@ -427,17 +426,18 @@ export const Formulario = () => {
                   />
                 </label>
                 <label>
-                  Tariff Fraction
+                  Tariff Fraction<p>*</p>
                   <InputNumber
                     className="InputNumber"
-                    placeholder="Tariff Fraction"
+                    placeholder="Tariff Fraction must be greater than 8"
                     name="tariff"
                     onChange={(event)=>handleChange(event,'tariff')}
+                    maxLength={10}
                   />
+                  
                 </label>
                 <label>
-                  Packaging Type
-                  Pickup Address
+                  Packaging Type<p>*</p>
                   <Select showSearch
                   optionFilterProp="children"
                   placeholder="Type Packaging"
@@ -451,7 +451,7 @@ export const Formulario = () => {
                     </Select>
                 </label>
                 <label>
-                  Volume
+                  Volume<p>*</p>
                   <InputNumber
                     placeholder="Volume"
                     name="volume"
@@ -460,7 +460,7 @@ export const Formulario = () => {
                   />
                 </label>
                 <label>
-                  Weight
+                  Weight<p>*</p>
                   <InputNumber
                     placeholder="Net Weight"
                     name="weight"
@@ -469,7 +469,7 @@ export const Formulario = () => {
                   />
                 </label>
                 <label>
-                  CBM
+                  CBM<p>*</p>
                   <Input
                     placeholder="CBM"
                     name="cbm"
@@ -477,16 +477,16 @@ export const Formulario = () => {
                   />
                 </label>
                 <label>
-                  Lenght
+                  Length<p>*</p>
                   <InputNumber
-                    placeholder="Lenght"
-                    name="lenght"
-                    onChange={(event)=>handleChange(event,'lenght')}
+                    placeholder="Length"
+                    name="length"
+                    onChange={(event)=>handleChange(event,'length')}
                     className='InputNumber'
                   />
                 </label>
                 <label>
-                  Width
+                  Width<p>*</p>
                   <InputNumber
                     placeholder="Width"
                     name="width"
@@ -495,7 +495,7 @@ export const Formulario = () => {
                   />
                 </label>
                 <label>
-                  Height
+                Height<p>*</p>
                   <InputNumber
                     placeholder="Height"
                     name="height"
@@ -504,7 +504,7 @@ export const Formulario = () => {
                   />
                 </label>
                 <label>
-                  Quantity
+                  Quantity<p>*</p>
                   <InputNumber
                     placeholder="Quantity"
                     name="quantity"

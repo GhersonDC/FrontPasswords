@@ -60,3 +60,8 @@ border-radius: 7px !important;
 
 }
 
+p{
+  width: 10px;
+  display: inline;
+  color: red;
+}
