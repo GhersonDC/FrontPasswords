@@ -1,0 +1,60 @@
+build-docker:
+  image: docker:latest
+  stage: build-docker
+  variables:
+    NAMESPACE: ""
+    ENVIRONMENT: ""
+  tags:
+    - ec2
+    - local
+  before_script:
+    - if [ "$CI_COMMIT_REF_NAME" != "master" ]; then ENVIRONMENT="${CI_COMMIT_REF_NAME}-"; fi
+    - if [ "$CI_COMMIT_REF_NAME" = "master" ]; then IMAGE_TAG="master"; fi
+    - if [ "$CI_COMMIT_REF_NAME" = "qa" ]; then IMAGE_TAG="stable"; fi
+    - if [ "$CI_COMMIT_REF_NAME" = "dev" ]; then IMAGE_TAG="latest"; fi
+    - export
+  script:
+    - docker login -u "${CI_REGISTRY_USER}" -p "${CI_REGISTRY_USER}" "${CI_REGISTRY}"
+    - cat server.conf
+    - docker build -t ${IMAGE}:${IMAGE_TAG}.${CI_COMMIT_SHORT_SHA} . 
+    - docker push ${IMAGE}:${IMAGE_TAG}.${CI_COMMIT_SHORT_SHA}
+  artifacts:
+    paths:
+      - coverage/
+  allow_failure: false
+  only:
+    refs:
+      - master
+      - qa
+      - dev
+      - tags
+
+
+deploy k8s:
+  image: alpine/k8s:1.19.15
+  stage: deploy
+  tags:
+    - kubernetes
+    - cluster
+  before_script:
+    - mkdir ~/.kube/
+    - echo $KUBE_CONFIG_AWS | base64 -d > config
+    - mv config ~/.kube/
+    - if [ "$CI_COMMIT_REF_NAME" != "master" ]; then NAMESPACE="${NAMESPACE}-${CI_COMMIT_REF_NAME}"; fi
+    - if [ "$CI_COMMIT_REF_NAME" = "master" ]; then IMAGE_TAG="master"; fi
+    - if [ "$CI_COMMIT_REF_NAME" = "qa" ]; then IMAGE_TAG="stable"; fi
+    - if [ "$CI_COMMIT_REF_NAME" = "dev" ]; then IMAGE_TAG="latest"; fi
+  script:
+    # - curl ${DEPLOYMENT_YML} >> deploy.yml
+    - wget -O deploy.yml ${DEPLOYMENT_YML}
+    - sed -i "s,<SERVICE_NAME>,${SERVICE_NAME},g" deploy.yml
+    - sed -i "s,<NAMESPACE>,${NAMESPACE},g" deploy.yml
+    - sed -i "s,<SERVICE_ENV>,${SERVICE_ENV},g" deploy.yml
+    - sed -i "s,<IMAGE>,${IMAGE}:${IMAGE_TAG}.${CI_COMMIT_SHORT_SHA},g" deploy.yml
+    - cat deploy.yml
+    - kubectl apply -f deploy.yml
+  only:
+    refs:
+      - master
+      - qa
+      - dev
