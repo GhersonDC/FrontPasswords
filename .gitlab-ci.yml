@@ -1,3 +1,40 @@
+variables:
+  SONAR_HOST_URL: "${SONAR_HOST_URL}"
+  SONAR_TOKEN: "${SONAR_TOKEN}"
+  SONAR_USER_HOME: "${CI_PROJECT_DIR}/.sonar"
+  PROJECT_KEY: "${CI_PROJECT_NAME}:${CI_COMMIT_REF_NAME}"
+  GIT_DEPTH: "0"
+  IMAGE: "${REGISTRY}${CI_PROJECT_PATH}"
+  IMAGEIO: "${REGISTRY_IO}${CI_PROJECT_PATH}"
+  SERVICE_NAME: "${CI_SERVICE_NAME}"
+  IMAGE_TAG: ""
+  RELEASE: ""
+  SERVICE_PORT: 3000
+  CONN_USER: ${TEST_DB_USER}
+  CONN_PASSWORD: ${TEST_DB_PASSWORD}
+  CONN_HOST: ${TEST_DB_HOST}
+  CONN_DATABASE: ${TEST_DB_NAME}
+  CONN_PORT: ${TEST_DB_PORT}
+
+stages:
+  - build-docker
+  - deploy
+
+cache:
+  key: ${CI_COMMIT_REF_SLUG}
+  paths:
+    - .cache/*
+    - node_modules
+    - .sonar/cache
+    - .npm
+
+before_script:
+  - export
+  - if [ "$CI_COMMIT_REF_NAME" != "master" ]; then NAMESPACE="${NAMESPACE}-${CI_COMMIT_REF_NAME}"; fi
+  - if [ "$CI_COMMIT_REF_NAME" = "master" ]; then IMAGE_TAG="master"; fi
+  - if [ "$CI_COMMIT_REF_NAME" = "qa" ]; then IMAGE_TAG="stable"; fi
+  - if [ "$CI_COMMIT_REF_NAME" = "dev" ]; then IMAGE_TAG="latest"; fi
+
 build-docker:
   image: docker:latest
   stage: build-docker
@@ -45,14 +82,12 @@ deploy k8s:
     - if [ "$CI_COMMIT_REF_NAME" = "qa" ]; then IMAGE_TAG="stable"; fi
     - if [ "$CI_COMMIT_REF_NAME" = "dev" ]; then IMAGE_TAG="latest"; fi
   script:
-    # - curl ${DEPLOYMENT_YML} >> deploy.yml
-    - wget -O deploy.yml ${DEPLOYMENT_YML}
-    - sed -i "s,<SERVICE_NAME>,${SERVICE_NAME},g" deploy.yml
-    - sed -i "s,<NAMESPACE>,${NAMESPACE},g" deploy.yml
-    - sed -i "s,<SERVICE_ENV>,${SERVICE_ENV},g" deploy.yml
-    - sed -i "s,<IMAGE>,${IMAGE}:${IMAGE_TAG}.${CI_COMMIT_SHORT_SHA},g" deploy.yml
-    - cat deploy.yml
-    - kubectl apply -f deploy.yml
+    - sed -i "s,<SERVICE_NAME>,${SERVICE_NAME},g" .k8s/deployment.yml
+    - sed -i "s,<NAMESPACE>,${NAMESPACE},g" .k8s/deployment.yml
+    - sed -i "s,<SERVICE_ENV>,${SERVICE_ENV},g" .k8s/deployment.yml
+    - sed -i "s,<IMAGE>,${IMAGE}:${IMAGE_TAG}.${CI_COMMIT_SHORT_SHA},g" .k8s/deployment.yml
+    - cat .k8s/deployment.yml
+    - kubectl apply -f .k8s/deployment.yml
   only:
     refs:
       - master
