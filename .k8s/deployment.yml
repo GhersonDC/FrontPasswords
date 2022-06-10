@@ -18,8 +18,5 @@ spec:
       containers:
       - image: <IMAGE>
         name: <SERVICE_NAME>
-        envFrom:
-          - configMapRef:
-              name: <SERVICE_ENV>
         ports:
           - containerPort: 80
