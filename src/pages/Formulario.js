@@ -56,7 +56,8 @@ export const Formulario = () => {
   const [packaging, setpackaging] = useState([]);
   const [equipment, setEquipment] = useState([]);
 
-  const url = "http://127.0.0.1:8000/api/";
+  const API_HOST = process.env.REACT_APP_API_HOST || "http://localhost:8000";
+  const url = `${API_HOST}/api/`;
   const token = cookies.get("token");
 
   //Fetch para getAll del api
