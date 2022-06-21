@@ -5,6 +5,7 @@ import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import logo from '../images/favicon.ico'
 
 const cookies = new Cookies();
+const API_HOST = process.env.REACT_APP_API_HOST || "http://localhost:8000";
 export const Login = () => {
   const [inputs, setinputs] = useState({
     email: "",
@@ -12,7 +13,7 @@ export const Login = () => {
   });
   const [loading, setLoading] = useState(false);
 
-  const url = `http://127.0.0.1:8000/api/login?email=${inputs.email}&password=${inputs.password}`;
+  const url = `${API_HOST}/api/login?email=${inputs.email}&password=${inputs.password}`;
   useEffect(() => {
     if (cookies.get("name")) {
       window.location.href = "./menu";
