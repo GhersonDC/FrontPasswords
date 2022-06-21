@@ -30,10 +30,10 @@ export const Formulario = () => {
     address: cookies.get('address'),
     rfc: cookies.get('rfc'),
     email: cookies.get('email'),
-    phone_number: "",
+    phone_number: cookies.get('telefono'),
     type_service: 0,
     reference: "",
-    incoterm: "",
+    incoterm: 0,
     pickup_address: "",
     pol: 0,
     pod: 0,
@@ -45,7 +45,7 @@ export const Formulario = () => {
     weight: 0,
     cbm: "",
     quantity: 0,
-    length: 0,
+    lenght: 0,
     width: 0,
     height: 0,
     special_description: "",
@@ -248,13 +248,6 @@ export const Formulario = () => {
       title: "Quantity",
       dataIndex: "quantity",
       key: "14",
-    },
-    {
-      title: "Date",
-      dataIndex: "createdAt",
-      key: "15",
-      fixed: 'right',
-      width:'10%'
     },
   ];
   return (
@@ -536,7 +529,7 @@ export const Formulario = () => {
             </TabPane>
 
             <TabPane tab="Instrucciones Especiales" key="special_info">
-              <TextArea rows={7} placeholder="Special Instructions" />
+              <TextArea rows={7} placeholder="Special Instructions" name="special_description" onChange={handleInputChange} />
             </TabPane>
           </Tabs>
         </Modal>

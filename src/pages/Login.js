@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { Form, Input, Button, message } from "antd";
 import Cookies from "universal-cookie";
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
+import logo from '../images/favicon.ico'
 
 const cookies = new Cookies();
 export const Login = () => {
@@ -54,7 +55,7 @@ export const Login = () => {
   return (
     <div className="total-login">
         <div className="text">
-            <h1>G-Clients</h1>
+            <h1><img src={logo}  alt="icon g-global"/>G-Clients</h1>
             <h4>Welcome Back! Please sign in to your Account</h4>
         </div>
       <div className="form-login">
@@ -62,7 +63,7 @@ export const Login = () => {
         layout="vertical"
           name="G-Client"
           wrapperCol={{
-            span: 20,
+            span: 18,
           }}
           initialValues={{
             remember: true,
