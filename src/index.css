@@ -110,6 +110,11 @@ p {
   display: inline;
   color: red;
 }
+.login-footer-label{
+  width: 50vw;
+  display: flex;
+  justify-content: center;
+}
 
 @media only screen and (max-width: 600px) {
 

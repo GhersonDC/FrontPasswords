@@ -217,7 +217,7 @@ export const Formulario = () => {
       key: "7",
     },
     {
-      title: "Tariff",
+      title: "HS Code",
       dataIndex: "tariff",
       key: "8",
     },

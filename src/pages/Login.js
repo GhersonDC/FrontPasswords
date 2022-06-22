@@ -115,11 +115,12 @@ export const Login = () => {
             <Button 
             className="boton"
             type="primary" htmlType="submit" loading={loading}>
-              Submit
+              Log In
             </Button>
           </Form.Item>
         </Form>
       </div>
+      <span class="login-footer-label">Made with <span role="img" aria-label="heart-emoji">❤️</span> by INN</span>
     </div>
   );
 };
