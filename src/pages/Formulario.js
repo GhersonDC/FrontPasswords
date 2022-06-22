@@ -290,7 +290,7 @@ export const Formulario = () => {
           onCancel={handleCancel}
           footer={[
             <Button key="back" onClick={handleCancel}>
-              Return
+              close
             </Button>,
             <Button
               key="submit"
