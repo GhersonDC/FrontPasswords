@@ -20,6 +20,7 @@ const { TabPane } = Tabs;
 const { TextArea } = Input;
 const { Header, Content } = Layout;
 const { Option } = Select;
+const API_HOST = process.env.REACT_APP_API_HOST || "http://localhost:8000";
 
 export const Formulario = () => {
   const [isModalVisible, setIsModalVisible] = useState(false); //use State para el modal
@@ -56,8 +57,8 @@ export const Formulario = () => {
   const [packaging, setpackaging] = useState([]);
   const [equipment, setEquipment] = useState([]);
 
-  const API_HOST = process.env.REACT_APP_API_HOST || "http://localhost:8000";
-  const url = `${API_HOST}/api/}`;
+  
+  const url = `${API_HOST}/api/`;
   const token = cookies.get("token");
 
   //Fetch para getAll del api
@@ -93,7 +94,7 @@ export const Formulario = () => {
 
 
   async function postData() {
-    await fetch(url+'clients/', {
+    await fetch(url+'clients', {
       method: "POST", 
       cache: "no-cache", 
       credentials: "same-origin", 
@@ -328,7 +329,7 @@ export const Formulario = () => {
                   <Input
                     placeholder="Reference"
                     name="reference"
-                    onChange={(event)=>handleChange(event,'reference')}
+                    onChange={handleInputChange}
                   />
                 </label>
                 <label>
