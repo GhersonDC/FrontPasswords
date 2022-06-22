@@ -166,6 +166,7 @@ export const Formulario = () => {
       ...datos,
       [e.target.name]: e.target.value,
     });
+    console.log(datos)
   };
   const handleChange = (value, name) => {
     setDatos({
@@ -439,7 +440,7 @@ export const Formulario = () => {
                   />
                 </label>
                 <label>
-                  Tariff Fraction<p>*</p>
+                  HSCODE<p>*</p>
                   <InputNumber
                     className="InputNumber"
                     placeholder="Tariff Fraction must be greater than 8"
@@ -485,7 +486,7 @@ export const Formulario = () => {
                   Cubic Meters<p>*</p>
                   <InputNumber
                     placeholder="Cubic Meters"
-                    name="length"
+                    name="cbm"
                     onChange={(event)=>handleChange(event,'cbm')}
                     className='InputNumber'
                   />
@@ -493,9 +494,9 @@ export const Formulario = () => {
                 <label>
                   Length<p>*</p>
                   <InputNumber
-                    placeholder="Length"
-                    name="length"
-                    onChange={(event)=>handleChange(event,'length')}
+                    placeholder="lenght"
+                    name="lenght"
+                    onChange={(event)=>handleChange(event,'lenght')}
                     className='InputNumber'
                   />
                 </label>
