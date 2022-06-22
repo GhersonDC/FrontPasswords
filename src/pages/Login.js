@@ -34,7 +34,7 @@ export const Login = () => {
       cookies.set("rfc", data.rfc, { path: "/" });
       cookies.set("address", data.direccion, { path: "/" });
       cookies.set("telefono", data.telefono, { path: "/" });
-      cookies.set('email',inputs.email,{ path: "/" });
+      cookies.set('email', inputs.email, { path: "/" });
       window.location.href = "./menu";
     } else {
       message.error("User or password incorrect");
@@ -42,8 +42,8 @@ export const Login = () => {
   };
 
   const onFinishFailed = () => {
-    message.error('Input Username and password');
-    
+    message.error('Try again. Input email and password correctly.');
+
   };
 
   const handleInputChange = (e) => {
@@ -55,17 +55,18 @@ export const Login = () => {
 
   return (
     <div className="total-login">
-        <div className="text">
-            <h1><img src={logo}  alt="icon g-global"/>G-Clients</h1>
-            <h4>Welcome Back! Please sign in to your Account</h4>
+      <div>
+        <div className="main_root_logo">
+          <img src={logo} alt="icon g-global" />
+          <h1>G-Clients</h1>
         </div>
+        <h4 className="main_root_text">Welcome Back! <br></br>Please sign in to your Account</h4>
+      </div>
       <div className="form-login">
         <Form
-        layout="vertical"
           name="G-Client"
-          wrapperCol={{
-            span: 18,
-          }}
+          labelAlign="left"
+          layout="vertical"
           initialValues={{
             remember: true,
           }}
@@ -79,15 +80,17 @@ export const Login = () => {
             rules={[
               {
                 type: "email",
-                message: "The input is not valid E-mail!",
+                message: "The email you entered isn’t connected to an account.",
               },
               {
                 required: true,
-                message: "Please input your username!",
+                message: "Please input your username",
               },
             ]}
           >
-            <Input name="email" prefix={<UserOutlined className="site-form-item-icon" />} onChange={handleInputChange} />
+            <Input 
+            className="input_root"
+            name="email" prefix={<UserOutlined className="site-form-item-icon" />} onChange={handleInputChange} />
           </Form.Item>
 
           <Form.Item
@@ -96,7 +99,7 @@ export const Login = () => {
             rules={[
               {
                 required: true,
-                message: "Please input your password!",
+                message: "The password you’ve entered is incorrect.",
               },
             ]}
           >
@@ -109,7 +112,9 @@ export const Login = () => {
               span: 16,
             }}
           >
-            <Button type="primary" htmlType="submit" loading={loading}>
+            <Button 
+            className="boton"
+            type="primary" htmlType="submit" loading={loading}>
               Submit
             </Button>
           </Form.Item>

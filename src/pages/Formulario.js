@@ -57,7 +57,7 @@ export const Formulario = () => {
   const [equipment, setEquipment] = useState([]);
 
   const API_HOST = process.env.REACT_APP_API_HOST || "http://localhost:8000";
-  const url = `${API_HOST}/api/`;
+  const url = `${API_HOST}/api/}`;
   const token = cookies.get("token");
 
   //Fetch para getAll del api
@@ -325,8 +325,7 @@ export const Formulario = () => {
                 </label>
                 <label>
                   Reference<p>*</p>
-                  <InputNumber
-                    className="InputNumber"
+                  <Input
                     placeholder="Reference"
                     name="reference"
                     onChange={(event)=>handleChange(event,'reference')}
