@@ -1,22 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: <SERVICE_NAME>
-  namespace: <NAMESPACE>
+  name: tms-client
+  namespace: tms
   labels:
-    app: <SERVICE_NAME>
+    app: tms-client
 spec:
-  revisionHistoryLimit: 1
   selector:
     matchLabels:
-      app: <SERVICE_NAME>
+      app: tms-client
   template:
     metadata:
       labels:
-        app: <SERVICE_NAME>
+        app: tms-client
     spec:
       containers:
       - image: <IMAGE>
-        name: <SERVICE_NAME>
+        name: tms-client
         ports:
-          - containerPort: 80
+        - containerPort: 80
