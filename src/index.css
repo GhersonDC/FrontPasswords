@@ -6,16 +6,20 @@ body {
   --background-page-main: #FFF;
   font-size: 12px;
 }
-#root{
+
+#root {
   background-color: var(--background-blue-g-global);
 }
+
 .site-page-header {
   border: 1px solid rgb(235, 237, 240);
-  margin: 20px;
-  padding: 40px;
-  background-color: var(--background-page-main);
+  /* margin: 20px; */
+  /* padding-top: 1rem; */
+  /* background-color: red; */
+  /* background-color: var(--background-page-main); */
 }
-.main_root_logo{
+
+.main_root_logo {
   margin: auto;
   align-items: flex-start;
   display: flex;
@@ -24,16 +28,19 @@ body {
   justify-content: space-between;
   justify-content: center;
 }
-.main_root_logo > h1{
+
+.main_root_logo>h1 {
   margin: -.5rem;
   padding-left: 1rem;
 }
-.ant-form-item-control-input-content > button{
+
+.ant-form-item-control-input-content>button {
   padding-top: .2rem;
   justify-content: center;
   width: 13vw;
 }
-.main_root_text{
+
+.main_root_text {
   padding-top: 1rem;
   justify-content: center;
   width: 50vw;
@@ -41,11 +48,12 @@ body {
   font-size: 1.5rem;
   text-align: center;
 }
+
 .total-login {
   background-color: var(--background-login);
-  width: 50vw;
-  height: 100vh;
-  padding-top: 10%;
+  width: 50%;
+  height: 90vh;
+  padding-top: 10vh;
   min-height: 100vh;
   overflow-y: hidden;
 }
@@ -54,36 +62,42 @@ body {
   margin: 2rem;
   align-items: center;
   justify-content: center;
-  padding: 3rem;
+  padding: 3rem 2rem 0rem;
   overflow-y: hidden;
   font-weight: 500;
   background-color: var(--background-page-main);
   border-radius: 8px;
-  box-shadow:   0 2px 4px rgba(0, 0, 0, .1), 0 8px 16px rgba(0, 0, 0, .1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, .1), 0 8px 16px rgba(0, 0, 0, .1);
 }
+
 body {
   background-color: var(--background-page-main);
 }
-.boton{
+
+.boton {
   margin: auto;
   justify-content: center;
 }
 
 
 .form-menu {
-  min-height: 50vh;
+  min-height: auto;
+  height: 100vh;
   /* padding: 5rem; */
   background-color: var(--background-login);
 }
 
 .table-div {
   border: 1px solid rgb(235, 237, 240);
-  margin: 20px;
-  padding: 40px;
+  margin: auto;
+  width: auto;
+  height: 80vh;
   font-size: 30px;
-  background-color: var(--background-page-main);
+  background-color: var(--background-page-main)
 }
-
+.ant-pagination{
+  justify-content: center;
+}
 h2 {
   color: #ffffff;
   font-family: 'Raleway', sans-serif;
@@ -110,7 +124,8 @@ p {
   display: inline;
   color: red;
 }
-.login-footer-label{
+
+.login-footer-label {
   width: 50vw;
   display: flex;
   justify-content: center;
@@ -118,18 +133,19 @@ p {
 
 @media only screen and (max-width: 600px) {
 
-  body { 
-     font-size: 10px;
+  body {
+    font-size: 10px;
   }
+
   .total-login {
     background-color: var(--background-login);
     width: 100vw;
-    height: 100vh;
-    padding-top: .5rem;
+    height: 50vh;
+    padding-top: 1vh;
   }
 
-  .main_root_text{
-    padding-top: 1rem;
+  .main_root_text {
+    padding-top: .5rem;
     justify-content: center;
     width: 100vw;
     height: auto;
@@ -137,17 +153,29 @@ p {
     text-align: center;
   }
 
-  .ant-form-item-control-input-content > button{
+  .ant-form-item-control-input-content>button {
     padding-top: .2rem;
     justify-content: center;
     width: auto;
   }
+  .table-div {
+    border: 1px solid rgb(235, 237, 240);
+    margin: auto;
+    width: 95vw;
+    height: auto;
+    font-size: 20px;
+    background-color: var(--background-page-main)
+  }
+}
+
+.log {
+  display: flex;
 }
 
 @media only screen and (max-width: 1200px) {
 
-  body { 
-     font-size: 12px; 
+  body {
+    font-size: 12px;
+    background-color: #3B7CDD;
   }
-
 }

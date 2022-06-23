@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState , useRef} from "react";
 import {
   PageHeader,
   Button,
@@ -12,7 +12,8 @@ import {
   message,
   Select,
 } from "antd";
-import { LogoutOutlined } from "@ant-design/icons";
+import { LogoutOutlined,SearchOutlined} from "@ant-design/icons";
+import Highlighter from 'react-highlight-words';
 import Cookies from "universal-cookie";
 
 const cookies = new Cookies();
@@ -56,6 +57,9 @@ export const Formulario = () => {
   const [location, setlocation] = useState([]);
   const [packaging, setpackaging] = useState([]);
   const [equipment, setEquipment] = useState([]);
+  const [searchText, setSearchText] = useState('');
+  const [searchedColumn, setSearchedColumn] = useState('');
+  const searchInput = useRef(null);
 
   
   const url = `${API_HOST}/api/`;
@@ -174,7 +178,102 @@ export const Formulario = () => {
       [name]: value,
     });
   };
-  
+  //Buscador filtrado
+  const getColumnSearchProps = (dataIndex) => ({
+    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+      <div
+        style={{
+          padding: 8,
+        }}
+      >
+        <Input
+          ref={searchInput}
+          placeholder={`Search ${dataIndex}`}
+          value={selectedKeys[0]}
+          onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+          onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
+          style={{
+            marginBottom: 8,
+            display: 'block',
+          }}
+        />
+        <Space>
+          <Button
+            type="primary"
+            onClick={() => handleSearch(selectedKeys, confirm, dataIndex)}
+            icon={<SearchOutlined />}
+            size="small"
+            style={{
+              width: 90,
+            }}
+          >
+            Search
+          </Button>
+          <Button
+            onClick={() => clearFilters && handleReset(clearFilters)}
+            size="small"
+            style={{
+              width: 90,
+            }}
+          >
+            Reset
+          </Button>
+          <Button
+            type="link"
+            size="small"
+            onClick={() => {
+              confirm({
+                closeDropdown: false,
+              });
+              setSearchText(selectedKeys[0]);
+              setSearchedColumn(dataIndex);
+            }}
+          >
+            Filter
+          </Button>
+        </Space>
+      </div>
+    ),
+    filterIcon: (filtered) => (
+      <SearchOutlined
+        style={{
+          color: filtered ? '#1890ff' : undefined,
+        }}
+      />
+    ),
+    onFilter: (value, record) =>
+      record[dataIndex].toString().toLowerCase().includes(value.toLowerCase()),
+    onFilterDropdownVisibleChange: (visible) => {
+      if (visible) {
+        setTimeout(() => searchInput.current?.select(), 100);
+      }
+    },
+    render: (text) =>
+      searchedColumn === dataIndex ? (
+        <Highlighter
+          highlightStyle={{
+            backgroundColor: '#ffc069',
+            padding: 0,
+          }}
+          searchWords={[searchText]}
+          autoEscape
+          textToHighlight={text ? text.toString() : ''}
+        />
+      ) : (
+        text
+      ),
+  });
+
+  const handleSearch = (selectedKeys, confirm, dataIndex) => {
+    confirm();
+    setSearchText(selectedKeys[0]);
+    setSearchedColumn(dataIndex);
+  };
+
+  const handleReset = (clearFilters) => {
+    clearFilters();
+    setSearchText('');
+  };
 
   //Columnas que se mostraran en la tabla
   const columns = [
@@ -182,50 +281,58 @@ export const Formulario = () => {
       title: "Id",
       dataIndex: "id",
       key: "1",
-      fixed: 'left',
       defaultSortOrder: 'descend',
       sorter: (a, b) => a.id - b.id,
+        ...getColumnSearchProps('id')
     },
     {
       title: "Service Type",
       dataIndex: "type_service",
       key: "2",
-      width:'15%'
+      width:'15%',
+      ...getColumnSearchProps('type_service')
     },
     {
       title: "Reference",
       dataIndex: "reference",
       key: "3",
+      ...getColumnSearchProps('reference')
     },
     {
       title: "Incoterm",
       dataIndex: "incoterm",
       key: "4",
+      ...getColumnSearchProps('incoterm')
     },
     {
       title: "Type Equipment",
       dataIndex: "type_equipment",
       key: "5",
+      ...getColumnSearchProps('type_equipment')
     },
     {
       title: "POL",
       dataIndex: "pol",
       key: "6",
+      ...getColumnSearchProps('pol')
     },
     {
       title: "POD",
       dataIndex: "pod",
       key: "7",
+      ...getColumnSearchProps('pod')
     },
     {
       title: "HS Code",
       dataIndex: "tariff",
       key: "8",
+      ...getColumnSearchProps('tariff')
     },
     {
       title: "Type packaging",
       dataIndex: "type_packaging",
       key: "9",
+      ...getColumnSearchProps('type_packaging')
     },
     {
       title: "Volume",
@@ -292,7 +399,7 @@ export const Formulario = () => {
           onCancel={handleCancel}
           footer={[
             <Button key="back" onClick={handleCancel}>
-              close
+              Close
             </Button>,
             <Button
               key="submit"
@@ -300,7 +407,7 @@ export const Formulario = () => {
               onClick={postData}
               disabled={false}
             >
-              Submit
+              Save
             </Button>,
           ]}
           width={600}

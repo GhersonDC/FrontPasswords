@@ -3,6 +3,7 @@ import { Form, Input, Button, message } from "antd";
 import Cookies from "universal-cookie";
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import logo from '../images/favicon.ico'
+// import {ship} from '../images'
 
 const cookies = new Cookies();
 const API_HOST = process.env.REACT_APP_API_HOST || "http://localhost:8000";
@@ -58,7 +59,7 @@ export const Login = () => {
       <div>
         <div className="main_root_logo">
           <img src={logo} alt="icon g-global" />
-          <h1>G-Clients</h1>
+          <h1> G-Instructions </h1>
         </div>
         <h4 className="main_root_text">Welcome Back! <br></br>Please sign in to your Account</h4>
       </div>
@@ -88,9 +89,9 @@ export const Login = () => {
               },
             ]}
           >
-            <Input 
-            className="input_root"
-            name="email" prefix={<UserOutlined className="site-form-item-icon" />} onChange={handleInputChange} />
+            <Input
+              className="input_root"
+              name="email" prefix={<UserOutlined className="site-form-item-icon" />} onChange={handleInputChange} />
           </Form.Item>
 
           <Form.Item
@@ -112,15 +113,15 @@ export const Login = () => {
               span: 16,
             }}
           >
-            <Button 
-            className="boton"
-            type="primary" htmlType="submit" loading={loading}>
+            <Button
+              className="boton"
+              type="primary" htmlType="submit" loading={loading}>
               Log In
             </Button>
           </Form.Item>
         </Form>
       </div>
-      <span class="login-footer-label">Made with <span role="img" aria-label="heart-emoji">❤️</span> by INN</span>
+      <span className="login-footer-label">Made with <span role="img" aria-label="heart-emoji">❤️</span> by INN</span>
     </div>
-  );
+  )
 };
