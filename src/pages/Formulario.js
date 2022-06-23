@@ -387,7 +387,7 @@ export const Formulario = () => {
           />
         </div>
         <div className="table-div">
-          <Table key='table1' rowKey={(record) => record.id} loading={loading} dataSource={data} columns={columns} scroll={{ x: 2000, y:300 }} />
+          <Table key='table1' rowKey={(record) => record.id} loading={loading} dataSource={data} columns={columns} scroll={{ x: 2000, y:1000 }} />
         </div>
         {/* Formulario Modal */}
         <Modal

@@ -55,73 +55,85 @@ export const Login = () => {
   };
 
   return (
-    <div className="total-login">
-      <div>
-        <div className="main_root_logo">
-          <img src={logo} alt="icon g-global" />
-          <h1> G-Instructions </h1>
+    <div className="container">
+      <div className="total-login">
+        <div className="header">
+          <div className="main_root_logo">
+            <img src={logo} alt="icon g-global" />
+            <h1> G-TMS </h1>
+          </div>
+          <div className="main_root_header_text">
+            <p className="main_root_text">Welcome Back!</p>
+            <p className="main_root_text">Please sign in to your Account</p>
+          </div>
         </div>
-        <h4 className="main_root_text">Welcome Back! <br></br>Please sign in to your Account</h4>
-      </div>
-      <div className="form-login">
-        <Form
-          name="G-Client"
-          labelAlign="left"
-          layout="vertical"
-          initialValues={{
-            remember: true,
-          }}
-          onFinish={getData}
-          onFinishFailed={onFinishFailed}
-          autoComplete="off"
-        >
-          <Form.Item
-            label="Email"
-            name="email"
-            rules={[
-              {
-                type: "email",
-                message: "The email you entered isn’t connected to an account.",
-              },
-              {
-                required: true,
-                message: "Please input your username",
-              },
-            ]}
-          >
-            <Input
-              className="input_root"
-              name="email" prefix={<UserOutlined className="site-form-item-icon" />} onChange={handleInputChange} />
-          </Form.Item>
-
-          <Form.Item
-            label="Password"
-            name="password"
-            rules={[
-              {
-                required: true,
-                message: "The password you’ve entered is incorrect.",
-              },
-            ]}
-          >
-            <Input.Password name="password" onChange={handleInputChange} prefix={<LockOutlined className="site-form-item-icon" />} />
-          </Form.Item>
-
-          <Form.Item
-            wrapperCol={{
-              offset: 8,
-              span: 16,
+        <div className="main">
+          <div className="form-login">
+          <Form
+            name="G-Client"
+            labelAlign="left"
+            layout="vertical"
+            initialValues={{
+              remember: true,
             }}
+            onFinish={getData}
+            onFinishFailed={onFinishFailed}
+            autoComplete="off"
           >
-            <Button
-              className="boton"
-              type="primary" htmlType="submit" loading={loading}>
-              Log In
-            </Button>
-          </Form.Item>
-        </Form>
+            <Form.Item
+              label="Email"
+              name="email"
+              rules={[
+                {
+                  type: "email",
+                  message: "The email you entered isn’t connected to an account.",
+                },
+                {
+                  required: true,
+                  message: "Please input your username",
+                },
+              ]}
+            >
+              <Input
+                className="input_root"
+                name="email" prefix={<UserOutlined className="site-form-item-icon" />} onChange={handleInputChange} />
+            </Form.Item>
+
+            <Form.Item
+              label="Password"
+              name="password"
+              rules={[
+                {
+                  required: true,
+                  message: "The password you’ve entered is incorrect.",
+                },
+              ]}
+            >
+              <Input.Password name="password" onChange={handleInputChange} prefix={<LockOutlined className="site-form-item-icon" />} />
+            </Form.Item>
+
+            <Form.Item
+              wrapperCol={{
+                offset: 8,
+                span: 16,
+              }}
+            >
+              <Button
+                className="boton"
+                type="primary" htmlType="submit" loading={loading}>
+                Log In
+              </Button>
+            </Form.Item>
+          </Form>
+          </div>
+        </div>
+        <div className="footer">
+          <span className="login-footer-label">Made with <span role="img" aria-label="heart-emoji">❤️</span> by INN</span>
+        </div>
       </div>
-      <span className="login-footer-label">Made with <span role="img" aria-label="heart-emoji">❤️</span> by INN</span>
+      <div className="total-login-images">
+        <img className="total-login-images-cargo"></img>
+      </div>
     </div>
   )
 };

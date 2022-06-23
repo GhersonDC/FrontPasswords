@@ -9,14 +9,15 @@ body {
 
 #root {
   background-color: var(--background-blue-g-global);
+  height: 100%;
+}
+
+.container {
+  display: flex;
 }
 
 .site-page-header {
   border: 1px solid rgb(235, 237, 240);
-  /* margin: 20px; */
-  /* padding-top: 1rem; */
-  /* background-color: red; */
-  /* background-color: var(--background-page-main); */
 }
 
 .main_root_logo {
@@ -24,49 +25,109 @@ body {
   align-items: flex-start;
   display: flex;
   width: 100%;
-  font-size: 1.3rem;
+  height: 40%;
+  font-size: 1rem;
   justify-content: space-between;
   justify-content: center;
 }
+.main_root_text{
+  height: 20%;
+  font-size: 1rem;
+  justify-content: center;
+  margin: auto;
+  align-items: center;
+  display: flex;
+}
+.main_root_logo{
+  height: 40%;
+  background-color: red;
+}
+.main_root_header_text{
+  height: 60%;
+  background-color: aqua;
+}
 
 .main_root_logo>h1 {
-  margin: -.5rem;
   padding-left: 1rem;
 }
 
 .ant-form-item-control-input-content>button {
-  padding-top: .2rem;
-  justify-content: center;
   width: 13vw;
+  margin: auto;
 }
 
 .main_root_text {
-  padding-top: 1rem;
+  padding: 2rem 0rem 2rem 0rem;
   justify-content: center;
+  height: 10%;
   width: 50vw;
-  height: auto;
-  font-size: 1.5rem;
   text-align: center;
+  text-overflow: ellipsis;
+  /* background-color: red; */
 }
 
 .total-login {
   background-color: var(--background-login);
-  width: 50%;
-  height: 90vh;
-  padding-top: 10vh;
+  width: 50vw;
+  height: 100vh;
+  /* padding-top: 10vh; */
   min-height: 100vh;
+  overflow-y: hidden;
+  overflow-x: hidden;
+}
+
+.header {
+  /* background-color: yellow; */
+  height: 30%;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  /* padding-top: 4vh; */
+  text-overflow: ellipsis;
   overflow-y: hidden;
 }
 
+.main {
+  /* background-color: green; */
+  height: 60%;
+  width: 100%;
+  padding: 5vh;
+}
+
+.footer {
+  /* background-color: cyan; */
+  height: 10%;
+  width: 100%;
+  padding: 3%;
+}
+
+.total-login-images {
+  width: 50vw;
+  height: 100vh;
+  display: flex;
+  background-repeat: no-repeat;
+}
+
+.total-login-images-cargo {
+  content: url(./images/cargo-ship.png);
+  justify-content: center;
+  margin: auto;
+  /* padding-top: 10vh; */
+  display: flex;
+  width: auto;
+  height: 50vh;
+}
+
 .form-login {
-  margin: 2rem;
+  margin: auto;
   align-items: center;
   justify-content: center;
-  padding: 3rem 2rem 0rem;
+  padding: 2rem 2rem 0rem;
   overflow-y: hidden;
   font-weight: 500;
-  background-color: var(--background-page-main);
+  /* background-color: var(--background-page-main); */
   border-radius: 8px;
+  width: 80%;
   box-shadow: 0 2px 4px rgba(0, 0, 0, .1), 0 8px 16px rgba(0, 0, 0, .1);
 }
 
@@ -83,21 +144,22 @@ body {
 .form-menu {
   min-height: auto;
   height: 100vh;
-  /* padding: 5rem; */
   background-color: var(--background-login);
 }
 
 .table-div {
   border: 1px solid rgb(235, 237, 240);
-  margin: auto;
-  width: auto;
-  height: 80vh;
+  /* margin: auto;
+  width: auto; */
+  /* height: 80vh; */
   font-size: 30px;
   background-color: var(--background-page-main)
 }
-.ant-pagination{
+
+.ant-pagination {
   justify-content: center;
 }
+
 h2 {
   color: #ffffff;
   font-family: 'Raleway', sans-serif;
@@ -119,45 +181,95 @@ Input,
 
 }
 
-p {
-  width: 10px;
-  display: inline;
-  color: red;
-}
-
 .login-footer-label {
   width: 50vw;
   display: flex;
   justify-content: center;
 }
 
-@media only screen and (max-width: 600px) {
+@media only screen and (max-width: 810px) {
 
   body {
-    font-size: 10px;
+    font-size: 12px;
+  }
+
+  .container {
+    display: inline;
+    height: 100%;
+  }
+
+  .header {
+    height: 30%;
+    width: 100vw;
+  }
+
+  .main {
+    height: 60%;
+    width: 100vw;
+  }
+
+  .footer {
+    height: 10%;
+    width: 100vw;
+  }
+
+  .login-footer-label {
+    width: 100%;
+  }
+  .main_root_text {
+    margin: auto;
+    text-overflow: ellipsis;
+    /* background-color: red; */
+    width: 100%;
+    font-size: 1rem;
+    text-overflow: ellipsis;
+  }
+
+  .main_root_logo {
+    height: 40%;
+    padding: 1vh;
+    background-color: var(--background-page-main);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, .1), 0 8px 16px rgba(0, 0, 0, .1);
+  }
+
+  .ant-form-item-control-input-content>button {
+    width: 15vw;
+    margin: auto;
+  }
+
+  h4 {
+    font-size: 3rem;
+    text-overflow: ellipsis;
+  }
+
+  .container>.total-login {
+    /* background-color: black; */
+    height: 100%;
   }
 
   .total-login {
     background-color: var(--background-login);
-    width: 100vw;
-    height: 50vh;
-    padding-top: 1vh;
+    width: auto;
+    height: 50%;
+    overflow-x: hidden;
+  }
+
+  .total-login-images {
+    height: 10%;
+    width: auto;
   }
 
   .main_root_text {
-    padding-top: .5rem;
     justify-content: center;
     width: 100vw;
-    height: auto;
-    font-size: 1.5rem;
+    height: 60%;
+    font-size: 2rem;
+    text-overflow: ellipsis;
+    /* background-color: red; */
     text-align: center;
   }
 
-  .ant-form-item-control-input-content>button {
-    padding-top: .2rem;
-    justify-content: center;
-    width: auto;
-  }
+
   .table-div {
     border: 1px solid rgb(235, 237, 240);
     margin: auto;
@@ -166,10 +278,10 @@ p {
     font-size: 20px;
     background-color: var(--background-page-main)
   }
-}
 
-.log {
-  display: flex;
+  .total-login-images-cargo {
+    height: 10vh;
+  }
 }
 
 @media only screen and (max-width: 1200px) {
