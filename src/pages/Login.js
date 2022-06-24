@@ -63,8 +63,8 @@ export const Login = () => {
             <h1> G-TMS </h1>
           </div>
           <div className="main_root_header_text">
-            <p className="main_root_text">Welcome Back!</p>
-            <p className="main_root_text">Please sign in to your Account</p>
+            <p className="main_root_text welcome_msg">Welcome Back!</p>
+            <p className="main_root_text sign_in">Please sign in to your Account</p>
           </div>
         </div>
         <div className="main">

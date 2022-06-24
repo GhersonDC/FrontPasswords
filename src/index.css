@@ -1,9 +1,11 @@
-@import '~antd/dist/antd.css';
+@import "~antd/dist/antd.css";
+
+/* global styles */
 
 body {
   --background-login: #f5f5f5;
-  --background-blue-g-global: #3B7CDD;
-  --background-page-main: #FFF;
+  --background-blue-g-global: #3b7cdd;
+  --background-page-main: #fff;
   font-size: 12px;
 }
 
@@ -11,6 +13,8 @@ body {
   background-color: var(--background-blue-g-global);
   height: 100%;
 }
+
+/* main container */
 
 .container {
   display: flex;
@@ -30,40 +34,50 @@ body {
   justify-content: space-between;
   justify-content: center;
 }
-.main_root_text{
+.main_root_text {
   height: 20%;
   font-size: 1rem;
   justify-content: center;
   margin: auto;
   align-items: center;
   display: flex;
+  font-family: Verdana, sans-serif;
 }
-.main_root_logo{
+.main_root_logo {
   height: 40%;
-  background-color: red;
+  padding-top: 1rem;
+  /* background-color: red; */
 }
-.main_root_header_text{
+.main_root_header_text {
   height: 60%;
-  background-color: aqua;
+  /* background-color: aqua; */
 }
 
-.main_root_logo>h1 {
+.main_root_logo > h1 {
   padding-left: 1rem;
 }
 
-.ant-form-item-control-input-content>button {
+.ant-form-item-control-input-content > button {
   width: 13vw;
   margin: auto;
 }
 
 .main_root_text {
-  padding: 2rem 0rem 2rem 0rem;
+  padding: 1rem 0rem 1.5rem 0rem;
   justify-content: center;
-  height: 10%;
-  width: 50vw;
   text-align: center;
-  text-overflow: ellipsis;
+  font-size: 2rem;
+  /* background-color: green; */
+}
+.welcome_msg {
+  padding-top: 2rem;
+  font-size: 1.2rem;
+  font-weight: lighter;
   /* background-color: red; */
+}
+
+.sign_in {
+  font-size: 1.5rem;
 }
 
 .total-login {
@@ -124,11 +138,10 @@ body {
   justify-content: center;
   padding: 2rem 2rem 0rem;
   overflow-y: hidden;
-  font-weight: 500;
   /* background-color: var(--background-page-main); */
   border-radius: 8px;
   width: 80%;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, .1), 0 8px 16px rgba(0, 0, 0, .1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1);
 }
 
 body {
@@ -139,7 +152,6 @@ body {
   margin: auto;
   justify-content: center;
 }
-
 
 .form-menu {
   min-height: auto;
@@ -153,7 +165,7 @@ body {
   width: auto; */
   /* height: 80vh; */
   font-size: 30px;
-  background-color: var(--background-page-main)
+  background-color: var(--background-page-main);
 }
 
 .ant-pagination {
@@ -162,7 +174,7 @@ body {
 
 h2 {
   color: #ffffff;
-  font-family: 'Raleway', sans-serif;
+  font-family: "Raleway", sans-serif;
   font-size: 1.3rem;
   line-height: 4rem;
   text-transform: uppercase;
@@ -178,7 +190,6 @@ Input,
 
 .InputNumber {
   width: 100% !important;
-
 }
 
 .login-footer-label {
@@ -188,7 +199,6 @@ Input,
 }
 
 @media only screen and (max-width: 810px) {
-
   body {
     font-size: 12px;
   }
@@ -221,18 +231,20 @@ Input,
     text-overflow: ellipsis;
     /* background-color: red; */
     width: 100%;
-    font-size: 1rem;
+    font-size: 0.5rem;
     text-overflow: ellipsis;
   }
-
+  .main_root_header_text {
+    padding-top: 1rem;
+  }
   .main_root_logo {
     height: 40%;
-    padding: 1vh;
+    padding: 1rem;
     background-color: var(--background-page-main);
-    box-shadow: 0 2px 4px rgba(0, 0, 0, .1), 0 8px 16px rgba(0, 0, 0, .1);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1), 0 8px 16px rgba(0, 0, 0, 0.1);
   }
 
-  .ant-form-item-control-input-content>button {
+  .ant-form-item-control-input-content > button {
     width: 15vw;
     margin: auto;
   }
@@ -242,7 +254,7 @@ Input,
     text-overflow: ellipsis;
   }
 
-  .container>.total-login {
+  .container > .total-login {
     /* background-color: black; */
     height: 100%;
   }
@@ -262,13 +274,21 @@ Input,
   .main_root_text {
     justify-content: center;
     width: 100vw;
-    height: 60%;
-    font-size: 2rem;
+    font-size: 1.7rem;
     text-overflow: ellipsis;
-    /* background-color: red; */
     text-align: center;
+    padding-top: 1rem;
   }
 
+  .sign_in {
+    font-size: 1.2rem;
+    font-weight: lighter;
+  }
+
+  .welcome_msg {
+    padding-top: 1.5rem;
+    /* background-color: red; */
+  }
 
   .table-div {
     border: 1px solid rgb(235, 237, 240);
@@ -276,7 +296,7 @@ Input,
     width: 95vw;
     height: auto;
     font-size: 20px;
-    background-color: var(--background-page-main)
+    background-color: var(--background-page-main);
   }
 
   .total-login-images-cargo {
@@ -285,9 +305,8 @@ Input,
 }
 
 @media only screen and (max-width: 1200px) {
-
   body {
     font-size: 12px;
-    background-color: #3B7CDD;
+    background-color: #3b7cdd;
   }
 }
