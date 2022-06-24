@@ -12,7 +12,6 @@ import {
   message,
   Select,
   Form,
-  Avatar,
 } from "antd";
 import { LogoutOutlined, SearchOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
@@ -24,7 +23,6 @@ const { Header, Content } = Layout;
 const { Option } = Select;
 const API_HOST = process.env.REACT_APP_API_HOST || "http://localhost:8000";
 
-const ColorList = ['#333', '#7265e6', '#ffbf00', '#00a2ae'];
 
 export const Formulario = () => {
   const [isModalVisible, setIsModalVisible] = useState(false); //use State para el modal
@@ -64,7 +62,6 @@ export const Formulario = () => {
   const [searchedColumn, setSearchedColumn] = useState("");
   const [form] = Form.useForm();
 
-  const [color, setColor] = useState(ColorList[0]);
 
   const searchInput = useRef(null);
   const url = `${API_HOST}/api/`;
@@ -389,18 +386,8 @@ export const Formulario = () => {
     <div className="form-menu">
       <Header>
         <h2 className="form-menu-name-client">{cookies.get("nombre")}</h2>
-        <Avatar
-          style={{
-            backgroundColor: color,
-            verticalAlign: 'middle',
-            position: "absolute", right: 15, top: 10
-          }}
-          size="large"
-        >
-          {cookies.get('nombre')[0]}
-      </Avatar>
         <Button
-          style={{ position: "absolute", right: 80, top: 15 }}
+          style={{ position: "absolute", right: 15, top: 15 }}
           type="primary"
           icon={<LogoutOutlined />}
           onClick={cerrarSesion}
@@ -422,8 +409,8 @@ export const Formulario = () => {
           />
         </div>
         <div className="table-div">
-          <Table key='table1' rowKey={(record) => record.id} loading={loading} dataSource={data} columns={columns} scroll={{ x: 2000, y:1000 }}
-          pagination={{ defaultPageSize: 10,showQuickJumper:true, showSizeChanger: true, pageSizeOptions: ['10', '20', '30'],total:data.length,showTotal:(total) => `Total ${total} items`}}/>
+          <Table key='table1' rowKey={(record) => record.id} loading={loading} dataSource={data} columns={columns} scroll={{ x: 2000, y: 1000 }}
+            pagination={{ defaultPageSize: 10, showQuickJumper: true, showSizeChanger: true, pageSizeOptions: ['10', '20', '30'], total: data.length, showTotal: (total) => `Total ${total} items` }} />
         </div>
         {/* Formulario Modal */}
         <Modal

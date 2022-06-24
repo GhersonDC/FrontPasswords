@@ -253,6 +253,10 @@ Input,
     margin: auto;
   }
 
+  .form-menu-name-client{
+    font-size: 1rem;
+  }
+
   h4 {
     font-size: 3rem;
     text-overflow: ellipsis;
