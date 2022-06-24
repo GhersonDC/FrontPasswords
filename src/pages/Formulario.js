@@ -1,4 +1,4 @@
-import React, { useEffect, useState , useRef} from "react";
+import React, { useEffect, useState, useRef } from "react";
 import {
   PageHeader,
   Button,
@@ -11,14 +11,14 @@ import {
   Layout,
   message,
   Select,
+  Form,
 } from "antd";
-import { LogoutOutlined,SearchOutlined} from "@ant-design/icons";
-import Highlighter from 'react-highlight-words';
+import { LogoutOutlined, SearchOutlined } from "@ant-design/icons";
+import Highlighter from "react-highlight-words";
 import Cookies from "universal-cookie";
 
 const cookies = new Cookies();
 const { TabPane } = Tabs;
-const { TextArea } = Input;
 const { Header, Content } = Layout;
 const { Option } = Select;
 const API_HOST = process.env.REACT_APP_API_HOST || "http://localhost:8000";
@@ -28,11 +28,11 @@ export const Formulario = () => {
   const [data, setData] = useState([]); //Use statePara obtener datos del api
   const [loading, setLoading] = useState(false);
   const [datos, setDatos] = useState({
-    customerId: cookies.get('clientid'),
-    address: cookies.get('address'),
-    rfc: cookies.get('rfc'),
-    email: cookies.get('email'),
-    phone_number: cookies.get('telefono'),
+    customerId: cookies.get("clientid"),
+    address: cookies.get("address"),
+    rfc: cookies.get("rfc"),
+    email: cookies.get("email"),
+    phone_number: cookies.get("telefono"),
     type_service: 0,
     reference: "",
     incoterm: 0,
@@ -53,62 +53,61 @@ export const Formulario = () => {
     special_description: "",
     type_equipment: 0,
   });
-  const [ports,setPorts] = useState([]);
+  const [ports, setPorts] = useState([]);
   const [location, setlocation] = useState([]);
   const [packaging, setpackaging] = useState([]);
   const [equipment, setEquipment] = useState([]);
-  const [searchText, setSearchText] = useState('');
-  const [searchedColumn, setSearchedColumn] = useState('');
+  const [searchText, setSearchText] = useState("");
+  const [searchedColumn, setSearchedColumn] = useState("");
+  const [form] = Form.useForm();
+
   const searchInput = useRef(null);
 
-  
   const url = `${API_HOST}/api/`;
   const token = cookies.get("token");
 
   //Fetch para getAll del api
   const getData = async () => {
     setLoading(true);
-    const resp = await fetch(url+'clients/'+cookies.get('clientid'), {
+    const resp = await fetch(url + "clients/" + cookies.get("clientid"), {
       method: "GET",
       headers: {
         Authorization: `Bearer ${token}`, //Agregado
       },
     });
-    setLoading(false)
+    setLoading(false);
 
     const { data } = await resp.json();
 
     setData(data);
   };
 
-
   const getSelects = async (url, selects) => {
-    const resp = await fetch(url+selects);
-    const {data} = await resp.json();
+    const resp = await fetch(url + selects);
+    const { data } = await resp.json();
 
     return data;
-  }
+  };
 
-  const getAll= async() =>{
-    setPorts(await getSelects(url,'ports'));
-    setlocation(await getSelects(url,'location'));
-    setpackaging(await getSelects(url,'type_packaging'));
-    setEquipment(await getSelects(url,'type_equipment'));
-  }
-
+  const getAll = async () => {
+    setPorts(await getSelects(url, "ports"));
+    setlocation(await getSelects(url, "location"));
+    setpackaging(await getSelects(url, "type_packaging"));
+    setEquipment(await getSelects(url, "type_equipment"));
+  };
 
   async function postData() {
-    await fetch(url+'clients', {
-      method: "POST", 
-      cache: "no-cache", 
-      credentials: "same-origin", 
+    await fetch(url + "clients", {
+      method: "POST",
+      cache: "no-cache",
+      credentials: "same-origin",
       headers: {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`,
       },
-      redirect: "follow", 
-      referrerPolicy: "no-referrer", 
-      body: JSON.stringify(datos), 
+      redirect: "follow",
+      referrerPolicy: "no-referrer",
+      body: JSON.stringify(datos),
     })
       .then(async (response) => {
         // check for error response
@@ -123,16 +122,24 @@ export const Formulario = () => {
         }
       })
       .catch((error) => {
-        message.error(error);
+        const n = (datos.tariff).toString();
+        if(n.length<8){
+          message.error("HSCode must be at least 8 characters")
+        }else{
+          message.error(error);
+        }
+        
       });
   }
 
-  const resetDatos= () =>{
-    setDatos({customerId: cookies.get('clientid'),
-    address: cookies.get('address'),
-    rfc: cookies.get('rfc'),
-    email: cookies.get('email')});
-  }
+  const resetDatos = () => {
+    setDatos({
+      customerId: cookies.get("clientid"),
+      address: cookies.get("address"),
+      rfc: cookies.get("rfc"),
+      email: cookies.get("email"),
+    });
+  };
 
   //
   const cerrarSesion = () => {
@@ -142,14 +149,18 @@ export const Formulario = () => {
     cookies.remove("address", { path: "/" });
     cookies.remove("rfc", { path: "/" });
     cookies.remove("telefono", { path: "/" });
-    cookies.remove("email", { path: "/" })
+    cookies.remove("email", { path: "/" });
     window.location.href = "/";
   };
 
   useEffect(() => {
     getData();
     getAll();
-    if (!cookies.get("nombre") && !cookies.get("clientid") && !cookies.get("address")) {
+    if (
+      !cookies.get("nombre") &&
+      !cookies.get("clientid") &&
+      !cookies.get("address")
+    ) {
       window.location.href = "/";
     }
   }, []);
@@ -170,7 +181,7 @@ export const Formulario = () => {
       ...datos,
       [e.target.name]: e.target.value,
     });
-    console.log(datos)
+    console.log(datos);
   };
   const handleChange = (value, name) => {
     setDatos({
@@ -180,7 +191,12 @@ export const Formulario = () => {
   };
   //Buscador filtrado
   const getColumnSearchProps = (dataIndex) => ({
-    filterDropdown: ({ setSelectedKeys, selectedKeys, confirm, clearFilters }) => (
+    filterDropdown: ({
+      setSelectedKeys,
+      selectedKeys,
+      confirm,
+      clearFilters,
+    }) => (
       <div
         style={{
           padding: 8,
@@ -190,11 +206,13 @@ export const Formulario = () => {
           ref={searchInput}
           placeholder={`Search ${dataIndex}`}
           value={selectedKeys[0]}
-          onChange={(e) => setSelectedKeys(e.target.value ? [e.target.value] : [])}
+          onChange={(e) =>
+            setSelectedKeys(e.target.value ? [e.target.value] : [])
+          }
           onPressEnter={() => handleSearch(selectedKeys, confirm, dataIndex)}
           style={{
             marginBottom: 8,
-            display: 'block',
+            display: "block",
           }}
         />
         <Space>
@@ -237,7 +255,7 @@ export const Formulario = () => {
     filterIcon: (filtered) => (
       <SearchOutlined
         style={{
-          color: filtered ? '#1890ff' : undefined,
+          color: filtered ? "#1890ff" : undefined,
         }}
       />
     ),
@@ -252,12 +270,12 @@ export const Formulario = () => {
       searchedColumn === dataIndex ? (
         <Highlighter
           highlightStyle={{
-            backgroundColor: '#ffc069',
+            backgroundColor: "#ffc069",
             padding: 0,
           }}
           searchWords={[searchText]}
           autoEscape
-          textToHighlight={text ? text.toString() : ''}
+          textToHighlight={text ? text.toString() : ""}
         />
       ) : (
         text
@@ -272,7 +290,11 @@ export const Formulario = () => {
 
   const handleReset = (clearFilters) => {
     clearFilters();
-    setSearchText('');
+    setSearchText("");
+  };
+
+  const onFinishFailed = (errorInfo) => {
+    message.error('Ah ocurrido un error',errorInfo)
   };
 
   //Columnas que se mostraran en la tabla
@@ -281,58 +303,58 @@ export const Formulario = () => {
       title: "Id",
       dataIndex: "id",
       key: "1",
-      defaultSortOrder: 'descend',
+      defaultSortOrder: "descend",
       sorter: (a, b) => a.id - b.id,
-        ...getColumnSearchProps('id')
+      ...getColumnSearchProps("id"),
     },
     {
       title: "Service Type",
       dataIndex: "type_service",
       key: "2",
-      width:'15%',
-      ...getColumnSearchProps('type_service')
+      width: "15%",
+      ...getColumnSearchProps("type_service"),
     },
     {
       title: "Reference",
       dataIndex: "reference",
       key: "3",
-      ...getColumnSearchProps('reference')
+      ...getColumnSearchProps("reference"),
     },
     {
       title: "Incoterm",
       dataIndex: "incoterm",
       key: "4",
-      ...getColumnSearchProps('incoterm')
+      ...getColumnSearchProps("incoterm"),
     },
     {
       title: "Type Equipment",
       dataIndex: "type_equipment",
       key: "5",
-      ...getColumnSearchProps('type_equipment')
+      ...getColumnSearchProps("type_equipment"),
     },
     {
       title: "POL",
       dataIndex: "pol",
       key: "6",
-      ...getColumnSearchProps('pol')
+      ...getColumnSearchProps("pol"),
     },
     {
       title: "POD",
       dataIndex: "pod",
       key: "7",
-      ...getColumnSearchProps('pod')
+      ...getColumnSearchProps("pod"),
     },
     {
       title: "HS Code",
       dataIndex: "tariff",
       key: "8",
-      ...getColumnSearchProps('tariff')
+      ...getColumnSearchProps("tariff"),
     },
     {
       title: "Type packaging",
       dataIndex: "type_packaging",
       key: "9",
-      ...getColumnSearchProps('type_packaging')
+      ...getColumnSearchProps("type_packaging"),
     },
     {
       title: "Volume",
@@ -363,7 +385,7 @@ export const Formulario = () => {
   return (
     <div className="form-menu">
       <Header>
-        <h2>{cookies.get('nombre')}</h2>
+        <h2>{cookies.get("nombre")}</h2>
         <Button
           style={{ position: "absolute", right: 15, top: 15 }}
           type="primary"
@@ -393,254 +415,483 @@ export const Formulario = () => {
         <Modal
           centered={true}
           destroyOnClose
-          bodyStyle={{ overflowY: 'auto', maxHeight: 'calc(100vh - 200px)' }}
+          bodyStyle={{ overflowY: "auto", maxHeight: "calc(100vh - 200px)" }}
           title="Add Instruction Letter"
           visible={isModalVisible}
           onCancel={handleCancel}
-          footer={[
-            <Button key="back" onClick={handleCancel}>
-              Close
-            </Button>,
-            <Button
-              key="submit"
-              type="primary"
-              onClick={postData}
-              disabled={false}
-            >
-              Save
-            </Button>,
-          ]}
+          onOk={form.submit}
           width={600}
         >
-          <Tabs defaultActiveKey="5">
-            <TabPane tab="Tipo de Servicio" key="5">
-              <Space direction="vertical" style={{ display:'flex' }} size='middle'>
-                <label>
-                  Service Type<p>*</p>
+          <Form
+            form={form}
+            name="basic"
+            labelCol={{
+              span: 6,
+            }}
+            wrapperCol={{
+              span: 13,
+            }}
+            initialValues={{
+              remember: true,
+            }}
+            autoComplete="off"
+            onFinish={postData}
+            onFinishFailed={onFinishFailed}
+          >
+            <Tabs defaultActiveKey="5" centered>
+              <TabPane tab="Service Type" key="5">
+                <Form.Item
+                  label="Service Type"
+                  name="type_service"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please select Service Type!",
+                    },
+                  ]}
+                >
                   <Select
-                  showSearch
+                    showSearch
                     placeholder="Select Service Type"
-                    style={{ width: '100%'}}
                     name="type_service"
-                    onSelect={(event)=>handleChange(event,'type_service')}
-                    filterOption={(input, option) => option.children.toUpperCase().includes(input.toUpperCase())}
+                    style={{ width: "100%" }}
+                    onSelect={(event) => handleChange(event, "type_service")}
+                    filterOption={(input, option) =>
+                      option.children
+                        .toUpperCase()
+                        .includes(input.toUpperCase())
+                    }
                   >
-                    <Option key='1' value="1">TERRESTRE</Option>
-                    <Option key='2' value="2">MARITIMO</Option>
-                    <Option key='3' value="3">DESPACHO ADUANAL/REGIMEN SI APLICA</Option>
-                    <Option key='4' value="4">COMBINADO</Option>
-                    <Option key='5' value="5">OTRO</Option>
+                    <Option key="1" value={1}>
+                      TERRESTRE
+                    </Option>
+                    <Option key="2" value={2}>
+                      MARITIMO
+                    </Option>
+                    <Option key="3" value={3}>
+                      DESPACHO ADUANAL/REGIMEN SI APLICA
+                    </Option>
+                    <Option key="4" value={4}>
+                      COMBINADO
+                    </Option>
+                    <Option key="5" value={5}>
+                      OTRO
+                    </Option>
                   </Select>
-                </label>
-                <label>
-                  Reference<p>*</p>
+                </Form.Item>
+
+                <Form.Item
+                  label="Reference"
+                  name="reference"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please input a Reference!",
+                    },
+                  ]}
+                >
                   <Input
                     placeholder="Reference"
                     name="reference"
                     onChange={handleInputChange}
                   />
-                </label>
-                <label>
-                  Incoterm<p>*</p>
+                </Form.Item>
+
+                <Form.Item
+                  label="Incoterm"
+                  name="incoterm"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please select Incoterm!",
+                    },
+                  ]}
+                >
                   <Select
-                  showSearch
+                    showSearch
                     placeholder="Select Incoterm"
                     name="incoterm"
-                    style={{ width: '100%' }}
-                    onSelect={(event)=>handleChange(event,'incoterm')}
-                    filterOption={(input, option) => option.children.toUpperCase().includes(input.toUpperCase())}>
-                    <Option key='1' value="EXW">EXW</Option>
-                    <Option key='2' value="FCA">FCA</Option>
-                    <Option key='3' value="CPT">CPT</Option>
-                    <Option key='4' value="CIP">CIP</Option>
-                    <Option key='5' value="DAP">DAP</Option>
-                    <Option key='6' value="DPU">DPU</Option>
-                    <Option key='7' value="DDP">DDP</Option>
-                    <Option key='8' value="CFR">CFR</Option>
-                    <Option key='9' value="FOB">FOB</Option>
-                    <Option key='10' value="FAS">FAS</Option>
-                    <Option key='11' value="CIF">CIF</Option>
+                    style={{ width: "100%" }}
+                    onSelect={(event) => handleChange(event, "incoterm")}
+                    filterOption={(input, option) =>
+                      option.children
+                        .toUpperCase()
+                        .includes(input.toUpperCase())
+                    }
+                  >
+                    <Option key="1" value="EXW">
+                      EXW
+                    </Option>
+                    <Option key="2" value="FCA">
+                      FCA
+                    </Option>
+                    <Option key="3" value="CPT">
+                      CPT
+                    </Option>
+                    <Option key="4" value="CIP">
+                      CIP
+                    </Option>
+                    <Option key="5" value="DAP">
+                      DAP
+                    </Option>
+                    <Option key="6" value="DPU">
+                      DPU
+                    </Option>
+                    <Option key="7" value="DDP">
+                      DDP
+                    </Option>
+                    <Option key="8" value="CFR">
+                      CFR
+                    </Option>
+                    <Option key="9" value="FOB">
+                      FOB
+                    </Option>
+                    <Option key="10" value="FAS">
+                      FAS
+                    </Option>
+                    <Option key="11" value="CIF">
+                      CIF
+                    </Option>
                   </Select>
-                </label>
-                <label>
-                  Type equipment<p>*</p>
-                  <Select showSearch
-                  optionFilterProp="children"
-                  placeholder="Type Equipment"
-                  name="equipment"
-                  style={{ width: '100%' }}
-                  onSelect={(event)=>handleChange(event,'type_equipment')}
-                  filterOption={(input, option) => option.children.toUpperCase().includes(input.toUpperCase())}>
-                    {equipment.map((option) => (
-                      <Select.Option key={option.id} value={option.id}>{option.name}</Select.Option>
-                      ))}
-                    </Select>
-                </label>
-                <label>
-                  Pickup Address<p>*</p>
-                  <Select showSearch
-                  optionFilterProp="children"
-                  placeholder="Pickup Address"
-                  name="Pickup Address"
-                  style={{ width: '100%' }}
-                  onSelect={(event)=>handleChange(event,'pickup_address')}
-                  filterOption={(input, option) => option.children.toUpperCase().includes(input.toUpperCase())}>
-                    {location.map((option) => (
-                      <Select.Option key={option.id} value={option.id}>{option.name}</Select.Option>
-                      ))}
-                    </Select>
-                </label>
-                <label>
-                Port of Load<p>*</p>
-                  <Select
-                  showSearch
-                  placeholder="Select Port of Load"
-                  name="pol"
-                  style={{ width: '100%' }}
-                  onSelect={(event)=>handleChange(event,'pol')}
-                  filterOption={(input, option) => option.children.toUpperCase().includes(input.toUpperCase())}>
-                     {ports.map((option) => (
-                      <Select.Option key={option.id} value={option.id}>{option.name}</Select.Option>
-                      ))}
-                  </Select>
-                </label>
-                <label>
-                Port of discharge<p>*</p>
-                  <Select
-                  showSearch
-                  optionFilterProp="children"
-                  placeholder="Select Port of discharge"
-                  name="pol"
-                  style={{ width: '100%' }}
-                  onSelect={(event)=>handleChange(event,'pod')}
-                  filterOption={(input, option) => option.children.toUpperCase().includes(input.toUpperCase())}>
-                     {ports.map((option) => (
-                      <Select.Option key={option.id} value={option.id}>{option.name}</Select.Option>
-                      ))}
-                  </Select>
-                </label>
-                <label>
-                  Delivery Address<p>*</p>
-                  <Select showSearch
-                  optionFilterProp="children"
-                  placeholder="Delivery Address"
-                  name="pol"
-                  style={{ width: '100%' }}
-                  onSelect={(event)=>handleChange(event,'delivery_address')}
-                  filterOption={(input, option) => option.children.toUpperCase().includes(input.toUpperCase())}>
-                    {location.map((option) => (
-                      <Select.Option key={option.id} value={option.id}>{option.name}</Select.Option>
-                      ))}
-                    </Select>
-                </label>
-              </Space>
-            </TabPane>
+                </Form.Item>
 
-            <TabPane tab="Mercancia" key="merchandise">
-              <Space direction="vertical" style={{ width: "100%" }}>
-                <label>
-                  Description<p>*</p>
-                  <Input
-                    placeholder="Description"
-                    name="description"
-                    onChange={handleInputChange}
-                  />
-                </label>
-                <label>
-                  HSCODE<p>*</p>
+                <Form.Item
+                  label="Type Equipment"
+                  name="equipment"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please select Type Equipment!",
+                    },
+                  ]}
+                >
+               <Select showSearch
+      optionFilterProp="children"
+      placeholder="Type Equipment"
+      name="equipment"
+      style={{ width: '100%' }}
+      onSelect={(event)=>handleChange(event,'type_equipment')}
+      filterOption={(input, option) => option.children.toUpperCase().includes(input.toUpperCase())}>
+        {equipment.map((option) => (
+          <Select.Option key={option.id} value={option.id}>{option.name}</Select.Option>
+          ))}
+        </Select>
+                </Form.Item>
+
+                <Form.Item
+                  label="Pickup Address"
+                  name="Pickup Address"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please select Pickup address!",
+                    },
+                  ]}
+                >
+                  <Select
+                    showSearch
+                    optionFilterProp="children"
+                    placeholder="Pickup Address"
+                    name="Pickup Address"
+                    style={{ width: "100%" }}
+                    onSelect={(event) => handleChange(event, "pickup_address")}
+                    filterOption={(input, option) =>
+                      option.children
+                        .toUpperCase()
+                        .includes(input.toUpperCase())
+                    }
+                  >
+                    {location.map((option) => (
+                      <Select.Option key={option.id} value={option.id}>
+                        {option.name}
+                      </Select.Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+
+                <Form.Item
+                  label="Delivery Address"
+                  name="Delivery Address"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please select Delivery address!",
+                    },
+                  ]}
+                >
+                  <Select
+                    showSearch
+                    optionFilterProp="children"
+                    placeholder="Delivery Address"
+                    name="pol"
+                    style={{ width: "100%" }}
+                    onSelect={(event) =>
+                      handleChange(event, "delivery_address")
+                    }
+                    filterOption={(input, option) =>
+                      option.children
+                        .toUpperCase()
+                        .includes(input.toUpperCase())
+                    }
+                  >
+                    {location.map((option) => (
+                      <Select.Option key={option.id} value={option.id}>
+                        {option.name}
+                      </Select.Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+
+                <Form.Item
+                  label="Port Of Load"
+                  name="pol"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please select Port of load!",
+                    },
+                  ]}
+                >
+                  <Select
+                    showSearch
+                    placeholder="Select Port of Load"
+                    name="pol"
+                    style={{ width: "100%" }}
+                    onSelect={(event) => handleChange(event, "pol")}
+                    filterOption={(input, option) =>
+                      option.children
+                        .toUpperCase()
+                        .includes(input.toUpperCase())
+                    }
+                  >
+                    {ports.map((option) => (
+                      <Select.Option key={option.id} value={option.id}>
+                        {option.name}
+                      </Select.Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+
+                <Form.Item
+                  label="Port Of Discharge"
+                  name="pod"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please select Port of discharge!",
+                    },
+                  ]}
+                >
+                  <Select
+                    showSearch
+                    optionFilterProp="children"
+                    placeholder="Select Port of discharge"
+                    name="pol"
+                    style={{ width: "100%" }}
+                    onSelect={(event) => handleChange(event, "pod")}
+                    filterOption={(input, option) =>
+                      option.children
+                        .toUpperCase()
+                        .includes(input.toUpperCase())
+                    }
+                  >
+                    {ports.map((option) => (
+                      <Select.Option key={option.id} value={option.id}>
+                        {option.name}
+                      </Select.Option>
+                    ))}
+                  </Select>
+                </Form.Item>
+              </TabPane>
+
+              <TabPane tab="Merchandise" key="merchandise">
+                <Form.Item
+                  label="Description"
+                  name="description"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please input a description!",
+                    },
+                  ]}
+                >
+                  <Input name="description" onChange={handleInputChange} />
+                </Form.Item>
+
+                <Form.Item
+                  label="HSCODE"
+                  name="tariff"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please input a HSCODE",
+                    },
+                  ]}
+                  help="HSCode must be 8 characters"
+                >
                   <InputNumber
-                    className="InputNumber"
-                    placeholder="Tariff Fraction must be greater than 8"
+                  className="InputNumber"
+                    placeholder="hscode must be greater than 8"
                     name="tariff"
-                    onChange={(event)=>handleChange(event,'tariff')}
+                    onChange={(event) => handleChange(event, "tariff")}
                     maxLength={10}
                   />
-                  
-                </label>
-                <label>
-                  Packaging Type<p>*</p>
-                  <Select showSearch
-                  optionFilterProp="children"
-                  placeholder="Type Packaging"
-                  name="packaging"
-                  style={{ width: '100%' }}
-                  onSelect={(event)=>handleChange(event,'type_packaging')}
-                  filterOption={(input, option) => option.children.toUpperCase().includes(input.toUpperCase())}>
-                    {packaging.map((option) => (
-                      <Select.Option key={option.id} value={option.id}>{option.name}</Select.Option>
-                      ))}
-                    </Select>
-                </label>
-                <label>
-                  Volume<p>*</p>
-                  <InputNumber
-                    placeholder="Volume"
-                    name="volume"
-                    className='InputNumber'
-                    onChange={(event)=>handleChange(event,'volume')}
-                  />
-                </label>
-                <label>
-                  Weight<p>*</p>
-                  <InputNumber
-                    placeholder="Net Weight"
-                    name="weight"
-                    onChange={(event)=>handleChange(event,'weight')}
-                    className='InputNumber'
-                  />
-                </label>
-                <label>
-                  Cubic Meters<p>*</p>
-                  <InputNumber
-                    placeholder="Cubic Meters"
-                    name="cbm"
-                    onChange={(event)=>handleChange(event,'cbm')}
-                    className='InputNumber'
-                  />
-                </label>
-                <label>
-                  Length<p>*</p>
-                  <InputNumber
-                    placeholder="lenght"
-                    name="lenght"
-                    onChange={(event)=>handleChange(event,'lenght')}
-                    className='InputNumber'
-                  />
-                </label>
-                <label>
-                  Width<p>*</p>
-                  <InputNumber
-                    placeholder="Width"
-                    name="width"
-                    onChange={(event)=>handleChange(event,'width')}
-                    className='InputNumber'
-                  />
-                </label>
-                <label>
-                Height<p>*</p>
-                  <InputNumber
-                    placeholder="Height"
-                    name="height"
-                    onChange={(event)=>handleChange(event,'height')}
-                    className='InputNumber'
-                  />
-                </label>
-                <label>
-                  Quantity
-                  <InputNumber
-                    placeholder="Quantity"
-                    name="quantity"
-                    onChange={(event)=>handleChange(event,'quantity')}
-                    className='InputNumber'
-                  />
-                </label>
-              </Space>
-            </TabPane>
+                </Form.Item>
 
-            <TabPane tab="Instrucciones Especiales" key="special_info">
-              <TextArea rows={7} placeholder="Special Instructions" name="special_description" onChange={handleInputChange} />
-            </TabPane>
-          </Tabs>
+                <Form.Item
+                  label="Packing Type"
+                  name="type_pckaging"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please select Pickup address!",
+                    },
+                  ]}
+                >
+                   <Select showSearch
+      optionFilterProp="children"
+      placeholder="Type Packaging"
+      name="packaging"
+      style={{ width: '100%' }}
+      onSelect={(event)=>handleChange(event,'type_packaging')}
+      filterOption={(input, option) => option.children.toUpperCase().includes(input.toUpperCase())}>
+        {packaging.map((option) => (
+          <Select.Option key={option.id} value={option.id}>{option.name}</Select.Option>
+          ))}
+        </Select>
+                </Form.Item>
+
+                <Form.Item
+                  label="Volume"
+                  name="volume"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please input a volume!",
+                    },
+                  ]}
+                >
+                 <InputNumber
+        placeholder="Volume"
+        name="volume"
+        className='InputNumber'
+        onChange={(event)=>handleChange(event,'volume')}
+      />
+                </Form.Item>
+
+                <Form.Item
+                  label="Net Weight"
+                  name="weight"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please input a weight!",
+                    },
+                  ]}
+                >
+                  <InputNumber
+        placeholder="Net Weight"
+        name="weight"
+        onChange={(event)=>handleChange(event,'weight')}
+        className='InputNumber'
+      />
+                </Form.Item>
+
+                <Form.Item
+                  label="Cubic Meters"
+                  name="cbm"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please input a cubic meters!",
+                    },
+                  ]}
+                >
+                 <InputNumber
+        placeholder="Cubic Meters"
+        name="cbm"
+        onChange={(event)=>handleChange(event,'cbm')}
+        className='InputNumber'
+      />
+                </Form.Item>
+
+                <Form.Item
+                  label="length"
+                  name="lenght"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please input a length!",
+                    },
+                  ]}
+                >
+                 <InputNumber
+        placeholder="lenght"
+        name="lenght"
+        onChange={(event)=>handleChange(event,'lenght')}
+        className='InputNumber'
+      />
+                </Form.Item>
+
+                <Form.Item
+                  label="Width"
+                  name="width"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please input a width!",
+                    },
+                  ]}
+                >
+                 <InputNumber
+        placeholder="Width"
+        name="width"
+        onChange={(event)=>handleChange(event,'width')}
+        className='InputNumber'
+      />
+                </Form.Item>
+
+                <Form.Item
+                  label="Height"
+                  name="height"
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please input a height!",
+                    },
+                  ]}
+                >
+                  <InputNumber
+        placeholder="Height"
+        name="height"
+        onChange={(event)=>handleChange(event,'height')}
+        className='InputNumber'
+      />
+                </Form.Item>
+
+                <Form.Item
+                  label="Quantity"
+                  name="quantity"
+                >
+                 <InputNumber
+        placeholder="Quantity"
+        name="quantity"
+        onChange={(event)=>handleChange(event,'quantity')}
+        className='InputNumber'
+      />
+                </Form.Item>
+                
+              </TabPane>
+
+              <TabPane  tab="Special Instructions" key="special_info">
+              <Form.Item label="Introduction">
+        <Input.TextArea rows={7} placeholder="Special Instructions" name="special_description" onChange={handleInputChange}/>
+      </Form.Item>
+              </TabPane>
+
+
+            </Tabs>
+          </Form>
         </Modal>
       </Content>
     </div>
