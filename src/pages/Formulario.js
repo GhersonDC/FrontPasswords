@@ -122,7 +122,7 @@ export const Formulario = () => {
         }
       })
       .catch((error) => {
-message.error(error+'🥲')
+        message.error(error + '🥲')
       });
   }
 
@@ -403,7 +403,7 @@ message.error(error+'🥲')
           />
         </div>
         <div className="table-div">
-          <Table key='table1' rowKey={(record) => record.id} loading={loading} dataSource={data} columns={columns} scroll={{ x: 2000, y:1000 }} />
+          <Table key='table1' rowKey={(record) => record.id} loading={loading} dataSource={data} columns={columns} scroll={{ x: 2000, y: 1000 }} />
         </div>
         {/* Formulario Modal */}
         <Modal
@@ -560,17 +560,17 @@ message.error(error+'🥲')
                     },
                   ]}
                 >
-               <Select showSearch
-      optionFilterProp="children"
-      placeholder="Type Equipment"
-      name="equipment"
-      style={{ width: '100%' }}
-      onSelect={(event)=>handleChange(event,'type_equipment')}
-      filterOption={(input, option) => option.children.toUpperCase().includes(input.toUpperCase())}>
-        {equipment.map((option) => (
-          <Select.Option key={option.id} value={option.id}>{option.name}</Select.Option>
-          ))}
-        </Select>
+                  <Select showSearch
+                    optionFilterProp="children"
+                    placeholder="Type Equipment"
+                    name="equipment"
+                    style={{ width: '100%' }}
+                    onSelect={(event) => handleChange(event, 'type_equipment')}
+                    filterOption={(input, option) => option.children.toUpperCase().includes(input.toUpperCase())}>
+                    {equipment.map((option) => (
+                      <Select.Option key={option.id} value={option.id}>{option.name}</Select.Option>
+                    ))}
+                  </Select>
                 </Form.Item>
 
                 <Form.Item
@@ -710,7 +710,7 @@ message.error(error+'🥲')
                     },
                   ]}
                 >
-                  <Input name="description" onChange={handleInputChange} />
+                  <Input name="description" onChange={handleInputChange} maxLength={100} />
                 </Form.Item>
 
                 <Form.Item
@@ -720,15 +720,15 @@ message.error(error+'🥲')
                     {
                       required: true,
                       message: "Please input a HSCODE",
-                    },{
-                      min:8,
-                      message:"Must have 8 charachters"
+                    }, {
+                      min: 8,
+                      message: "Must have 8 charachters"
                     }
                   ]}
                 >
                   <InputNumber
-                  stringMode
-                  className="InputNumber"
+                    stringMode
+                    className="InputNumber"
                     placeholder="hscode must be greater than 8"
                     name="tariff"
                     onChange={(event) => handleChange(event, "tariff")}
@@ -746,17 +746,17 @@ message.error(error+'🥲')
                     },
                   ]}
                 >
-                   <Select showSearch
-      optionFilterProp="children"
-      placeholder="Type Packaging"
-      name="packaging"
-      style={{ width: '100%' }}
-      onSelect={(event)=>handleChange(event,'type_packaging')}
-      filterOption={(input, option) => option.children.toUpperCase().includes(input.toUpperCase())}>
-        {packaging.map((option) => (
-          <Select.Option key={option.id} value={option.id}>{option.name}</Select.Option>
-          ))}
-        </Select>
+                  <Select showSearch
+                    optionFilterProp="children"
+                    placeholder="Type Packaging"
+                    name="packaging"
+                    style={{ width: '100%' }}
+                    onSelect={(event) => handleChange(event, 'type_packaging')}
+                    filterOption={(input, option) => option.children.toUpperCase().includes(input.toUpperCase())}>
+                    {packaging.map((option) => (
+                      <Select.Option key={option.id} value={option.id}>{option.name}</Select.Option>
+                    ))}
+                  </Select>
                 </Form.Item>
 
                 <Form.Item
@@ -769,12 +769,12 @@ message.error(error+'🥲')
                     },
                   ]}
                 >
-                 <InputNumber
-        placeholder="Volume"
-        name="volume"
-        className='InputNumber'
-        onChange={(event)=>handleChange(event,'volume')}
-      />
+                  <InputNumber
+                    placeholder="Volume"
+                    name="volume"
+                    className='InputNumber'
+                    onChange={(event) => handleChange(event, 'volume')}
+                  />
                 </Form.Item>
 
                 <Form.Item
@@ -788,11 +788,11 @@ message.error(error+'🥲')
                   ]}
                 >
                   <InputNumber
-        placeholder="Net Weight"
-        name="weight"
-        onChange={(event)=>handleChange(event,'weight')}
-        className='InputNumber'
-      />
+                    placeholder="Net Weight"
+                    name="weight"
+                    onChange={(event) => handleChange(event, 'weight')}
+                    className='InputNumber'
+                  />
                 </Form.Item>
 
                 <Form.Item
@@ -805,12 +805,13 @@ message.error(error+'🥲')
                     },
                   ]}
                 >
-                 <InputNumber
-        placeholder="Cubic Meters"
-        name="cbm"
-        onChange={(event)=>handleChange(event,'cbm')}
-        className='InputNumber'
-      />
+                  <InputNumber
+                    placeholder="Cubic Meters"
+                    name="cbm"
+                    onChange={(event) => handleChange(event, 'cbm')}
+                    className='InputNumber'
+                    maxLength={35}
+                  />
                 </Form.Item>
 
                 <Form.Item
@@ -823,12 +824,12 @@ message.error(error+'🥲')
                     },
                   ]}
                 >
-                 <InputNumber
-        placeholder="lenght"
-        name="lenght"
-        onChange={(event)=>handleChange(event,'lenght')}
-        className='InputNumber'
-      />
+                  <InputNumber
+                    placeholder="lenght"
+                    name="lenght"
+                    onChange={(event) => handleChange(event, 'lenght')}
+                    className='InputNumber'
+                  />
                 </Form.Item>
 
                 <Form.Item
@@ -841,12 +842,12 @@ message.error(error+'🥲')
                     },
                   ]}
                 >
-                 <InputNumber
-        placeholder="Width"
-        name="width"
-        onChange={(event)=>handleChange(event,'width')}
-        className='InputNumber'
-      />
+                  <InputNumber
+                    placeholder="Width"
+                    name="width"
+                    onChange={(event) => handleChange(event, 'width')}
+                    className='InputNumber'
+                  />
                 </Form.Item>
 
                 <Form.Item
@@ -860,31 +861,31 @@ message.error(error+'🥲')
                   ]}
                 >
                   <InputNumber
-        placeholder="Height"
-        name="height"
-        onChange={(event)=>handleChange(event,'height')}
-        className='InputNumber'
-      />
+                    placeholder="Height"
+                    name="height"
+                    onChange={(event) => handleChange(event, 'height')}
+                    className='InputNumber'
+                  />
                 </Form.Item>
 
                 <Form.Item
                   label="Quantity"
                   name="quantity"
                 >
-                 <InputNumber
-        placeholder="Quantity"
-        name="quantity"
-        onChange={(event)=>handleChange(event,'quantity')}
-        className='InputNumber'
-      />
+                  <InputNumber
+                    placeholder="Quantity"
+                    name="quantity"
+                    onChange={(event) => handleChange(event, 'quantity')}
+                    className='InputNumber'
+                  />
                 </Form.Item>
-                
+
               </TabPane>
 
-              <TabPane  tab="Special Instructions" key="special_info">
-              <Form.Item label="Introduction">
-        <Input.TextArea rows={7} placeholder="Special Instructions" name="special_description" onChange={handleInputChange}/>
-      </Form.Item>
+              <TabPane tab="Special Instructions" key="special_info">
+                <Form.Item label="Introduction">
+                  <Input.TextArea rows={7} placeholder="Special Instructions" name="special_description" onChange={handleInputChange} maxLength={100} />
+                </Form.Item>
               </TabPane>
 
 
