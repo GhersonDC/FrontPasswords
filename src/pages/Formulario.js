@@ -122,13 +122,7 @@ export const Formulario = () => {
         }
       })
       .catch((error) => {
-        const n = (datos.tariff).toString();
-        if(n.length<8){
-          message.error("HSCode must be at least 8 characters")
-        }else{
-          message.error(error);
-        }
-        
+message.error(error+'🥲')
       });
   }
 
@@ -139,6 +133,7 @@ export const Formulario = () => {
       rfc: cookies.get("rfc"),
       email: cookies.get("email"),
     });
+    form.resetFields();
   };
 
   //
@@ -181,7 +176,6 @@ export const Formulario = () => {
       ...datos,
       [e.target.name]: e.target.value,
     });
-    console.log(datos);
   };
   const handleChange = (value, name) => {
     setDatos({
@@ -293,8 +287,8 @@ export const Formulario = () => {
     setSearchText("");
   };
 
-  const onFinishFailed = (errorInfo) => {
-    message.error('Ah ocurrido un error',errorInfo)
+  const onFinishFailed = () => {
+    message.error('Required inputs incomplete')
   };
 
   //Columnas que se mostraran en la tabla
@@ -414,7 +408,7 @@ export const Formulario = () => {
         {/* Formulario Modal */}
         <Modal
           centered={true}
-          destroyOnClose
+          destroyOnClose={true}
           bodyStyle={{ overflowY: "auto", maxHeight: "calc(100vh - 200px)" }}
           title="Add Instruction Letter"
           visible={isModalVisible}
@@ -494,6 +488,7 @@ export const Formulario = () => {
                     placeholder="Reference"
                     name="reference"
                     onChange={handleInputChange}
+                    maxLength='50'
                   />
                 </Form.Item>
 
@@ -725,11 +720,14 @@ export const Formulario = () => {
                     {
                       required: true,
                       message: "Please input a HSCODE",
-                    },
+                    },{
+                      min:8,
+                      message:"Must have 8 charachters"
+                    }
                   ]}
-                  help="HSCode must be 8 characters"
                 >
                   <InputNumber
+                  stringMode
                   className="InputNumber"
                     placeholder="hscode must be greater than 8"
                     name="tariff"
