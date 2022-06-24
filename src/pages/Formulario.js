@@ -12,6 +12,7 @@ import {
   message,
   Select,
   Form,
+  Pagination,
 } from "antd";
 import { LogoutOutlined, SearchOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
@@ -354,26 +355,31 @@ export const Formulario = () => {
       title: "Volume",
       dataIndex: "volume",
       key: "10",
+      ...getColumnSearchProps("volume"),
     },
     {
       title: "Weight",
       dataIndex: "weight",
       key: "11",
+      ...getColumnSearchProps("weight"),
     },
     {
       title: "Height",
       dataIndex: "height",
       key: "12",
+      ...getColumnSearchProps("height"),
     },
     {
       title: "Width",
       dataIndex: "width",
       key: "13",
+      ...getColumnSearchProps("width"),
     },
     {
       title: "Quantity",
       dataIndex: "quantity",
       key: "14",
+      ...getColumnSearchProps("quantity"),
     },
   ];
   return (
@@ -403,7 +409,8 @@ export const Formulario = () => {
           />
         </div>
         <div className="table-div">
-          <Table key='table1' rowKey={(record) => record.id} loading={loading} dataSource={data} columns={columns} scroll={{ x: 2000, y: 1000 }} />
+          <Table key='table1' rowKey={(record) => record.id} loading={loading} dataSource={data} columns={columns} scroll={{ x: 2000, y:1000 }} 
+          pagination={{ defaultPageSize: 10,showQuickJumper:true, showSizeChanger: true, pageSizeOptions: ['10', '20', '30'],total:data.length,showTotal:(total) => `Total ${total} items`}}/>
         </div>
         {/* Formulario Modal */}
         <Modal
