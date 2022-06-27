@@ -15,11 +15,6 @@ export const Login = () => {
   const [loading, setLoading] = useState(false);
 
   const url = `${API_HOST}/api/login?email=${inputs.email}&password=${inputs.password}`;
-  useEffect(() => {
-    if (cookies.get("name")) {
-      window.location.href = "./menu";
-    }
-  }, []);
 
   const getData = async () => {
     setLoading(true);

@@ -152,13 +152,6 @@ export const Formulario = () => {
   useEffect(() => {
     getData();
     getAll();
-    if (
-      !cookies.get("nombre") &&
-      !cookies.get("clientid") &&
-      !cookies.get("address")
-    ) {
-      window.location.href = "/";
-    }
   }, []);
 
   //Funciones para desplegar el modal addInstructionLetter
@@ -729,7 +722,7 @@ export const Formulario = () => {
                       message: "Please input a HSCODE",
                     }, {
                       min: 8,
-                      message: "Must have 8 charachters"
+                      message: "Must have 8 digits"
                     }
                   ]}
                 >
