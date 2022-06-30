@@ -54,5 +54,7 @@
     {
         "title": "Quantity",
         "dataIndex": "quantity"
+    },{
+        "title": "Action"
     }
 ]
