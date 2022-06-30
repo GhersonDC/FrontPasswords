@@ -1,0 +1,62 @@
+[
+    {
+        "title": "Id",
+        "dataIndex": "id"
+    },
+    {
+        "title": "Name",
+        "dataIndex": "name"
+    },
+    {
+        "title": "Service Type",
+        "dataIndex": "type_service"
+    },
+    {
+        "title": "Reference",
+        "dataIndex": "reference"
+    },
+    {
+        "title": "Incoterm",
+        "dataIndex": "incoterm"
+    },
+    {
+        "title": "Type Equipment",
+        "dataIndex": "type_equipment"
+    },
+    {
+        "title": "Pol",
+        "dataIndex": "pol"
+    },
+    {
+        "title": "Pod",
+        "dataIndex": "pod"
+    },
+    {
+        "title": "HS Code",
+        "dataIndex": "tariff"
+    },
+    {
+        "title": "Type packaging",
+        "dataIndex": "type_packaging"
+    },
+    {
+        "title": "Volume",
+        "dataIndex": "volume"
+    },
+    {
+        "title": "Weight",
+        "dataIndex": "weight"
+    },
+    {
+        "title": "Height",
+        "dataIndex": "height"
+    },
+    {
+        "title": "Width",
+        "dataIndex": "width"
+    },
+    {
+        "title": "Quantity",
+        "dataIndex": "quantity"
+    }
+]

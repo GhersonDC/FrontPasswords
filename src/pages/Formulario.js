@@ -13,13 +13,20 @@ import {
   Select,
   Form,
 } from "antd";
-import { LogoutOutlined, SearchOutlined } from "@ant-design/icons";
+import { SearchOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
 import Cookies from "universal-cookie";
 
+import { Headers } from "../components/Header";
+
+import Columnas_Table from '../sources/columns_table.json';
+import Incoterms_Table from '../sources/incoterms_table.json';
+import Service_Type from '../sources/service_type.json';
+
+
 const cookies = new Cookies();
 const { TabPane } = Tabs;
-const { Header, Content } = Layout;
+const { Content } = Layout;
 const { Option } = Select;
 const API_HOST = process.env.REACT_APP_API_HOST || "http://localhost:8000";
 
@@ -34,6 +41,7 @@ export const Formulario = () => {
     rfc: cookies.get("rfc"),
     email: cookies.get("email"),
     phone_number: cookies.get("telefono"),
+    name: cookies.get("name"),
     type_service: 0,
     reference: "",
     incoterm: 0,
@@ -113,7 +121,7 @@ export const Formulario = () => {
       .then(async (response) => {
         // check for error response
         if (!response.ok) {
-          console.log(datos);
+          // console.log(datos);
           return Promise.reject("Error: Complete Correctly");
         } else if (response.ok) {
           message.success("Instruction Letter Created");
@@ -137,17 +145,16 @@ export const Formulario = () => {
     form.resetFields();
   };
 
+
+
   //
-  const cerrarSesion = () => {
-    cookies.remove("nombre", { path: "/" });
-    cookies.remove("token", { path: "/" });
-    cookies.remove("clientid", { path: "/" });
-    cookies.remove("address", { path: "/" });
-    cookies.remove("rfc", { path: "/" });
-    cookies.remove("telefono", { path: "/" });
-    cookies.remove("email", { path: "/" });
-    window.location.href = "/";
-  };
+  // const array = ["nombre", "token", "clientid", "address", "rfc", "telefono", "email"];
+  // const cerrarSesion = () => {
+  //   for (let i = 0; i <= array.length; i++) {
+  //     cookies.remove(array[i], { path: "/" });
+  //   }
+  //   window.location.href = "/";
+  // };
 
   useEffect(() => {
     getData();
@@ -177,6 +184,8 @@ export const Formulario = () => {
       [name]: value,
     });
   };
+  //
+
   //Buscador filtrado
   const getColumnSearchProps = (dataIndex) => ({
     filterDropdown: ({
@@ -286,108 +295,43 @@ export const Formulario = () => {
   };
 
   //Columnas que se mostraran en la tabla
-  const columns = [
-    {
-      title: "Id",
-      dataIndex: "id",
-      key: "1",
-      defaultSortOrder: "descend",
-      sorter: (a, b) => a.id - b.id,
-      ...getColumnSearchProps("id"),
-    },
-    {
-      title: "Service Type",
-      dataIndex: "type_service",
-      key: "2",
-      width: "15%",
-      ...getColumnSearchProps("type_service"),
-    },
-    {
-      title: "Reference",
-      dataIndex: "reference",
-      key: "3",
-      ...getColumnSearchProps("reference"),
-    },
-    {
-      title: "Incoterm",
-      dataIndex: "incoterm",
-      key: "4",
-      ...getColumnSearchProps("incoterm"),
-    },
-    {
-      title: "Type Equipment",
-      dataIndex: "type_equipment",
-      key: "5",
-      ...getColumnSearchProps("type_equipment"),
-    },
-    {
-      title: "POL",
-      dataIndex: "pol",
-      key: "6",
-      ...getColumnSearchProps("pol"),
-    },
-    {
-      title: "POD",
-      dataIndex: "pod",
-      key: "7",
-      ...getColumnSearchProps("pod"),
-    },
-    {
-      title: "HS Code",
-      dataIndex: "tariff",
-      key: "8",
-      ...getColumnSearchProps("tariff"),
-    },
-    {
-      title: "Type packaging",
-      dataIndex: "type_packaging",
-      key: "9",
-      ...getColumnSearchProps("type_packaging"),
-    },
-    {
-      title: "Volume",
-      dataIndex: "volume",
-      key: "10",
-      ...getColumnSearchProps("volume"),
-    },
-    {
-      title: "Weight",
-      dataIndex: "weight",
-      key: "11",
-      ...getColumnSearchProps("weight"),
-    },
-    {
-      title: "Height",
-      dataIndex: "height",
-      key: "12",
-      ...getColumnSearchProps("height"),
-    },
-    {
-      title: "Width",
-      dataIndex: "width",
-      key: "13",
-      ...getColumnSearchProps("width"),
-    },
-    {
-      title: "Quantity",
-      dataIndex: "quantity",
-      key: "14",
-      ...getColumnSearchProps("quantity"),
-    },
-  ];
+  const columnas = Columnas_Table;
+
+  const columns = []; //required for render after pushing into array
+
+  columnas.forEach(function (columna, index) {
+    columns.push({
+      title: columna.title,
+      dataIndex: columna.dataIndex,
+      key: index,
+      ...getColumnSearchProps(columna.dataIndex),
+    })
+  })
+
+  const incoterm = [];
+  const incoterms = Incoterms_Table;
+
+  incoterms.forEach(function (incot, index) {
+    incoterm.push({
+      key: index,
+      value: incot.value
+    })
+  })
+
+  const service_type = [];
+  const service_types = Service_Type;
+
+  service_types.forEach(function (stype, index) {
+    service_type.push({
+      key: index,
+      value: stype.value,
+      description: stype.description
+    })
+  })
+
   return (
     <div className="form-menu">
-      <Header>
-        <h2 className="form-menu-name-client">{cookies.get("nombre")}</h2>
-        <Button
-          style={{ position: "absolute", right: 15, top: 15 }}
-          type="primary"
-          icon={<LogoutOutlined />}
-          onClick={cerrarSesion}
-        >
-          Log out
-        </Button>
-      </Header>
+      <Headers />
       <Content>
         <div className="site-page-header-ghost-wrapper">
           <PageHeader
@@ -409,12 +353,13 @@ export const Formulario = () => {
         <Modal
           centered={true}
           destroyOnClose={true}
-          bodyStyle={{ overflowY: "auto", maxHeight: "calc(100vh - 200px)" }}
+          bodyStyle={{ overflowY: "scroll", maxHeight: "calc(100vh - 200px)" }}
           title="Add Instruction Letter"
           visible={isModalVisible}
           onCancel={handleCancel}
           onOk={form.submit}
           width={600}
+
         >
           <Form
             form={form}
@@ -456,21 +401,9 @@ export const Formulario = () => {
                         .includes(input.toUpperCase())
                     }
                   >
-                    <Option key="1" value={1}>
-                      TERRESTRE
-                    </Option>
-                    <Option key="2" value={2}>
-                      MARITIMO
-                    </Option>
-                    <Option key="3" value={3}>
-                      DESPACHO ADUANAL/REGIMEN SI APLICA
-                    </Option>
-                    <Option key="4" value={4}>
-                      COMBINADO
-                    </Option>
-                    <Option key="5" value={5}>
-                      OTRO
-                    </Option>
+                    {service_type.map((option) => (
+                      <Select.Option key={option.key} value={option.value}>{option.description}</Select.Option>
+                    ))}
                   </Select>
                 </Form.Item>
 
@@ -514,39 +447,9 @@ export const Formulario = () => {
                         .includes(input.toUpperCase())
                     }
                   >
-                    <Option key="1" value="EXW">
-                      EXW
-                    </Option>
-                    <Option key="2" value="FCA">
-                      FCA
-                    </Option>
-                    <Option key="3" value="CPT">
-                      CPT
-                    </Option>
-                    <Option key="4" value="CIP">
-                      CIP
-                    </Option>
-                    <Option key="5" value="DAP">
-                      DAP
-                    </Option>
-                    <Option key="6" value="DPU">
-                      DPU
-                    </Option>
-                    <Option key="7" value="DDP">
-                      DDP
-                    </Option>
-                    <Option key="8" value="CFR">
-                      CFR
-                    </Option>
-                    <Option key="9" value="FOB">
-                      FOB
-                    </Option>
-                    <Option key="10" value="FAS">
-                      FAS
-                    </Option>
-                    <Option key="11" value="CIF">
-                      CIF
-                    </Option>
+                    {incoterm.map((option) => (
+                      <Select.Option key={option.key} value={option.value}>{option.value}</Select.Option>
+                    ))}
                   </Select>
                 </Form.Item>
 
@@ -729,7 +632,7 @@ export const Formulario = () => {
                   <InputNumber
                     stringMode
                     className="InputNumber"
-                    placeholder="hscode must be greater than 8"
+                    placeholder="hscode must be greater than 8 digits"
                     name="tariff"
                     onChange={(event) => handleChange(event, "tariff")}
                     maxLength={10}
@@ -816,7 +719,7 @@ export const Formulario = () => {
 
                 <Form.Item
                   label="length"
-                  name="lenght"
+                  name="lenght" //error de nombre en variable
                   rules={[
                     {
                       required: true,
@@ -887,8 +790,6 @@ export const Formulario = () => {
                   <Input.TextArea rows={7} placeholder="Special Instructions" name="special_description" onChange={handleInputChange} maxLength={100} />
                 </Form.Item>
               </TabPane>
-
-
             </Tabs>
           </Form>
         </Modal>

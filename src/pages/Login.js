@@ -24,13 +24,13 @@ export const Login = () => {
     setLoading(false);
     const { data } = await resp.json();
     if (data.nombre) {
-      cookies.set("nombre", data.nombre, { path: "/" });
-      cookies.set("token", data.token, { path: "/" });
-      cookies.set("clientid", data.clientid, { path: "/" });
-      cookies.set("rfc", data.rfc, { path: "/" });
-      cookies.set("address", data.direccion, { path: "/" });
-      cookies.set("telefono", data.telefono, { path: "/" });
-      cookies.set('email', inputs.email, { path: "/" });
+      cookies.set("nombre", data.nombre, {secure: true, sameSite: 'none'});
+      cookies.set("token", data.token, {secure: true, sameSite: 'none'});
+      cookies.set("clientid", data.clientid, {secure: true, sameSite: 'none'});
+      cookies.set("rfc", data.rfc, {secure: true, sameSite: 'none'});
+      cookies.set("address", data.direccion, {secure: true, sameSite: 'none'});
+      cookies.set("telefono", data.telefono, {secure: true, sameSite: 'none'});
+      cookies.set('email', inputs.email, {secure: true, sameSite: 'none'});
       window.location.href = "./menu";
     } else {
       message.error("User or password incorrect");
