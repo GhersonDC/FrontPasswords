@@ -23,6 +23,7 @@ import { Headers } from "../components/Header";
 import Columnas_Table from '../sources/columns_table.json';
 import Incoterms_Table from '../sources/incoterms_table.json';
 import Service_Type from '../sources/service_type.json';
+import { Quotes } from "../components/Quotes";
 
 
 const cookies = new Cookies();
@@ -70,6 +71,7 @@ export const Formulario = () => {
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const [form] = Form.useForm();
+  const [quote, setquote] = useState(false)
 
 
   const searchInput = useRef(null);
@@ -155,7 +157,7 @@ export const Formulario = () => {
         }
       })
       .catch((error) => {
-        message.error(error + '🥲')
+        message.error(error)
       });
   }
 
@@ -168,17 +170,6 @@ export const Formulario = () => {
     });
     form.resetFields();
   };
-
-
-
-  //
-  // const array = ["nombre", "token", "clientid", "address", "rfc", "telefono", "email"];
-  // const cerrarSesion = () => {
-  //   for (let i = 0; i <= array.length; i++) {
-  //     cookies.remove(array[i], { path: "/" });
-  //   }
-  //   window.location.href = "/";
-  // };
 
   useEffect(() => {
     getData();
@@ -324,12 +315,25 @@ export const Formulario = () => {
   const columns = []; //required for render after pushing into array
 
   columnas.forEach(function (columna, index) {
-    columns.push({
-      title: columna.title,
-      dataIndex: columna.dataIndex,
-      key: index,
-      ...getColumnSearchProps(columna.dataIndex),
-    })
+    if(columna.title ==="Action"){
+      columns.push({
+        title: columna.title,
+        key: index,
+        fixed: 'right',
+        render: (_, record) => (
+          <Space size="middle">
+            <Button type="primary" onClick={()=>{setquote(true)}}>Quote</Button>
+          </Space>
+        )
+      })
+    }else{
+      columns.push({
+        title: columna.title,
+        dataIndex: columna.dataIndex,
+        key: index,
+        ...getColumnSearchProps(columna.dataIndex),
+      })
+    }
   })
 
   const incoterm = [];
@@ -391,6 +395,7 @@ export const Formulario = () => {
             </Button>,
           ]}
         >
+          
           <Form
             form={form}
             name="basic"
@@ -854,6 +859,7 @@ export const Formulario = () => {
             </Tabs>
           </Form>
         </Modal>
+        <Quotes quote={quote} close={() => setquote(false)}/>
       </Content>
     </div>
   );
