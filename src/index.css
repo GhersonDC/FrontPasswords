@@ -187,11 +187,6 @@ h2 {
   max-height: 10vh;
 }
 
-Input,
-.InputNumber {
-  border-radius: 7px !important;
-}
-
 .InputNumber {
   width: 100% !important;
 }
@@ -262,6 +257,9 @@ Input,
     text-overflow: ellipsis;
   }
 
+  .input_info_ant{
+    border-radius: 0px !important;
+  }
   .container > .total-login {
     /* background-color: black; */
     height: 100%;

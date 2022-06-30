@@ -12,6 +12,7 @@ import {
   message,
   Select,
   Form,
+  notification,
 } from "antd";
 import { SearchOutlined } from "@ant-design/icons";
 import Highlighter from "react-highlight-words";
@@ -74,6 +75,29 @@ export const Formulario = () => {
   const searchInput = useRef(null);
   const url = `${API_HOST}/api/`;
   const token = cookies.get("token");
+
+  const openNotificationDescription = () => {
+    notification.open({
+      message: 'Ejemplos de Descripcion',
+      description:
+        'This is the content of the description.',
+      className: 'custom-class',
+      style: {
+        width: 600,
+      },
+    });
+  };
+  const openNotificationReference = () => {
+    notification.open({
+      message: 'Ejemplos de Referencia',
+      description:
+        'This is the content of the notification. This is the content of the notification. This is the content of the notification.',
+      className: 'custom-class',
+      style: {
+        width: 600,
+      },
+    });
+  };
 
   //Fetch para getAll del api
   const getData = async () => {
@@ -357,9 +381,15 @@ export const Formulario = () => {
           title="Add Instruction Letter"
           visible={isModalVisible}
           onCancel={handleCancel}
-          onOk={form.submit}
           width={600}
-
+          footer={[
+            <Button key="back" onClick={handleCancel}>
+              Close
+            </Button>,
+            <Button key="submit" type="primary" onClick={form.submit}>
+              Save
+            </Button>,
+          ]}
         >
           <Form
             form={form}
@@ -407,22 +437,36 @@ export const Formulario = () => {
                   </Select>
                 </Form.Item>
 
+                <Input.Group compact>
+                
+                </Input.Group>
                 <Form.Item
                   label="Reference"
                   name="reference"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please input a Reference!",
-                    },
-                  ]}
+                  // rules={[
+                  //   {
+                  //     required: true,
+                  //     message: "Please input a Reference!",
+                  //   },
+                  // ]}
                 >
-                  <Input
-                    placeholder="Reference"
-                    name="reference"
-                    onChange={handleInputChange}
-                    maxLength='50'
-                  />
+                    <Input
+                      maxLength='50'
+                      placeholder="Reference"
+                      style={{
+                        width: 'calc(100% - 50px)',
+                      }}
+                      minLength={1}
+                      name="reference" onChange={handleInputChange}
+                    />
+
+                    <Button
+                      style={{
+                        width: '50px',
+                        overflow: "hidden",
+                      }} type="primary" onClick={openNotificationReference}>
+                      ?
+                    </Button>
                 </Form.Item>
 
                 <Form.Item
@@ -606,14 +650,31 @@ export const Formulario = () => {
                 <Form.Item
                   label="Description"
                   name="description"
-                  rules={[
-                    {
-                      required: true,
-                      message: "Please input a description!",
-                    },
-                  ]}
+                  // rules={[
+                  //   {
+                  //     required: true,
+                  //     message: "Please input a description!",
+                  //   },
+                  // ]}
                 >
-                  <Input name="description" onChange={handleInputChange} maxLength={100} />
+                  <Input.Group compact>
+                    <Input
+                    minLength={1}
+                      style={{
+                        width: 'calc(100% - 50px)',
+                      }}
+                      name="description" onChange={handleInputChange} maxLength={100}
+                      placeholder="Description"
+                    />
+
+                    <Button
+                      style={{
+                        width: '50px',
+                        overflow: "hidden",
+                      }} type="primary" onClick={openNotificationDescription}>
+                      ?
+                    </Button>
+                  </Input.Group>
                 </Form.Item>
 
                 <Form.Item
@@ -632,7 +693,7 @@ export const Formulario = () => {
                   <InputNumber
                     stringMode
                     className="InputNumber"
-                    placeholder="hscode must be greater than 8 digits"
+                    placeholder="Hscode must be greater than 8 digits"
                     name="tariff"
                     onChange={(event) => handleChange(event, "tariff")}
                     maxLength={10}
@@ -728,7 +789,7 @@ export const Formulario = () => {
                   ]}
                 >
                   <InputNumber
-                    placeholder="lenght"
+                    placeholder="Lenght"
                     name="lenght"
                     onChange={(event) => handleChange(event, 'lenght')}
                     className='InputNumber'
