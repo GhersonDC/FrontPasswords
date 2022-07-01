@@ -69,7 +69,6 @@ export const Formulario = () => {
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const [form] = Form.useForm();
-<<<<<<< HEAD
   const [quote, setquote] = useState(false)
 
   const [checkNick,setCheckNick] = useState(true);
@@ -89,9 +88,6 @@ export const Formulario = () => {
     console.log(e)
   }
 
-=======
-  const [quote, setquote] = useState({status:false,id:0,isLoading:false});
->>>>>>> 4adf074041b59061f0984ff4f9a58629ef0e93e9
 
   const searchInput = useRef(null);
   const url = `${API_HOST}/api/`;
