@@ -61,7 +61,7 @@ export const Quotes = ({ quote, close }) => {
           loading={quote.isLoading}
           renderItem={(item) => (
             <List.Item 
-            actions={[<Button type='primary'>Descargar PDF</Button>,<p>Accept <Switch/></p>]}>
+            actions={[<Button type='primary' onClick={()=>{setverPdf(true)}}>Ver PDF</Button>,<p>Accept <Switch/></p>]}>
               <List.Item.Meta
                 title={<a href="https://ant.design">{item.localstotal}</a>}
                 description="Ant Design, a design language for background applications, is refined by Ant UED Team"
@@ -69,7 +69,7 @@ export const Quotes = ({ quote, close }) => {
             </List.Item>
           )}
         />
-        {verPdf ? <PDF/> : null}
+        {verPdf ? <PDF visible={verPdf} close={() => setverPdf(false)}/> : null}
       </Drawer>
     </>
   );
