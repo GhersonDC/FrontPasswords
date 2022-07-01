@@ -20,18 +20,16 @@ import Cookies from "universal-cookie";
 
 import { Headers } from "../components/Header";
 
-import Columnas_Table from '../sources/columns_table.json';
-import Incoterms_Table from '../sources/incoterms_table.json';
-import Service_Type from '../sources/service_type.json';
+import Columnas_Table from "../sources/columns_table.json";
+import Incoterms_Table from "../sources/incoterms_table.json";
+import Service_Type from "../sources/service_type.json";
 import { Quotes } from "../components/Quotes";
-
 
 const cookies = new Cookies();
 const { TabPane } = Tabs;
 const { Content } = Layout;
 const { Option } = Select;
 const API_HOST = process.env.REACT_APP_API_HOST || "http://localhost:8000";
-
 
 export const Formulario = () => {
   const [isModalVisible, setIsModalVisible] = useState(false); //use State para el modal
@@ -71,19 +69,16 @@ export const Formulario = () => {
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const [form] = Form.useForm();
-  const [quote, setquote] = useState(false)
-
+  const [quote, setquote] = useState({status:false,id:0,isLoading:false});
 
   const searchInput = useRef(null);
   const url = `${API_HOST}/api/`;
-  const token = cookies.get("token");
 
   const openNotificationDescription = () => {
     notification.open({
-      message: 'Ejemplos de Descripcion',
-      description:
-        'This is the content of the description.',
-      className: 'custom-class',
+      message: "Ejemplos de Descripcion",
+      description: "This is the content of the description.",
+      className: "custom-class",
       style: {
         width: 600,
       },
@@ -91,10 +86,10 @@ export const Formulario = () => {
   };
   const openNotificationReference = () => {
     notification.open({
-      message: 'Ejemplos de Referencia',
+      message: "Ejemplos de Referencia",
       description:
-        'This is the content of the notification. This is the content of the notification. This is the content of the notification.',
-      className: 'custom-class',
+        "This is the content of the notification. This is the content of the notification. This is the content of the notification.",
+      className: "custom-class",
       style: {
         width: 600,
       },
@@ -107,7 +102,7 @@ export const Formulario = () => {
     const resp = await fetch(url + "clients/" + cookies.get("clientid"), {
       method: "GET",
       headers: {
-        Authorization: `Bearer ${token}`, //Agregado
+        Authorization: `Bearer ${localStorage.getItem('token')}`, //Agregado
       },
     });
     setLoading(false);
@@ -138,7 +133,7 @@ export const Formulario = () => {
       credentials: "same-origin",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${localStorage.getItem('token')}`,
       },
       redirect: "follow",
       referrerPolicy: "no-referrer",
@@ -157,7 +152,7 @@ export const Formulario = () => {
         }
       })
       .catch((error) => {
-        message.error(error)
+        message.error(error);
       });
   }
 
@@ -306,7 +301,7 @@ export const Formulario = () => {
   };
 
   const onFinishFailed = () => {
-    message.error('Required inputs incomplete')
+    message.error("Required inputs incomplete");
   };
 
   //Columnas que se mostraran en la tabla
@@ -315,26 +310,33 @@ export const Formulario = () => {
   const columns = []; //required for render after pushing into array
 
   columnas.forEach(function (columna, index) {
-    if(columna.title ==="Action"){
+    if (columna.title === "Action") {
       columns.push({
         title: columna.title,
         key: index,
-        fixed: 'right',
+        fixed: "right",
         render: (_, record) => (
           <Space size="middle">
-            <Button type="primary" onClick={()=>{setquote(true)}}>Quote</Button>
+            <Button
+              type="primary"
+              onClick={() => {
+                setquote({status:true,id:record,isLoading:true});
+              }}
+            >
+              Quote
+            </Button>
           </Space>
-        )
-      })
-    }else{
+        ),
+      });
+    } else {
       columns.push({
         title: columna.title,
         dataIndex: columna.dataIndex,
         key: index,
         ...getColumnSearchProps(columna.dataIndex),
-      })
+      });
     }
-  })
+  });
 
   const incoterm = [];
   const incoterms = Incoterms_Table;
@@ -342,9 +344,9 @@ export const Formulario = () => {
   incoterms.forEach(function (incot, index) {
     incoterm.push({
       key: index,
-      value: incot.value
-    })
-  })
+      value: incot.value,
+    });
+  });
 
   const service_type = [];
   const service_types = Service_Type;
@@ -353,9 +355,9 @@ export const Formulario = () => {
     service_type.push({
       key: index,
       value: stype.value,
-      description: stype.description
-    })
-  })
+      description: stype.description,
+    });
+  });
 
   return (
     <div className="form-menu">
@@ -374,8 +376,22 @@ export const Formulario = () => {
           />
         </div>
         <div className="table-div">
-          <Table key='table1' rowKey={(record) => record.id} loading={loading} dataSource={data} columns={columns} scroll={{ x: 2000, y: 1000 }}
-            pagination={{ defaultPageSize: 10, showQuickJumper: true, showSizeChanger: true, pageSizeOptions: ['10', '20', '30'], total: data.length, showTotal: (total) => `Total ${total} items` }} />
+          <Table
+            key="table1"
+            rowKey={(record) => record.id}
+            loading={loading}
+            dataSource={data}
+            columns={columns}
+            scroll={{ x: 2000, y: 1000 }}
+            pagination={{
+              defaultPageSize: 10,
+              showQuickJumper: true,
+              showSizeChanger: true,
+              pageSizeOptions: ["10", "20", "30"],
+              total: data.length,
+              showTotal: (total) => `Total ${total} items`,
+            }}
+          />
         </div>
         {/* Formulario Modal */}
         <Modal
@@ -395,7 +411,6 @@ export const Formulario = () => {
             </Button>,
           ]}
         >
-          
           <Form
             form={form}
             name="basic"
@@ -437,41 +452,44 @@ export const Formulario = () => {
                     }
                   >
                     {service_type.map((option) => (
-                      <Select.Option key={option.key} value={option.value}>{option.description}</Select.Option>
+                      <Select.Option key={option.key} value={option.value}>
+                        {option.description}
+                      </Select.Option>
                     ))}
                   </Select>
                 </Form.Item>
 
-                <Input.Group compact>
-                
-                </Input.Group>
                 <Form.Item
                   label="Reference"
                   name="reference"
-                  // rules={[
-                  //   {
-                  //     required: true,
-                  //     message: "Please input a Reference!",
-                  //   },
-                  // ]}
+                  rules={[
+                    {
+                      required: true,
+                      message: "Please input a Reference!",
+                    },
+                  ]}
                 >
-                    <Input
-                      maxLength='50'
-                      placeholder="Reference"
-                      style={{
-                        width: 'calc(100% - 50px)',
-                      }}
-                      minLength={1}
-                      name="reference" onChange={handleInputChange}
-                    />
-
-                    <Button
-                      style={{
-                        width: '50px',
-                        overflow: "hidden",
-                      }} type="primary" onClick={openNotificationReference}>
-                      ?
-                    </Button>
+                  <Input.Group compact><Input
+                    maxLength="50"
+                    placeholder="Reference"
+                    style={{
+                      width: "calc(100% - 50px)",
+                    }}
+                    minLength={1}
+                    name="reference"
+                    onChange={handleInputChange}
+                  />
+                  <Button
+                    style={{
+                      width: "50px",
+                      overflow: "hidden",
+                    }}
+                    type="primary"
+                    onClick={openNotificationReference}
+                  >
+                    ?
+                  </Button></Input.Group>
+                  
                 </Form.Item>
 
                 <Form.Item
@@ -497,7 +515,9 @@ export const Formulario = () => {
                     }
                   >
                     {incoterm.map((option) => (
-                      <Select.Option key={option.key} value={option.value}>{option.value}</Select.Option>
+                      <Select.Option key={option.key} value={option.value}>
+                        {option.value}
+                      </Select.Option>
                     ))}
                   </Select>
                 </Form.Item>
@@ -512,15 +532,23 @@ export const Formulario = () => {
                     },
                   ]}
                 >
-                  <Select showSearch
+                  <Select
+                    showSearch
                     optionFilterProp="children"
                     placeholder="Type Equipment"
                     name="equipment"
-                    style={{ width: '100%' }}
-                    onSelect={(event) => handleChange(event, 'type_equipment')}
-                    filterOption={(input, option) => option.children.toUpperCase().includes(input.toUpperCase())}>
+                    style={{ width: "100%" }}
+                    onSelect={(event) => handleChange(event, "type_equipment")}
+                    filterOption={(input, option) =>
+                      option.children
+                        .toUpperCase()
+                        .includes(input.toUpperCase())
+                    }
+                  >
                     {equipment.map((option) => (
-                      <Select.Option key={option.id} value={option.id}>{option.name}</Select.Option>
+                      <Select.Option key={option.id} value={option.id}>
+                        {option.name}
+                      </Select.Option>
                     ))}
                   </Select>
                 </Form.Item>
@@ -664,19 +692,24 @@ export const Formulario = () => {
                 >
                   <Input.Group compact>
                     <Input
-                    minLength={1}
+                      minLength={1}
                       style={{
-                        width: 'calc(100% - 50px)',
+                        width: "calc(100% - 50px)",
                       }}
-                      name="description" onChange={handleInputChange} maxLength={100}
+                      name="description"
+                      onChange={handleInputChange}
+                      maxLength={100}
                       placeholder="Description"
                     />
 
                     <Button
                       style={{
-                        width: '50px',
+                        width: "50px",
                         overflow: "hidden",
-                      }} type="primary" onClick={openNotificationDescription}>
+                      }}
+                      type="primary"
+                      onClick={openNotificationDescription}
+                    >
                       ?
                     </Button>
                   </Input.Group>
@@ -689,10 +722,11 @@ export const Formulario = () => {
                     {
                       required: true,
                       message: "Please input a HSCODE",
-                    }, {
+                    },
+                    {
                       min: 8,
-                      message: "Must have 8 digits"
-                    }
+                      message: "Must have 8 digits",
+                    },
                   ]}
                 >
                   <InputNumber
@@ -715,15 +749,23 @@ export const Formulario = () => {
                     },
                   ]}
                 >
-                  <Select showSearch
+                  <Select
+                    showSearch
                     optionFilterProp="children"
                     placeholder="Type Packaging"
                     name="packaging"
-                    style={{ width: '100%' }}
-                    onSelect={(event) => handleChange(event, 'type_packaging')}
-                    filterOption={(input, option) => option.children.toUpperCase().includes(input.toUpperCase())}>
+                    style={{ width: "100%" }}
+                    onSelect={(event) => handleChange(event, "type_packaging")}
+                    filterOption={(input, option) =>
+                      option.children
+                        .toUpperCase()
+                        .includes(input.toUpperCase())
+                    }
+                  >
                     {packaging.map((option) => (
-                      <Select.Option key={option.id} value={option.id}>{option.name}</Select.Option>
+                      <Select.Option key={option.id} value={option.id}>
+                        {option.name}
+                      </Select.Option>
                     ))}
                   </Select>
                 </Form.Item>
@@ -741,8 +783,8 @@ export const Formulario = () => {
                   <InputNumber
                     placeholder="Volume"
                     name="volume"
-                    className='InputNumber'
-                    onChange={(event) => handleChange(event, 'volume')}
+                    className="InputNumber"
+                    onChange={(event) => handleChange(event, "volume")}
                   />
                 </Form.Item>
 
@@ -759,8 +801,8 @@ export const Formulario = () => {
                   <InputNumber
                     placeholder="Net Weight"
                     name="weight"
-                    onChange={(event) => handleChange(event, 'weight')}
-                    className='InputNumber'
+                    onChange={(event) => handleChange(event, "weight")}
+                    className="InputNumber"
                   />
                 </Form.Item>
 
@@ -777,8 +819,8 @@ export const Formulario = () => {
                   <InputNumber
                     placeholder="Cubic Meters"
                     name="cbm"
-                    onChange={(event) => handleChange(event, 'cbm')}
-                    className='InputNumber'
+                    onChange={(event) => handleChange(event, "cbm")}
+                    className="InputNumber"
                     maxLength={35}
                   />
                 </Form.Item>
@@ -796,8 +838,8 @@ export const Formulario = () => {
                   <InputNumber
                     placeholder="Lenght"
                     name="lenght"
-                    onChange={(event) => handleChange(event, 'lenght')}
-                    className='InputNumber'
+                    onChange={(event) => handleChange(event, "lenght")}
+                    className="InputNumber"
                   />
                 </Form.Item>
 
@@ -814,8 +856,8 @@ export const Formulario = () => {
                   <InputNumber
                     placeholder="Width"
                     name="width"
-                    onChange={(event) => handleChange(event, 'width')}
-                    className='InputNumber'
+                    onChange={(event) => handleChange(event, "width")}
+                    className="InputNumber"
                   />
                 </Form.Item>
 
@@ -832,34 +874,36 @@ export const Formulario = () => {
                   <InputNumber
                     placeholder="Height"
                     name="height"
-                    onChange={(event) => handleChange(event, 'height')}
-                    className='InputNumber'
+                    onChange={(event) => handleChange(event, "height")}
+                    className="InputNumber"
                   />
                 </Form.Item>
 
-                <Form.Item
-                  label="Quantity"
-                  name="quantity"
-                >
+                <Form.Item label="Quantity" name="quantity">
                   <InputNumber
                     placeholder="Quantity"
                     name="quantity"
-                    onChange={(event) => handleChange(event, 'quantity')}
-                    className='InputNumber'
+                    onChange={(event) => handleChange(event, "quantity")}
+                    className="InputNumber"
                   />
                 </Form.Item>
-
               </TabPane>
 
               <TabPane tab="Special Instructions" key="special_info">
                 <Form.Item label="Introduction">
-                  <Input.TextArea rows={7} placeholder="Special Instructions" name="special_description" onChange={handleInputChange} maxLength={100} />
+                  <Input.TextArea
+                    rows={7}
+                    placeholder="Special Instructions"
+                    name="special_description"
+                    onChange={handleInputChange}
+                    maxLength={100}
+                  />
                 </Form.Item>
               </TabPane>
             </Tabs>
           </Form>
         </Modal>
-        <Quotes quote={quote} close={() => setquote(false)}/>
+        {quote.status ? <Quotes quote={quote} close={() => setquote({status:false,isLoading:false})} />:null}
       </Content>
     </div>
   );

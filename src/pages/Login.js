@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { Form, Input, Button, message } from "antd";
 import Cookies from "universal-cookie";
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
@@ -25,12 +25,12 @@ export const Login = () => {
     const { data } = await resp.json();
     if (data.nombre) {
       cookies.set("nombre", data.nombre, {secure: true, sameSite: 'none'});
-      cookies.set("token", data.token, {secure: true, sameSite: 'none'});
       cookies.set("clientid", data.clientid, {secure: true, sameSite: 'none'});
       cookies.set("rfc", data.rfc, {secure: true, sameSite: 'none'});
       cookies.set("address", data.direccion, {secure: true, sameSite: 'none'});
       cookies.set("telefono", data.telefono, {secure: true, sameSite: 'none'});
       cookies.set('email', inputs.email, {secure: true, sameSite: 'none'});
+      localStorage.setItem('token',data.token);
       window.location.href = "./menu";
     } else {
       message.error("User or password incorrect");
@@ -127,7 +127,7 @@ export const Login = () => {
         </div>
       </div>
       <div className="total-login-images">
-        <img className="total-login-images-cargo"></img>
+        <img className="total-login-images-cargo" alt="cargo-image"></img>
       </div>
     </div>
   )

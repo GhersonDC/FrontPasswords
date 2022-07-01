@@ -15,6 +15,7 @@ import {
     for (let i = 0; i < array.length; i++) {
       cookies.remove(array[i], {secure: true, sameSite: 'none'});
     }
+    localStorage.removeItem('token');
     window.location.href = "/";
   };
 export const Headers = () => {
