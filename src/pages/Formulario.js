@@ -73,6 +73,23 @@ export const Formulario = () => {
   const [form] = Form.useForm();
   const [quote, setquote] = useState(false)
 
+  const [checkNick,setCheckNick] = useState(true);
+  
+
+  useEffect(()=>{
+    form.validateFields(['nickname'])
+  },[checkNick,form])
+
+  const onCheckBoxChange = (e) =>{
+    if(e.target.textLength > 0){
+      setCheckNick(false)
+    }
+    else if(e.target.textLength == 0){
+      setCheckNick(true)
+    }
+    console.log(e)
+  }
+
 
   const searchInput = useRef(null);
   const url = `${API_HOST}/api/`;
@@ -448,12 +465,12 @@ export const Formulario = () => {
                 <Form.Item
                   label="Reference"
                   name="reference"
-                  // rules={[
-                  //   {
-                  //     required: true,
-                  //     message: "Please input a Reference!",
-                  //   },
-                  // ]}
+                  rules={[
+                    {
+                      required: checkNick,
+                      message: "Please input a Reference!",
+                    },
+                  ]}
                 >
                     <Input
                       maxLength='50'
@@ -462,7 +479,7 @@ export const Formulario = () => {
                         width: 'calc(100% - 50px)',
                       }}
                       minLength={1}
-                      name="reference" onChange={handleInputChange}
+                      name="reference" onChange={onCheckBoxChange}
                     />
 
                     <Button
