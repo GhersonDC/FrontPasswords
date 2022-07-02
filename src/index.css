@@ -339,6 +339,19 @@ h2 {
   width: auto;
 }
 
+.four-col-printed{
+  margin: auto;
+  width: 72vw;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-wrap: nowrap;
+  padding: 5px;
+  text-align: center;
+  border-bottom: 1px solid black;
+  font-size: 15px;
+}
+
 
 .double-col {
   background-color: #0068ff !important;
@@ -355,12 +368,54 @@ h2 {
   align-items: center;
   display: flex;
   flex-wrap: nowrap;
-  padding: 20px;
+  padding: 15px;
   text-align: center;
-  border-bottom: 1px solid black;
+  border-bottom: 2px solid black;
+  border-top: 1px solid black;
+  font-weight: bold;
 }
 .pdf-content{
   border:1px solid black;
-  width:72vw;
+  width:45vw;
   margin: auto;
+}
+.total-col {
+  margin: auto;
+  width: 72vw;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-wrap: nowrap;
+  text-align: center;
+  border-bottom: 1px solid black;
+  height: 4vh;
+  background-color: black;
+  color: #fff;
+}
+.total-col-white {
+  margin: auto;
+  width: 72vw;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-wrap: nowrap;
+  text-align: center;
+  height: 4vh;
+}
+.double-col-white{ 
+  margin: auto;
+  width: 72vw;
+  display: flex;
+  border-top: 1px solid black;
+}
+.col-footer{
+  background-color: #0068ff !important;
+  margin: auto;
+  width: 72vw;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  color: white;
+  height: 12vh;
+  font-size: 15px;
 }

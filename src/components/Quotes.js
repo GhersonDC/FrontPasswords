@@ -36,12 +36,11 @@ export const Quotes = ({ quote, close }) => {
           message.log("Error de red");
         });
     }
-  }, [quote.isLoading]);
-
+  }, []);
   return (
     <>
       <Drawer
-        title={`Quote ${quote.id ? quote.id.name: "..."}`}
+        title={`Letter ${quote.id ? quote.id.name: "..."}`}
         placement="right"
         width={750}
         onClose={close}
@@ -63,8 +62,8 @@ export const Quotes = ({ quote, close }) => {
             <List.Item 
             actions={[<Button type='primary' onClick={()=>{setverPdf(true)}}>Ver PDF</Button>,<p>Accept <Switch/></p>]}>
               <List.Item.Meta
-                title={<a href="https://ant.design">{item.localstotal}</a>}
-                description="Ant Design, a design language for background applications, is refined by Ant UED Team"
+                title={item.name}
+                description={`${quote.id.reference} Port of load ${quote.id.pol}  Port of discharge ${quote.id.pod}`}
               />
             </List.Item>
           )}
