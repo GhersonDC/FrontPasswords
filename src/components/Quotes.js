@@ -7,7 +7,7 @@ const API_HOST = process.env.REACT_APP_API_HOST || "http://localhost:8000";
 
 export const Quotes = ({ quote, close }) => {
   const [dataQuote, setdataQuote] = useState([]);
-  const [verPdf, setverPdf] = useState({visible:false,quoteData:''})
+  const [verPdf, setverPdf] = useState({visible:false,quoteData:'',data:''})
 
   const url = `http://127.0.0.1:8000/api/quote/1`;
 
@@ -23,7 +23,7 @@ export const Quotes = ({ quote, close }) => {
           if (response.ok) {
             // ⬅️ verificamos que todo esté bien con la respuesta HTTP
             response.json().then(({ data }) => {
-              setdataQuote(data);
+              setdataQuote(data); 
               quote.isLoading = false;
             });
           } else {
@@ -36,6 +36,7 @@ export const Quotes = ({ quote, close }) => {
         });
     }
   }, []);
+  
   return (
     <>
       <Drawer
@@ -57,15 +58,28 @@ export const Quotes = ({ quote, close }) => {
           itemLayout="horizontal"
           dataSource={dataQuote}
           loading={quote.isLoading}
-          renderItem={(item) => (
-            <List.Item 
-            actions={[<Button type='primary' onClick={()=>{setverPdf({visible:true,data:item})}}>Ver PDF</Button>,<p>Accept <Switch/></p>]}>
+          renderItem={(item) => {
+            let color;
+            let border;
+            
+
+            if(item.status===1){
+              color='rgba(23, 255, 0,.4)'
+            border='1px solid #17FF00'}
+            else if(item.status===0){color='rgba(250, 19, 0,.3)' 
+            border='1px solid #C82A0E'}
+            else{color='white'
+            border='1px solid black'}
+
+            return <List.Item 
+            style={{background:color,border:border,height:'10vh',padding:10,marginTop:5,borderRadius:4}}
+            actions={[<Button type='primary' onClick={()=>{setverPdf({visible:true,data:item})}}>View Quote</Button> ]}>
               <List.Item.Meta
                 title={item.name}
                 description={`${quote.id.reference} Port of load ${quote.id.pol}  Port of discharge ${quote.id.pod}`}
               />
             </List.Item>
-          )}
+          }}
         />
         {verPdf ? <PDF visible={verPdf} close={() => setverPdf(false)}/> : null}
       </Drawer>

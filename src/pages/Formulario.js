@@ -72,10 +72,6 @@ export const Formulario = () => {
   const [form] = Form.useForm();
   const [quote, setquote] = useState(false);
 
-  useEffect(() => {
-    form.validateFields(["nickname"]);
-  }, [form]);
-
   const searchInput = useRef(null);
   const url = `${API_HOST}/api/`;
 
@@ -192,6 +188,7 @@ export const Formulario = () => {
       ...datos,
       [e.target.name]: e.target.value,
     });
+    console.log(datos)
   };
   const handleChange = (value, name) => {
     setDatos({
@@ -481,7 +478,7 @@ export const Formulario = () => {
                         maxLength="50"
                         placeholder="Reference"
                         name="reference"
-                        onChange={handleChange}
+                        onChange={handleInputChange}
                       />
                     </FormItem>
                     <Button
@@ -682,7 +679,9 @@ export const Formulario = () => {
               </TabPane>
 
               <TabPane tab="Merchandise" key="merchandise">
-                <Form.Item label="Description" required>
+                <Form.Item
+                  label="Description"
+                >
                   <Input.Group compact>
                     <FormItem
                       name="description"
@@ -698,7 +697,7 @@ export const Formulario = () => {
                         maxLength="100"
                         placeholder="Description"
                         name="description"
-                        onChange={handleChange}
+                        onChange={handleInputChange}
                       />
                     </FormItem>
                     <Button

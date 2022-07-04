@@ -1,4 +1,4 @@
-import { Modal, Col, Row, Spin } from "antd";
+import { Modal, Col, Row, Spin,Button,message } from "antd";
 import { useState, useEffect } from "react";
 import { LoadingOutlined } from '@ant-design/icons';
 
@@ -23,11 +23,10 @@ export const PDF = ({ visible, close }) => {
     land: 0,
     aamx: 0,
   });
-  console.log(visible)
 
   const url = "http://127.0.0.1:8000/api/";
 
-  const getSelects = async (url, selects) => {
+  async function getSelects (url, selects) {
     const resp = await fetch(url + selects + "/1", {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`, //Agregado
@@ -38,7 +37,7 @@ export const PDF = ({ visible, close }) => {
     return data;
   };
 
-  const getAll = async () => {
+  async function getAll (){
     setlocals(await getSelects(url, "locals"));
     setmaritime(await getSelects(url, "maritime"));
     setland(await getSelects(url, "land"));
@@ -62,6 +61,7 @@ export const PDF = ({ visible, close }) => {
     aamx.forEach(function (a) {
       totals.aamx += a.total;
     });
+    console.log(locals)
   };
 
   useEffect(() => {
@@ -70,6 +70,33 @@ export const PDF = ({ visible, close }) => {
       setLoading(false)
     }
   }, [aamx]);
+
+  async function acceptQuote(status) {
+    await fetch(`${url}quote/${visible.data.id}`, {
+      method: "PUT",
+      cache: "no-cache",
+      credentials: "same-origin",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
+      },
+      redirect: "follow",
+      referrerPolicy: "no-referrer",
+      body: JSON.stringify(status),
+    })
+      .then(async (response) => {
+        // check for error response
+        if (!response.ok) {
+          // console.log(datos);
+          return Promise.reject("Error: Complete Correctly");
+        } else if (response.ok) {
+          message.success("Quote Accepted");
+        }
+      })
+      .catch((error) => {
+        message.error(error);
+      });
+  }
 
   return (
     <>
@@ -80,6 +107,14 @@ export const PDF = ({ visible, close }) => {
         centered
         width={"50vw"}
         bodyStyle={{ overflowY: "scroll", maxHeight: "calc(100vh - 200px)"}}
+        footer={[
+          <Button key="back" type="primary" onClick={acceptQuote(0)} danger>
+            Reject Quote
+          </Button>,
+          <Button key="submit" type="primary" onClick={acceptQuote(1)}>
+            Accept Quote
+          </Button>
+        ]}
       >
         <Spin spinning={loading} tip='Loading...' indicator={antIcon} >
           {totals.aamx ? <div className="pdf-content">
@@ -102,16 +137,16 @@ export const PDF = ({ visible, close }) => {
                 </Col>
               </div>
               <div className="four-col">
-                <Col span={5} className="col-services">
+                <Col span={7} className="col-services">
                   SERVICIOS LOCALES
                 </Col>
-                <Col span={5} className="col-services">
+                <Col span={4} className="col-services">
                   PRECIO UNITARIO
                 </Col>
-                <Col span={5} className="col-services">
+                <Col span={4} className="col-services">
                   IVA
                 </Col>
-                <Col span={5} className="col-services">
+                <Col span={4} className="col-services">
                   DIVISA
                 </Col>
                 <Col span={5} className="col-services">
@@ -121,16 +156,16 @@ export const PDF = ({ visible, close }) => {
               {locals
                 ? locals.map((option) => (
                     <div className="four-col-printed" key={option.id}>
-                      <Col span={5} className="col-services">
-                        {option.material}
+                      <Col span={7} className="col-services">
+                        <div className="material">{option.materialEs}</div>
                       </Col>
-                      <Col span={5} className="col-services">
+                      <Col span={4} className="col-services">
                       ${option.unitPrice}
                       </Col>
-                      <Col span={5} className="col-services">
+                      <Col span={4} className="col-services">
                         {option.iva}
                       </Col>
-                      <Col span={5} className="col-services">
+                      <Col span={4} className="col-services">
                         USD
                       </Col>
                       <Col span={5} className="col-services">
@@ -153,16 +188,16 @@ export const PDF = ({ visible, close }) => {
               </div>
                 <Col span={24} style={{background:'#0068ff',height:"1.5vh"}}></Col>
               <div className="four-col">
-                <Col span={5} className="col-services">
+                <Col span={7} className="col-services">
                   SERVICIOS MARITIMOS
                 </Col>
-                <Col span={5} className="col-services">
+                <Col span={4} className="col-services">
                   PRECIO UNITARIO
                 </Col>
-                <Col span={5} className="col-services">
+                <Col span={4} className="col-services">
                   IVA
                 </Col>
-                <Col span={5} className="col-services">
+                <Col span={4} className="col-services">
                   DIVISA
                 </Col>
                 <Col span={5} className="col-services">
@@ -172,16 +207,16 @@ export const PDF = ({ visible, close }) => {
               {maritime
                 ? maritime.map((option) => (
                     <div className="four-col-printed" key={option.id}>
-                      <Col span={5} className="col-services">
-                        {option.material}
+                      <Col span={7} className="col-services">
+                      <div className="material">{option.materialEs}</div>
                       </Col>
-                      <Col span={5} className="col-services">
+                      <Col span={4} className="col-services">
                         ${option.unitPrice}
                       </Col>
-                      <Col span={5} className="col-services">
+                      <Col span={4} className="col-services">
                         {option.iva}
                       </Col>
-                      <Col span={5} className="col-services">
+                      <Col span={4} className="col-services">
                         USD
                       </Col>
                       <Col span={5} className="col-services">
@@ -204,16 +239,16 @@ export const PDF = ({ visible, close }) => {
               </div>
               <Col span={24} style={{background:'#0068ff',height:"1.5vh"}}></Col>
               <div className="four-col">
-                <Col span={5} className="col-services">
+                <Col span={7} className="col-services">
                   AAMX (GASTOS A CUENTA DE CLIENTE)
                 </Col>
-                <Col span={5} className="col-services">
+                <Col span={4} className="col-services">
                 $PRECIO UNITARIO
                 </Col>
-                <Col span={5} className="col-services">
+                <Col span={4} className="col-services">
                   IVA
                 </Col>
-                <Col span={5} className="col-services">
+                <Col span={4} className="col-services">
                   DIVISA
                 </Col>
                 <Col span={5} className="col-services">
@@ -223,16 +258,16 @@ export const PDF = ({ visible, close }) => {
               {aamx
                 ? aamx.map((option) => (
                     <div className="four-col-printed" key={option.id}>
-                      <Col span={5} className="col-services">
-                        {option.material}
+                      <Col span={7} className="col-services">
+                      <div className="material">{option.materialEs}</div>
                       </Col>
-                      <Col span={5} className="col-services">
+                      <Col span={4} className="col-services">
                       ${option.unitPrice}
                       </Col>
-                      <Col span={5} className="col-services">
+                      <Col span={4} className="col-services">
                         {option.iva}
                       </Col>
-                      <Col span={5} className="col-services">
+                      <Col span={4} className="col-services">
                         USD
                       </Col>
                       <Col span={5} className="col-services">
@@ -254,16 +289,16 @@ export const PDF = ({ visible, close }) => {
               </div>
               <Col span={24} style={{background:'#0068ff',height:"1.5vh"}}></Col>
               <div className="four-col">
-                <Col span={5} className="col-services">
+                <Col span={7} className="col-services">
                   SERVICIOS TERRESTRES
                 </Col>
-                <Col span={5} className="col-services">
+                <Col span={4} className="col-services">
                 PRECIO UNITARIO
                 </Col>
-                <Col span={5} className="col-services">
+                <Col span={4} className="col-services">
                   IVA
                 </Col>
-                <Col span={5} className="col-services">
+                <Col span={4} className="col-services">
                   DIVISA
                 </Col>
                 <Col span={5} className="col-services">
@@ -273,16 +308,16 @@ export const PDF = ({ visible, close }) => {
               {land
                 ? land.map((option) => (
                     <div className="four-col-printed" key={option.id}>
-                      <Col span={5} className="col-services">
-                        {option.material}
+                      <Col span={7} className="col-services">
+                      <div className="material">{option.materialEs}</div>
                       </Col>
-                      <Col span={5} className="col-services">
+                      <Col span={4} className="col-services">
                       ${option.unitPrice}
                       </Col>
-                      <Col span={5} className="col-services">
+                      <Col span={4} className="col-services">
                         {option.iva}
                       </Col>
-                      <Col span={5} className="col-services">
+                      <Col span={4} className="col-services">
                         USD
                       </Col>
                       <Col span={5} className="col-services">

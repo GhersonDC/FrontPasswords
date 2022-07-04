@@ -412,7 +412,6 @@ h2 {
 }
 .col-footer{
   background-color: #0068ff !important;
-  margin: auto;
   width: 72vw;
   justify-content: center;
   align-items: center;
@@ -420,4 +419,8 @@ h2 {
   color: white;
   height: 12vh;
   font-size: 15px;
+  font-size: .8rem;
+}
+.material{
+  width: 12vw;
 }
