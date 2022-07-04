@@ -9,7 +9,7 @@ export const Quotes = ({ quote, close }) => {
   const [dataQuote, setdataQuote] = useState([]);
   const [verPdf, setverPdf] = useState({visible:false,quoteData:'',data:''})
 
-  const url = `http://127.0.0.1:8000/api/quote/1`;
+  const url = `${API_HOST}/api/quote/${quote.id.id}`;
 
   useEffect(() => {
     if (quote.isLoading) {
@@ -81,7 +81,7 @@ export const Quotes = ({ quote, close }) => {
             </List.Item>
           }}
         />
-        {verPdf ? <PDF visible={verPdf} close={() => setverPdf(false)}/> : null}
+        {verPdf.visible ? <PDF visible={verPdf} close={() => setverPdf(false)}/> : null}
       </Drawer>
     </>
   );

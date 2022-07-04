@@ -2,6 +2,8 @@ import { Modal, Col, Row, Spin,Button,message } from "antd";
 import { useState, useEffect } from "react";
 import { LoadingOutlined } from '@ant-design/icons';
 
+const API_HOST = process.env.REACT_APP_API_HOST || "http://localhost:8000";
+
 const antIcon = (
   <LoadingOutlined
     style={{
@@ -24,10 +26,10 @@ export const PDF = ({ visible, close }) => {
     aamx: 0,
   });
 
-  const url = "http://127.0.0.1:8000/api/";
+  const url = `${API_HOST}/api/`;
 
   async function getSelects (url, selects) {
-    const resp = await fetch(url + selects + "/1", {
+    const resp = await fetch(`${url}${selects}/${visible.data.id}`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`, //Agregado
       },
@@ -82,7 +84,7 @@ export const PDF = ({ visible, close }) => {
       },
       redirect: "follow",
       referrerPolicy: "no-referrer",
-      body: JSON.stringify(status),
+      body: JSON.stringify({status:status}),
     })
       .then(async (response) => {
         // check for error response
@@ -90,7 +92,7 @@ export const PDF = ({ visible, close }) => {
           // console.log(datos);
           return Promise.reject("Error: Complete Correctly");
         } else if (response.ok) {
-          message.success("Quote Accepted");
+          message.success("Quote updated");
         }
       })
       .catch((error) => {
@@ -108,10 +110,10 @@ export const PDF = ({ visible, close }) => {
         width={"50vw"}
         bodyStyle={{ overflowY: "scroll", maxHeight: "calc(100vh - 200px)"}}
         footer={[
-          <Button key="back" type="primary" onClick={acceptQuote(0)} danger>
+          <Button key="back" type="primary" onClick={()=>(acceptQuote(0))} danger>
             Reject Quote
           </Button>,
-          <Button key="submit" type="primary" onClick={acceptQuote(1)}>
+          <Button key="submit" type="primary" onClick={()=>(acceptQuote(1))}>
             Accept Quote
           </Button>
         ]}
