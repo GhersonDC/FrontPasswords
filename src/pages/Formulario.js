@@ -469,7 +469,7 @@ export const Formulario = () => {
                   <Input.Group compact>
                     <FormItem
                       name="reference"
-                      style={{width:'89%',height:'1vh'}}
+                      style={{ width: '89%', height: '1vh' }}
                       rules={[
                         {
                           required: true,
@@ -485,7 +485,7 @@ export const Formulario = () => {
                       />
                     </FormItem>
                     <Button
-                    style={{width:'10%'}}
+                      style={{ width: '10%' }}
                       type="primary"
                       onClick={openNotificationReference}
                     >
@@ -682,33 +682,27 @@ export const Formulario = () => {
               </TabPane>
 
               <TabPane tab="Merchandise" key="merchandise">
-                <Form.Item
-                  label="Description"
-                  name="description"
-                  // rules={[
-                  //   {
-                  //     required: true,
-                  //     message: "Please input a description!",
-                  //   },
-                  // ]}
-                >
+                <Form.Item label="Description" required>
                   <Input.Group compact>
-                    <Input
-                      minLength={1}
-                      style={{
-                        width: "calc(100% - 50px)",
-                      }}
+                    <FormItem
                       name="description"
-                      onChange={handleInputChange}
-                      maxLength={100}
-                      placeholder="Description"
-                    />
-
+                      style={{ width: '89%', height: '1vh' }}
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please input a Description!",
+                        },
+                      ]}
+                    >
+                      <Input
+                        maxLength="100"
+                        placeholder="Description"
+                        name="description"
+                        onChange={handleChange}
+                      />
+                    </FormItem>
                     <Button
-                      style={{
-                        width: "50px",
-                        overflow: "hidden",
-                      }}
+                      style={{ width: '10%' }}
                       type="primary"
                       onClick={openNotificationDescription}
                     >
