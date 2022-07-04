@@ -7,7 +7,7 @@ const API_HOST = process.env.REACT_APP_API_HOST || "http://localhost:8000";
 
 export const Quotes = ({ quote, close }) => {
   const [dataQuote, setdataQuote] = useState([]);
-  const [verPdf, setverPdf] = useState(false)
+  const [verPdf, setverPdf] = useState({visible:false,quoteData:''})
 
   const url = `http://127.0.0.1:8000/api/quote/1`;
 
@@ -23,7 +23,6 @@ export const Quotes = ({ quote, close }) => {
           if (response.ok) {
             // ⬅️ verificamos que todo esté bien con la respuesta HTTP
             response.json().then(({ data }) => {
-              console.log(data);
               setdataQuote(data);
               quote.isLoading = false;
             });
@@ -60,7 +59,7 @@ export const Quotes = ({ quote, close }) => {
           loading={quote.isLoading}
           renderItem={(item) => (
             <List.Item 
-            actions={[<Button type='primary' onClick={()=>{setverPdf(true)}}>Ver PDF</Button>,<p>Accept <Switch/></p>]}>
+            actions={[<Button type='primary' onClick={()=>{setverPdf({visible:true,data:item})}}>Ver PDF</Button>,<p>Accept <Switch/></p>]}>
               <List.Item.Meta
                 title={item.name}
                 description={`${quote.id.reference} Port of load ${quote.id.pol}  Port of discharge ${quote.id.pod}`}

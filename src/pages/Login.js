@@ -31,6 +31,7 @@ export const Login = () => {
       cookies.set("telefono", data.telefono, {secure: true, sameSite: 'none'});
       cookies.set('email', inputs.email, {secure: true, sameSite: 'none'});
       localStorage.setItem('token',data.token);
+      localStorage.setItem('nombre',data.nombre);
       window.location.href = "./menu";
     } else {
       message.error("User or password incorrect");

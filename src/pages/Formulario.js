@@ -24,6 +24,7 @@ import Columnas_Table from "../sources/columns_table.json";
 import Incoterms_Table from "../sources/incoterms_table.json";
 import Service_Type from "../sources/service_type.json";
 import { Quotes } from "../components/Quotes";
+import FormItem from "antd/lib/form/FormItem";
 
 const cookies = new Cookies();
 const { TabPane } = Tabs;
@@ -69,25 +70,11 @@ export const Formulario = () => {
   const [searchText, setSearchText] = useState("");
   const [searchedColumn, setSearchedColumn] = useState("");
   const [form] = Form.useForm();
-  const [quote, setquote] = useState(false)
+  const [quote, setquote] = useState(false);
 
-  const [checkNick,setCheckNick] = useState(true);
-  
-
-  useEffect(()=>{
-    form.validateFields(['nickname'])
-  },[checkNick,form])
-
-  const onCheckBoxChange = (e) =>{
-    if(e.target.textLength > 0){
-      setCheckNick(false)
-    }
-    else if(e.target.textLength == 0){
-      setCheckNick(true)
-    }
-    console.log(e)
-  }
-
+  useEffect(() => {
+    form.validateFields(["nickname"]);
+  }, [form]);
 
   const searchInput = useRef(null);
   const url = `${API_HOST}/api/`;
@@ -120,7 +107,7 @@ export const Formulario = () => {
     const resp = await fetch(url + "clients/" + cookies.get("clientid"), {
       method: "GET",
       headers: {
-        Authorization: `Bearer ${localStorage.getItem('token')}`, //Agregado
+        Authorization: `Bearer ${localStorage.getItem("token")}`, //Agregado
       },
     });
     setLoading(false);
@@ -151,7 +138,7 @@ export const Formulario = () => {
       credentials: "same-origin",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem('token')}`,
+        Authorization: `Bearer ${localStorage.getItem("token")}`,
       },
       redirect: "follow",
       referrerPolicy: "no-referrer",
@@ -338,7 +325,7 @@ export const Formulario = () => {
             <Button
               type="primary"
               onClick={() => {
-                setquote({status:true,id:record,isLoading:true});
+                setquote({ status: true, id: record, isLoading: true });
               }}
             >
               Quote
@@ -428,6 +415,7 @@ export const Formulario = () => {
               Save
             </Button>,
           ]}
+          forceRender
         >
           <Form
             form={form}
@@ -477,33 +465,33 @@ export const Formulario = () => {
                   </Select>
                 </Form.Item>
 
-                <Form.Item
-                  label="Reference"
-                  name="reference"
-                  rules={[
-                    {
-                      required: checkNick,
-                      message: "Please input a Reference!",
-                    },
-                  ]}
-                >
-                    <Input
-                      maxLength='50'
-                      placeholder="Reference"
-                      style={{
-                        width: 'calc(100% - 50px)',
-                      }}
-                      minLength={1}
-                      name="reference" onChange={onCheckBoxChange}
-                    />
-
+                <Form.Item label="Reference" required>
+                  <Input.Group compact>
+                    <FormItem
+                      name="reference"
+                      style={{width:'89%',height:'1vh'}}
+                      rules={[
+                        {
+                          required: true,
+                          message: "Please input a Reference!",
+                        },
+                      ]}
+                    >
+                      <Input
+                        maxLength="50"
+                        placeholder="Reference"
+                        name="reference"
+                        onChange={handleChange}
+                      />
+                    </FormItem>
                     <Button
-                      style={{
-                        width: '50px',
-                        overflow: "hidden",
-                      }} type="primary" onClick={openNotificationReference}>
+                    style={{width:'10%'}}
+                      type="primary"
+                      onClick={openNotificationReference}
+                    >
                       ?
                     </Button>
+                  </Input.Group>
                 </Form.Item>
 
                 <Form.Item
@@ -917,7 +905,12 @@ export const Formulario = () => {
             </Tabs>
           </Form>
         </Modal>
-        {quote.status ? <Quotes quote={quote} close={() => setquote({status:false,isLoading:false})} />:null}
+        {quote.status ? (
+          <Quotes
+            quote={quote}
+            close={() => setquote({ status: false, isLoading: false })}
+          />
+        ) : null}
       </Content>
     </div>
   );
