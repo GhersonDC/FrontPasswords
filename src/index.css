@@ -4,13 +4,13 @@
 
 body {
   --background-login: #f5f5f5;
-  --background-blue-g-global: #3b7cdd;
+  --background-main: rgb(255, 255, 255);
   --background-page-main: #fff;
   font-size: 12px;
 }
 
 #root {
-  background-color: var(--background-blue-g-global);
+  background-color: var(--background-main);
   height: 100%;
 }
 
@@ -52,7 +52,9 @@ body {
   height: 60%;
   /* background-color: aqua; */
 }
-
+.logo{
+  width: 3rem;
+}
 .main_root_logo > h1 {
   padding-left: 1rem;
 }
@@ -122,16 +124,6 @@ body {
   background-repeat: no-repeat;
 }
 
-.total-login-images-cargo {
-  content: url(./images/cargo-ship.png);
-  justify-content: center;
-  margin: auto;
-  /* padding-top: 10vh; */
-  display: flex;
-  width: auto;
-  height: 50vh;
-}
-
 .form-login {
   margin: auto;
   align-items: center;
@@ -151,6 +143,7 @@ body {
 .boton {
   margin: auto;
   justify-content: center;
+  display: inline-block;
 }
 
 .form-menu {

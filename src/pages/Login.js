@@ -3,7 +3,6 @@ import { Form, Input, Button, message } from "antd";
 import Cookies from "universal-cookie";
 import { UserOutlined, LockOutlined } from '@ant-design/icons';
 import logo from '../images/favicon.ico'
-// import {ship} from '../images'
 
 const cookies = new Cookies();
 const API_HOST = process.env.REACT_APP_API_HOST || "http://localhost:8000";
@@ -13,7 +12,7 @@ export const Login = () => {
     password: "",
   });
   const [loading, setLoading] = useState(false);
-
+  //falta corregir para invocar el dynamo
   const url = `${API_HOST}/api/login?email=${inputs.email}&password=${inputs.password}`;
 
   const getData = async () => {
@@ -25,7 +24,6 @@ export const Login = () => {
     const { data } = await resp.json();
     if (data.nombre) {
       cookies.set("nombre", data.nombre, {secure: true, sameSite: 'none'});
-      cookies.set("clientid", data.clientid, {secure: true, sameSite: 'none'});
       cookies.set("rfc", data.rfc, {secure: true, sameSite: 'none'});
       cookies.set("address", data.direccion, {secure: true, sameSite: 'none'});
       cookies.set("telefono", data.telefono, {secure: true, sameSite: 'none'});
@@ -55,18 +53,18 @@ export const Login = () => {
       <div className="total-login">
         <div className="header">
           <div className="main_root_logo">
-            <img src={logo} alt="icon g-global" />
-            <h1> G-TMS </h1>
+            <img src={logo} className="logo" />
+            <h1> Password System Auth </h1>
           </div>
           <div className="main_root_header_text">
-            <p className="main_root_text welcome_msg">Welcome Back!</p>
-            <p className="main_root_text sign_in">Please sign in to your Account</p>
+            <p className="main_root_text welcome_msg">Introduce tu password</p>
+            <p className="main_root_text sign_in">Selecciona un metodo</p>
           </div>
         </div>
         <div className="main">
           <div className="form-login">
           <Form
-            name="G-Client"
+            name="PasswordMenu" //here defined info about form name
             labelAlign="left"
             layout="vertical"
             initialValues={{
@@ -119,16 +117,25 @@ export const Login = () => {
                 type="primary" htmlType="submit" loading={loading}>
                 Log In
               </Button>
+              <Button
+                className="boton"
+                type="secondary" htmlType="submit" loading={loading}>
+                Sign Up
+              </Button>
             </Form.Item>
           </Form>
           </div>
         </div>
         <div className="footer">
-          <span className="login-footer-label">Made with <span role="img" aria-label="heart-emoji">❤️</span> by INN</span>
+          <span className="login-footer-label">Password project 2023.</span>
         </div>
       </div>
+      {/* imagen subir  */}
       <div className="total-login-images">
-        <img className="total-login-images-cargo" alt="cargo-image"></img>
+        <input type="file" className="total-login-images" />
+          <button >
+            Upload!
+          </button>
       </div>
     </div>
   )
