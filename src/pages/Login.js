@@ -16,25 +16,25 @@ export const Login = () => {
   //falta corregir para invocar el dynamo
   //const url = `${API_HOST}/api/login?email=${inputs.email}&password=${inputs.password}`;
 
-  const getData = async function signIn() {
-    try {
-      //aws amplify
-      const user = await Auth.signIn(email, password);
-      console.log(user);
-      setLoading(false);
-      // const { data } = await resp.json();
-      // if (data.nombre) {
-      //   cookies.set("nombre", data.nombre, { secure: true, sameSite: "none" });
-      //   // localStorage.setItem('token',data.token);
-      //   localStorage.setItem("nombre", data.nombre);
-      //   window.location.href = "./menu";
-      // } else {
-      //   message.error("User or password incorrect");
-      // }
-    } catch (error) {
-      console.log("error signing in", error);
-    }
-  };
+  // const getData = async function signIn() {
+  //   try {
+  //     //aws amplify
+  //     const user = await Auth.signIn(email, password);
+  //     console.log(user);
+  //     setLoading(false);
+  //     // const { data } = await resp.json();
+  //     // if (data.nombre) {
+  //     //   cookies.set("nombre", data.nombre, { secure: true, sameSite: "none" });
+  //     //   // localStorage.setItem('token',data.token);
+  //     //   localStorage.setItem("nombre", data.nombre);
+  //     //   window.location.href = "./menu";
+  //     // } else {
+  //     //   message.error("User or password incorrect");
+  //     // }
+  //   } catch (error) {
+  //     console.log("error signing in", error);
+  //   }
+  // };
 
   const onFinishFailed = () => {
     message.error("Try again. Input email and password correctly.");
