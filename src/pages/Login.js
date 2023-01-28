@@ -4,8 +4,6 @@ import Cookies from "universal-cookie";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import logo from "../images/favicon.ico";
 import { Amplify, Auth } from "aws-amplify";
-import awsconfig from "./aws-exports";
-Amplify.configure(awsconfig);
 
 const cookies = new Cookies();
 const API_HOST = process.env.REACT_APP_API_HOST || "http://localhost:8000";
