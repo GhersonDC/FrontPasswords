@@ -19,7 +19,7 @@ export const Login = () => {
   const getData = async function signIn() {
     try {
       //aws amplify
-      const user = await Auth.signIn(username, password);
+      const user = await Auth.signIn(email, password);
       console.log(user);
       setLoading(false);
       // const { data } = await resp.json();
@@ -126,14 +126,6 @@ export const Login = () => {
                   loading={loading}
                 >
                   Log In
-                </Button>
-                <Button
-                  className="boton"
-                  type="secondary"
-                  htmlType="submit"
-                  loading={loading}
-                >
-                  Sign Up
                 </Button>
               </Form.Item>
             </Form>
