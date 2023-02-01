@@ -1,18 +1,18 @@
 import React, { useState } from "react";
 import { Form, Input, Button, message } from "antd";
-import Cookies from "universal-cookie";
+//import Cookies from "universal-cookie";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
-import logo from "../images/favicon.ico";
-import { Amplify, Auth } from "aws-amplify";
+//import logo from "../images/favicon.ico";
+//import { Amplify, Auth } from "aws-amplify";
 
-const cookies = new Cookies();
-const API_HOST = process.env.REACT_APP_API_HOST || "http://localhost:8000";
+//const cookies = new Cookies();
+//const API_HOST = process.env.REACT_APP_API_HOST || "http://localhost:8000";
 export const Login = () => {
   const [inputs, setinputs] = useState({
     email: "",
     password: "",
   });
-  const [loading, setLoading] = useState(false);
+ // const [loading, setLoading] = useState(false);
   //falta corregir para invocar el dynamo
   //const url = `${API_HOST}/api/login?email=${inputs.email}&password=${inputs.password}`;
 
@@ -52,7 +52,7 @@ export const Login = () => {
       <div className="total-login">
         <div className="header">
           <div className="main_root_logo">
-            <img src={logo} className="logo" />
+            {/* <img src={logo} className="logo" /> */}
             <h1> Password System Auth </h1>
           </div>
           <div className="main_root_header_text">
@@ -69,7 +69,7 @@ export const Login = () => {
               initialValues={{
                 remember: true,
               }}
-              onFinish={getData}
+              //onFinish={getData}
               onFinishFailed={onFinishFailed}
               autoComplete="off"
             >
@@ -123,7 +123,7 @@ export const Login = () => {
                   className="boton"
                   type="primary"
                   htmlType="submit"
-                  loading={loading}
+                 // loading={loading}
                 >
                   Log In
                 </Button>
