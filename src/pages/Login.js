@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Form, Input, Button, message } from "antd";
-import cookies from "universal-cookie";
+import Cookies from "universal-cookie";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 //import logo from "../images/favicon.ico";
 import { Amplify, Auth } from "aws-amplify";
@@ -9,7 +9,7 @@ import awsExports from "../aws-exports";
 Amplify.configure(awsExports);
 Auth.configure(awsExports);
 
-//const cookies = new Cookies();
+const cookies = new Cookies();
 //const API_HOST = process.env.REACT_APP_API_HOST || "http://localhost:8000";
 
 export const Login = () => {
@@ -31,7 +31,7 @@ export const Login = () => {
       setLoading(false);
 
       // if (user) {
-        // cookies.set("nombre", user.username, { secure: true, sameSite: "none" });
+        cookies.set("nombre", user.username, { secure: true, sameSite: "none" });
         // localStorage.setItem('token',data.token);
         localStorage.setItem("nombre", user.username);
         window.location.href = "./menu";
