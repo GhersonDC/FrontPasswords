@@ -3,38 +3,46 @@ import { Form, Input, Button, message } from "antd";
 //import Cookies from "universal-cookie";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 //import logo from "../images/favicon.ico";
-//import { Amplify, Auth } from "aws-amplify";
+import { Amplify, Auth } from "aws-amplify";
+
+import awsExports from '../aws-exports';
+Amplify.configure(awsExports);
+Auth.configure(awsExports);
 
 //const cookies = new Cookies();
 //const API_HOST = process.env.REACT_APP_API_HOST || "http://localhost:8000";
+
 export const Login = () => {
   const [inputs, setinputs] = useState({
     email: "",
     password: "",
   });
- // const [loading, setLoading] = useState(false);
+  
+ const [loading, setLoading] = useState(false);
+//  const email = 'gherson.cruz@iteso.mx';
+//  const password = '12345678';
   //falta corregir para invocar el dynamo
   //const url = `${API_HOST}/api/login?email=${inputs.email}&password=${inputs.password}`;
 
-  // const getData = async function signIn() {
-  //   try {
-  //     //aws amplify
-  //     const user = await Auth.signIn(email, password);
-  //     console.log(user);
-  //     setLoading(false);
-  //     // const { data } = await resp.json();
-  //     // if (data.nombre) {
-  //     //   cookies.set("nombre", data.nombre, { secure: true, sameSite: "none" });
-  //     //   // localStorage.setItem('token',data.token);
-  //     //   localStorage.setItem("nombre", data.nombre);
-  //     //   window.location.href = "./menu";
-  //     // } else {
-  //     //   message.error("User or password incorrect");
-  //     // }
-  //   } catch (error) {
-  //     console.log("error signing in", error);
-  //   }
-  // };
+  const getData = async function signIn() {
+    try {
+      //aws amplify
+      const user = await Auth.signIn(email, password);
+      console.log(user);
+      setLoading(false);
+      // const { data } = await resp.json();
+      // if (data.nombre) {
+      //   cookies.set("nombre", data.nombre, { secure: true, sameSite: "none" });
+      //   // localStorage.setItem('token',data.token);
+      //   localStorage.setItem("nombre", data.nombre);
+      //   window.location.href = "./menu";
+      // } else {
+      //   message.error("User or password incorrect");
+      // }
+    } catch (error) {
+      console.log("error signing in", error);
+    }
+  };
 
   const onFinishFailed = () => {
     message.error("Try again. Input email and password correctly.");
@@ -69,7 +77,7 @@ export const Login = () => {
               initialValues={{
                 remember: true,
               }}
-              //onFinish={getData}
+              onFinish={getData}
               onFinishFailed={onFinishFailed}
               autoComplete="off"
             >
@@ -123,7 +131,7 @@ export const Login = () => {
                   className="boton"
                   type="primary"
                   htmlType="submit"
-                 // loading={loading}
+                  loading={loading}
                 >
                   Log In
                 </Button>

@@ -66,3 +66,23 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+# PARA AGREGAR AUTH A UN PROYECTO NUEVO
+
+https://docs.amplify.aws/start/getting-started/auth/q/integration/react/#install-amplify-ui
+----------------------------------
+amplify add auth
+----------------------------------
+
+# PARA AGREGAR LAS CREDENCIALES DE TRABAJO DEBEMOS BUSCARLAS DENTRO DE AMPLIFY
+
+--------------------------
+amplify pull --appId d35yxyjkqddl0p --envName staging
+--------------------------
+
+# ACTUALIZAR AMPLIFY SI ESTA OUTDATE
+------------------------
+amplify upgrade
+------------------------
+
+
