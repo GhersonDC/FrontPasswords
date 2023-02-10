@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import { Form, Input, Button, message } from "antd";
-//import Cookies from "universal-cookie";
+import cookies from "universal-cookie";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 //import logo from "../images/favicon.ico";
 import { Amplify, Auth } from "aws-amplify";
+import awsExports from "../aws-exports";
 
-import awsExports from '../aws-exports';
 Amplify.configure(awsExports);
 Auth.configure(awsExports);
 
@@ -17,30 +17,30 @@ export const Login = () => {
     email: "",
     password: "",
   });
-  
- const [loading, setLoading] = useState(false);
-//  const email = 'gherson.cruz@iteso.mx';
-//  const password = '12345678';
+
+  const [loading, setLoading] = useState(false);
+
   //falta corregir para invocar el dynamo
   //const url = `${API_HOST}/api/login?email=${inputs.email}&password=${inputs.password}`;
 
   const getData = async function signIn() {
     try {
       //aws amplify
-      const user = await Auth.signIn(email, password);
-      console.log(user);
+      const user = await Auth.signIn(inputs.email, inputs.password);
+      console.log(user.username);
       setLoading(false);
-      // const { data } = await resp.json();
-      // if (data.nombre) {
-      //   cookies.set("nombre", data.nombre, { secure: true, sameSite: "none" });
-      //   // localStorage.setItem('token',data.token);
-      //   localStorage.setItem("nombre", data.nombre);
-      //   window.location.href = "./menu";
+
+      // if (user) {
+        // cookies.set("nombre", user.username, { secure: true, sameSite: "none" });
+        // localStorage.setItem('token',data.token);
+        localStorage.setItem("nombre", user.username);
+        window.location.href = "./menu";
       // } else {
-      //   message.error("User or password incorrect");
+      //   console.error('error 0000');
       // }
     } catch (error) {
-      console.log("error signing in", error);
+      console.log(error.message);
+      message.error(error.message);
     }
   };
 
