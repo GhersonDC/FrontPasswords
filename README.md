@@ -85,4 +85,12 @@ amplify pull --appId d35yxyjkqddl0p --envName staging
 amplify upgrade
 ------------------------
 
+# steps to configure
 
+npm install -g @aws-amplify/cli
+
+amplify configure
+
+amplify pull --appId d35yxyjkqddl0p --envName staging
+
+--congrats youre ready!
