@@ -1,7 +1,7 @@
 import "antd/dist/antd.less";
 import { BrowserRouter, Routes, Route,Navigate } from 'react-router-dom';
 import { Login }  from "./pages/Login";
-import Menu from "./pages/Menu";
+import Menu from "./pages/MenuPage";
 // import { Formulario } from "./pages/Formulario";
 import  Error  from "./pages/Error";
 import Cookies from "universal-cookie";
