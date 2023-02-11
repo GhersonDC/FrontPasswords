@@ -2,7 +2,6 @@ import {
   DesktopOutlined,
   FileOutlined,
   PieChartOutlined,
-  TeamOutlined,
   UserOutlined,
   LogoutOutlined,
 } from '@ant-design/icons';
@@ -27,12 +26,37 @@ const items = [
   getItem('Passwords', '1', <PieChartOutlined />),
   getItem('Compartidos', '2', <DesktopOutlined />),
   getItem('Invitaciones', 'sub1', <UserOutlined />, [
-    getItem('Gherson', '3'),
-    getItem('Nestor', '4'),
+    getItem('Historial', '3'),
+    getItem('Activas', '4'),
   ]),
-  getItem('Exportacion', '9', <FileOutlined />),
+  getItem('Exportacion', '5', <FileOutlined />),
 ];
+// Menu for values from items array
+const componentsSwitch = (key) => {
+  switch (key) {
+    case '1':
+      console.log('1');
+      return ;
+    case '2':
+      console.log('2');
+      return <CompartidoPage/>;
+    case '3':
+      console.log('3');
+      return ;
+    case '4':
+      console.log('4');
+      return ;
+    case '5':
+      console.log('5');
+      return ;
+    default:
+      break;
+   }
+  };
 const MenuPage = () => {
+  // define states
+  const [selectedMenuItem, setSelectedMenuItem]= useState(false);
+
   const [collapsed, setCollapsed] = useState(false);
   return (
     <Layout
@@ -42,7 +66,10 @@ const MenuPage = () => {
     >
       <Sider collapsible collapsed={collapsed} onCollapse={(value) => setCollapsed(value)}>
         <div className="logo" />
-        <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline" items={items} />
+        {/* Assign states for Menu */}
+        <Menu theme="dark" selectedKeys={selectedMenuItem} mode="inline" items={items} onClick={(e) => 
+        setSelectedMenuItem(e.key)}>
+        </Menu>
       </Sider>
       <Layout className="site-layout">
         <Header
@@ -58,23 +85,13 @@ const MenuPage = () => {
         <Button
           style={{
             padding: 0,
+            width:40
           }}
-          ><LogoutOutlined 
-          style={
-            {
-              width:50
-            }
-          }/></Button>
+          ><LogoutOutlined/></Button>
         </Col>
         <Col span={2}>
-          <Row>
-        <Avatar style={{ backgroundColor: '#f56a00' , verticalAlign: 'middle' }} size="large" >
-        </Avatar>
-          </Row>
-          <Row>
-
-      {cookies.get('nombre')}
-          </Row>
+          <Avatar style={{ backgroundColor: '#f56a00' , verticalAlign: 'middle' }} size="large" >
+          </Avatar>
         </Col>
       </Row>
         </Header>
@@ -98,7 +115,8 @@ const MenuPage = () => {
               minHeight: 360,
             }}
           >
-            Bill is a cat.
+            {/* display content based on switch */}
+            {componentsSwitch(selectedMenuItem)}
           </div>
         </Content>
         <Footer
