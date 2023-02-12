@@ -1,6 +1,11 @@
 @import "~antd/dist/antd.css";
 
 /* global styles */
+.form_signup{
+  align-content: center;
+  margin: auto;
+  padding-top: 3rem;
+}
 #components-layout-demo-fixed-sider .logo {
   height: 100px;
   width: 100px;

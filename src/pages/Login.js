@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import { Form, Input, Button, message } from "antd";
 import Cookies from "universal-cookie";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
+import { Link } from 'react-router-dom'
 //import logo from "../images/favicon.ico";
 import { Amplify, Auth } from "aws-amplify";
 import awsExports from "../aws-exports";
+import Signup from "./Signup";
 
 Amplify.configure(awsExports);
 Auth.configure(awsExports);
@@ -61,7 +63,7 @@ export const Login = () => {
         <div className="header">
           <div className="main_root_logo">
             {/* <img src={logo} className="logo" /> */}
-            <h1> Password System Auth </h1>
+            <p> Password System Auth </p>
           </div>
           <div className="main_root_header_text">
             <p className="main_root_text welcome_msg">Introduce tu password</p>
@@ -137,6 +139,7 @@ export const Login = () => {
                 </Button>
               </Form.Item>
             </Form>
+            <Link to="/Signup" className="btn btn-primary">Sign up</Link>
           </div>
         </div>
         <div className="footer">
