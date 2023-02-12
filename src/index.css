@@ -66,8 +66,23 @@ body {
   height: 60%;
   /* background-color: aqua; */
 }
+.container_image{
+  display: grid;
+  margin: auto;
+}
+.button_camera{
+  height: 3rem;
+}
+.imagen_capture{
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
 .logo{
   width: 3rem;
+  border-radius: 10px;
+  padding-right: .5rem;
+  padding-right: .5rem;
 }
 .main_root_logo > h1 {
   padding-left: 1rem;
@@ -153,11 +168,14 @@ body {
 body {
   background-color: var(--background-page-main);
 }
-
-.boton {
+.main_name_menu{
+  font-size: 2rem;
+}
+.boton, .link{
   margin: auto;
   justify-content: center;
-  display: inline-block;
+  display: flex;
+  align-content: center;
 }
 
 .form-menu {

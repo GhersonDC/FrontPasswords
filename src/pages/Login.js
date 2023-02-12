@@ -3,9 +3,10 @@ import { Form, Input, Button, message } from "antd";
 import Cookies from "universal-cookie";
 import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { Link } from 'react-router-dom'
-//import logo from "../images/favicon.ico";
+import logo from '../images/logo.jpg';
 import { Amplify, Auth } from "aws-amplify";
 import awsExports from "../aws-exports";
+import WebcamVideo from "./CameraCapture";
 import Signup from "./Signup";
 
 Amplify.configure(awsExports);
@@ -62,8 +63,8 @@ export const Login = () => {
       <div className="total-login">
         <div className="header">
           <div className="main_root_logo">
-            {/* <img src={logo} className="logo" /> */}
-            <p> Password System Auth </p>
+            <img src={logo} className="logo" />
+            <p className="main_name_menu"> System Auth </p>
           </div>
           <div className="main_root_header_text">
             <p className="main_root_text welcome_msg">Introduce tu password</p>
@@ -123,12 +124,7 @@ export const Login = () => {
                 />
               </Form.Item>
 
-              <Form.Item
-                wrapperCol={{
-                  offset: 8,
-                  span: 16,
-                }}
-              >
+              <Form.Item>
                 <Button
                   className="boton"
                   type="primary"
@@ -137,9 +133,10 @@ export const Login = () => {
                 >
                   Log In
                 </Button>
+                <br />
+                <Link to="/Signup" className="btn btn-primary link">Sign up</Link>
               </Form.Item>
             </Form>
-            <Link to="/Signup" className="btn btn-primary">Sign up</Link>
           </div>
         </div>
         <div className="footer">
@@ -148,8 +145,7 @@ export const Login = () => {
       </div>
       {/* imagen subir  */}
       <div className="total-login-images">
-        <input type="file" className="total-login-images" />
-        <button>Upload!</button>
+        <WebcamVideo/>
       </div>
     </div>
   );
