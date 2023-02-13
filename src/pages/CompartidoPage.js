@@ -19,13 +19,13 @@ const EditableCell = ({  title, editable, children, dataIndex, record, handleSav
     const [editing, setEditing] = useState(false);
     const inputRef = useRef(null);
     const form = useContext(EditableContext);
-
+    
     useEffect(() => {
         if (editing) {
           inputRef.current.focus();
         }
     }, [editing]);
-
+    
     const toggleEdit = () => {
         setEditing(!editing);
         form.setFieldsValue({
@@ -82,8 +82,8 @@ const CompartidoPage = () => {
     };
 
     const [dataSource, setDataSource] = useState([
-        { key: '1', password: 'John Brown', link: "32", introduction: 'New York No. 1 Lake Park', },
-        { key: '2', password: 'Jim Green', link: 42, introduction: 'London No. 1 Lake Park', },
+        { key: 1, password: 'John Brown', link: "32", introduction: 'New York No. 1 Lake Park', },
+        { key: 2, password: 'Jim Green', link: 42, introduction: 'London No. 1 Lake Park', },
         { key: '3', password: 'Joe Black', link: 32, introduction: 'Sydney No. 1 Lake Park', },
         { key: '4', password: 'Joe Black', link: 32, introduction: 'Sydney No. 1 Lake Park', },
         { key: '5', password: 'Ultimo', link: 32, introduction: 'Sydney No. 1 Lake Park', },
@@ -96,7 +96,7 @@ const CompartidoPage = () => {
     };
 
     const defaultColumns = [
-        { title: 'Password', dataIndex: 'password', key: 'password', },
+        { title: 'Password', dataIndex: 'password', key: 'password', editable: true,},
         { title: 'Link',  dataIndex: 'link', key: 'link', },
         { title: 'Description', dataIndex: 'introduction', key: 'introduction', },
         { title: 'Action', key: 'action', render: (_, record) => dataSource.length >= 1 ? (
