@@ -25,7 +25,7 @@ const EditableCell = ({  title, editable, children, dataIndex, record, handleSav
           inputRef.current.focus();
         }
     }, [editing]);
-    
+
     const toggleEdit = () => {
         setEditing(!editing);
         form.setFieldsValue({
@@ -184,6 +184,7 @@ const CompartidoPage = () => {
                 <Table components={components} rowClassName={() => 'editable-row'} bordered dataSource={dataSource} columns={columns}/>
             </Card> 
         </Card>
+        
     );
 };
 export default CompartidoPage;
