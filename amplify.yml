@@ -3,11 +3,9 @@ frontend:
   phases:
     preBuild:
       commands:
-        - eslint --fix
         - npm ci
     build:
       commands:
-        - amplifyPush --simple
         - npm run build
   artifacts:
     baseDirectory: build
