@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { Form, Input, Button, message } from "antd";
+import { Form, Input, Button, message, Upload } from "antd";
 import Cookies from "universal-cookie";
-import { UserOutlined, LockOutlined } from "@ant-design/icons";
-import { Link } from 'react-router-dom'
-import logo from '../images/logo.jpg';
+import { UserOutlined, LockOutlined, UploadOutlined } from "@ant-design/icons";
+import { Link } from "react-router-dom";
+import logo from "../images/logo.jpg";
 import { Amplify, Auth } from "aws-amplify";
 import awsExports from "../aws-exports";
-import WebcamVideo from "./CameraCapture";
+import {WebcamCapture} from './CameraCapture'
 import Signup from "./Signup";
 
 Amplify.configure(awsExports);
@@ -20,9 +20,13 @@ export const Login = () => {
     email: "",
     password: "",
   });
-
+  
   const [loading, setLoading] = useState(false);
-
+  const [upload, setUpload] = useState('');
+  const onAddCategory = (newCategory)=>{
+    setUpload(newCategory)
+    console.log(newCategory);
+  }
   //falta corregir para invocar el dynamo
   //const url = `${API_HOST}/api/login?email=${inputs.email}&password=${inputs.password}`;
 
@@ -34,10 +38,10 @@ export const Login = () => {
       setLoading(false);
 
       // if (user) {
-        cookies.set("nombre", user.username, { secure: true, sameSite: "none" });
-        // localStorage.setItem('token',data.token);
-        localStorage.setItem("nombre", user.username);
-        window.location.href = "./menu";
+      cookies.set("nombre", user.username, { secure: true, sameSite: "none" });
+      // localStorage.setItem('token',data.token);
+      localStorage.setItem("nombre", user.username);
+      window.location.href = "./menu";
       // } else {
       //   console.error('error 0000');
       // }
@@ -123,7 +127,11 @@ export const Login = () => {
                   prefix={<LockOutlined className="site-form-item-icon" />}
                 />
               </Form.Item>
-
+              <Form.Item name="upload" label="Photo" valuePropName="checked">
+                <Upload name="logo" listType="picture-card">
+                  test
+                </Upload>
+              </Form.Item>
               <Form.Item>
                 <Button
                   className="boton"
@@ -134,7 +142,9 @@ export const Login = () => {
                   Log In
                 </Button>
                 <br />
-                <Link to="/Signup" className="btn btn-primary link">Sign up</Link>
+                <Link to="/Signup" className="btn btn-primary link">
+                  Sign up
+                </Link>
               </Form.Item>
             </Form>
           </div>
@@ -145,7 +155,9 @@ export const Login = () => {
       </div>
       {/* imagen subir  */}
       <div className="total-login-images">
-        <WebcamVideo/>
+        <WebcamCapture  
+          sendDataTo={(value)=>onAddCategory(value)} 
+        />
       </div>
     </div>
   );
