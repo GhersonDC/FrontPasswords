@@ -3,25 +3,28 @@
 
 const awsmobile = {
     "aws_project_region": "us-east-1",
-    "aws_cognito_identity_pool_id": "us-east-1:935a1e77-d531-43fd-9b2c-93c0ca48bd0a",
+    "aws_cognito_identity_pool_id": "us-east-1:1c20028e-b89c-4601-8030-e4ea1728e47b",
     "aws_cognito_region": "us-east-1",
-    "aws_user_pools_id": "us-east-1_8fQBwQ2cm",
-    "aws_user_pools_web_client_id": "77ngdb69p75r8sg3ui6i4u002v",
+    "aws_user_pools_id": "us-east-1_bmVWOjonp",
+    "aws_user_pools_web_client_id": "3biuk1no0688tjoe1nfp3jv3ja",
     "oauth": {},
     "aws_cognito_username_attributes": [
         "EMAIL"
     ],
     "aws_cognito_social_providers": [],
-    "aws_cognito_signup_attributes": [
-        "EMAIL"
-    ],
+    "aws_cognito_signup_attributes": [],
     "aws_cognito_mfa_configuration": "OFF",
     "aws_cognito_mfa_types": [
         "SMS"
     ],
     "aws_cognito_password_protection_settings": {
         "passwordPolicyMinLength": 8,
-        "passwordPolicyCharacters": []
+        "passwordPolicyCharacters": [
+            "REQUIRES_LOWERCASE",
+            "REQUIRES_NUMBERS",
+            "REQUIRES_SYMBOLS",
+            "REQUIRES_UPPERCASE"
+        ]
     },
     "aws_cognito_verification_mechanisms": [
         "EMAIL"
