@@ -1,37 +1,20 @@
 {
-  "auth": {
-    "mytestcfe79d82": {
-      "customAuth": false,
+  "api": {
+    "frontpasswords": {
       "dependsOn": [],
-      "frontendAuthConfig": {
-        "mfaConfiguration": "OFF",
-        "mfaTypes": [
-          "SMS"
-        ],
-        "passwordProtectionSettings": {
-          "passwordPolicyCharacters": [],
-          "passwordPolicyMinLength": 8
-        },
-        "signupAttributes": [
-          "EMAIL"
-        ],
-        "socialProviders": [],
-        "usernameAttributes": [
-          "EMAIL"
-        ],
-        "verificationMechanisms": [
-          "EMAIL"
-        ]
+      "output": {
+        "authConfig": {
+          "additionalAuthenticationProviders": [],
+          "defaultAuthentication": {
+            "apiKeyConfig": {
+              "apiKeyExpirationDays": 7
+            },
+            "authenticationType": "API_KEY"
+          }
+        }
       },
       "providerPlugin": "awscloudformation",
-      "service": "Cognito"
-    }
-  },
-  "storage": {
-    "s3imagenesrekog": {
-      "dependsOn": [],
-      "providerPlugin": "awscloudformation",
-      "service": "S3"
+      "service": "AppSync"
     }
   }
 }
