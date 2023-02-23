@@ -1,7 +1,9 @@
 import { Card, Button, Form, Input, Table, Popconfirm } from 'antd';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { DeleteOutlined } from '@ant-design/icons';
-
+import { API, graphqlOperation } from 'aws-amplify';
+import { createPassword } from '../graphql/mutations';
+import { listPasswords } from '../graphql/queries';
 const EditableContext = React.createContext(null);
 
 const EditableRow = ({ index, ...props }) => {
@@ -66,9 +68,38 @@ const onFinishFailed = (errorInfo) => {
 };
 
 const CompartidoPage = () => {
-    
 
-    const onFinish = (values) => {
+    const [password, setPassword] = useState({
+        password: "",
+        link: "",
+        description: "",
+    })
+
+    /** Funcion para añadir a la base de datos por medio de GraphQL y a AWS */
+    const handleSubmit = async (e) => {
+        console.log(password)
+        try {
+            const response = await API.graphql(graphqlOperation(createPassword, {input:password}))
+            console.log(response)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    
+    const [passwords, setPasswords] = useState([])
+
+    /** Funcion para obtener los password de AWS */
+    useEffect(() => {
+        async function loadPasswords() {
+            const response = await API.graphql(graphqlOperation(listPasswords))
+            setPasswords(response.data.listPasswords.items)
+        }
+        loadPasswords()
+    })
+
+
+    /* CAMBIAR EN FORM PARA TENERLO DE FORMA ESTATICA
+        const onFinish = (values) => {
         console.log('Success:', values);
         console.log(dataSource)
         let key = (dataSource.length + 1).toString()
@@ -79,14 +110,14 @@ const CompartidoPage = () => {
         console.log(values)
         setDataSource([...dataSource, values]);
         console.log(dataSource)
-    };
+    }; */
 
     const [dataSource, setDataSource] = useState([
-        { key: 1, password: 'John Brown', link: "32", introduction: 'New York No. 1 Lake Park', },
-        { key: 2, password: 'Jim Green', link: 42, introduction: 'London No. 1 Lake Park', },
-        { key: '3', password: 'Joe Black', link: 32, introduction: 'Sydney No. 1 Lake Park', },
-        { key: '4', password: 'Joe Black', link: 32, introduction: 'Sydney No. 1 Lake Park', },
-        { key: '5', password: 'Ultimo', link: 32, introduction: 'Sydney No. 1 Lake Park', },
+        { key: 1, password: 'John Brown', link: "32", description: 'New York No. 1 Lake Park', },
+        { key: 2, password: 'Jim Green', link: 42, description: 'London No. 1 Lake Park', },
+        { key: '3', password: 'Joe Black', link: 32, description: 'Sydney No. 1 Lake Park', },
+        { key: '4', password: 'Joe Black', link: 32, description: 'Sydney No. 1 Lake Park', },
+        { key: '5', password: 'Ultimo', link: 32, description: 'Sydney No. 1 Lake Park', },
     ])
 
     const handleDelete = (key) => {
@@ -98,7 +129,7 @@ const CompartidoPage = () => {
     const defaultColumns = [
         { title: 'Password', dataIndex: 'password', key: 'password', editable: true,},
         { title: 'Link',  dataIndex: 'link', key: 'link', },
-        { title: 'Description', dataIndex: 'introduction', key: 'introduction', },
+        { title: 'Description', dataIndex: 'description', key: 'description', },
         { title: 'Action', key: 'action', render: (_, record) => dataSource.length >= 1 ? (
             <span>
                 <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record.key)}>
@@ -149,7 +180,7 @@ const CompartidoPage = () => {
     return (
         <Card title="Data">            
             <Card title="Add Password">
-                <Form name="basic" labelCol={{span: 8,}} wrapperCol={{span: 16,}} style={{maxWidth: 600,}} initialValues={{remember: true,}} onFinish={onFinish} onFinishFailed={onFinishFailed} autoComplete="off">
+                <Form name="basic" labelCol={{span: 8,}} wrapperCol={{span: 16,}} style={{maxWidth: 600,}} initialValues={{remember: true,}} onFinish={handleSubmit} onFinishFailed={onFinishFailed} autoComplete="off">
                     <Form.Item label="Password" name="password"
                             rules={[
                                 {
@@ -157,8 +188,9 @@ const CompartidoPage = () => {
                                     message: 'Please input your password!',
                                 },
                             ]}
+                            
                         >
-                            <Input.Password />
+                            <Input.Password onChange={(e) => setPassword({ ...password, password: e.target.value })}/>
                     </Form.Item>
                     <Form.Item label="Link" name="link"
                             rules={[
@@ -167,11 +199,12 @@ const CompartidoPage = () => {
                                     message: 'Please input your password!',
                                 },
                             ]}
+                            
                         >
-                            <Input />
+                            <Input onChange={(e) => setPassword({ ...password, link: e.target.value })}/>
                     </Form.Item>
-                    <Form.Item name='introduction' label="Description">
-                            <Input.TextArea />
+                    <Form.Item name='description' label="Description" > 
+                            <Input.TextArea onChange={(e) => setPassword({ ...password, description: e.target.value })}/>
                     </Form.Item>
                     <Form.Item wrapperCol={{ offset: 8,  span: 16, }}>
                             <Button type="primary" htmlType="submit">
@@ -181,7 +214,7 @@ const CompartidoPage = () => {
                 </Form>
             </Card>
             <Card title="Data Table" style={{ marginTop: 16 }}>
-                <Table components={components} rowClassName={() => 'editable-row'} bordered dataSource={dataSource} columns={columns}/>
+                <Table components={components} rowClassName={() => 'editable-row'} bordered dataSource={passwords} columns={columns}/>
             </Card> 
         </Card>
         
