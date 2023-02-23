@@ -1,19 +1,21 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Form, Input, Button, message, Upload, Image } from "antd";
 // import Cookies from "universal-cookie";
 import { UserOutlined, LockOutlined, UploadOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import logo from "../images/logo.jpg";
-import { Amplify, Auth } from "aws-amplify";
+import { Amplify, Auth, Hub} from "aws-amplify";
 import awsExports from "../aws-exports";
 import { WebcamCapture } from "./CameraCapture";
 import Signup from "./Signup";
 import axios from 'axios';
+import { useAuthenticator } from '@aws-amplify/ui-react';
 
 Amplify.configure(awsExports);
 Auth.configure(awsExports);
 
 // const cookies = new Cookies();
+
 
 export const Login = () => {
   const [inputs, setinputs] = useState({
@@ -36,8 +38,8 @@ export const Login = () => {
 
   const api = 'https://cors-anywhere.herokuapp.com/https://71ctdrooxd.execute-api.us-east-1.amazonaws.com/prod/search-face';
 
-  const handleSubmitLogin = (e) => {
-    // e.preventDefault();
+  async function handleSubmitLogin() {
+    
     const data = { "imgdata" : jpeg64 };
     axios
       .post(api, JSON.stringify(data),{
@@ -48,12 +50,12 @@ export const Login = () => {
         }
       })
       .then((response) => {
-        // console.log(response);
-        setLoginResp(response)
+        setLoginResp(response.data.data.FaceMatches[0].Face.ImageId);
       })
       .catch((error) => {
-        console.log(error);
+        message.error("Rostro no reconocido, intenta de nuevo");
       });
+
   };
 
   const getData = async function signIn() {
@@ -61,27 +63,33 @@ export const Login = () => {
     try {
       //aws amplify
       const user = await Auth.signIn(inputs.email, inputs.password);
-      console.log({user});
       setLoading(false);
-      //await handleSubmitLogin();
-      // Start
-      await Auth.currentSession()
-      .then((data) => {
-        console.log(data)
-     }).catch(err => console.log(err));
-      // Start
-      if(user && loginResp.statusText == "OK"){
-        // handleSubmitLogin()
+
+      if(!user){
+        return;
+      }
+      
+      await handleSubmitLogin();
+      
+      if(user.attributes.profile == loginResp){
+
         console.log('success');
-        // cookies.set("nombre", user.username, { secure: true, sameSite: "none" });
-        // localStorage.setItem("nombre", user.username);
         window.location.href = "./menu";
+        
       }
     } catch (error) {
       console.log(error.message);
       message.error(error.message);
     }
   };
+  //retrieve login credentials
+  async function check() {
+
+    const user = await Auth.currentAuthenticatedUser();
+    const { attributes } = user;
+    console.log(attributes)
+
+  }
 
   const onFinishFailed = () => {
     message.error("Try again. Input email and password correctly.");
@@ -195,6 +203,7 @@ export const Login = () => {
                   className="btn btn-primary link">
                   Sign up
                 </Link>
+                {/* <Button onClick={check}>check</Button> */}
               </Form.Item>
             </Form>
           </div>

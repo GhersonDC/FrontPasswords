@@ -14,7 +14,6 @@ function Rutas() {
       <Routes>
         <Route exact path="/" element={<Login/>}/>
         <Route exact path="/Signup" element={<SignUp/>}/>
-        <Route exact path="/" element= {<Login />}/>
         <Route exact path="/menu" element={<Menu/>}/*element={cookies.get('clientid') ? (<Formulario />):( <Navigate to="/" />)}*//>
         <Route path="*"  element={<Error/>}/>
       </Routes>

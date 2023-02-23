@@ -74,6 +74,8 @@ https://docs.amplify.aws/start/getting-started/auth/q/integration/react/#install
 amplify add auth
 ----------------------------------
 
+cli pwd reset
+
 # PARA AGREGAR LAS CREDENCIALES DE TRABAJO DEBEMOS BUSCARLAS DENTRO DE AMPLIFY
 
 --------------------------
