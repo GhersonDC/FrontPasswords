@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Form, Input, Button, message, Upload, Image } from "antd";
-import Cookies from "universal-cookie";
+// import Cookies from "universal-cookie";
 import { UserOutlined, LockOutlined, UploadOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import logo from "../images/logo.jpg";
@@ -13,7 +13,7 @@ import axios from 'axios';
 Amplify.configure(awsExports);
 Auth.configure(awsExports);
 
-const cookies = new Cookies();
+// const cookies = new Cookies();
 
 export const Login = () => {
   const [inputs, setinputs] = useState({
@@ -23,6 +23,7 @@ export const Login = () => {
 
   const [loading, setLoading] = useState(false);
   const [jpeg64, setJpeg64] = useState("");
+  const [loginResp, setLoginResp] = useState("");
   //webcam
   const [catchImage, setcatchImage] = React.useState();
 
@@ -47,7 +48,8 @@ export const Login = () => {
         }
       })
       .then((response) => {
-        console.log(response);
+        // console.log(response);
+        setLoginResp(response)
       })
       .catch((error) => {
         console.log(error);
@@ -59,12 +61,20 @@ export const Login = () => {
     try {
       //aws amplify
       const user = await Auth.signIn(inputs.email, inputs.password);
-      console.log(user.username);
+      console.log({user});
       setLoading(false);
-      if(user && handleSubmitLogin()){
+      //await handleSubmitLogin();
+      // Start
+      await Auth.currentSession()
+      .then((data) => {
+        console.log(data)
+     }).catch(err => console.log(err));
+      // Start
+      if(user && loginResp.statusText == "OK"){
+        // handleSubmitLogin()
         console.log('success');
-        cookies.set("nombre", user.username, { secure: true, sameSite: "none" });
-        localStorage.setItem("nombre", user.username);
+        // cookies.set("nombre", user.username, { secure: true, sameSite: "none" });
+        // localStorage.setItem("nombre", user.username);
         window.location.href = "./menu";
       }
     } catch (error) {

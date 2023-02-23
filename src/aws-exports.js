@@ -3,16 +3,18 @@
 
 const awsmobile = {
     "aws_project_region": "us-east-1",
-    "aws_cognito_identity_pool_id": "us-east-1:1c20028e-b89c-4601-8030-e4ea1728e47b",
+    "aws_cognito_identity_pool_id": "us-east-1:bb9cd472-74ca-4943-ae7b-2955f3fc0c59",
     "aws_cognito_region": "us-east-1",
-    "aws_user_pools_id": "us-east-1_bmVWOjonp",
-    "aws_user_pools_web_client_id": "3biuk1no0688tjoe1nfp3jv3ja",
+    "aws_user_pools_id": "us-east-1_ioS7ZqCsF",
+    "aws_user_pools_web_client_id": "60k3d5elss041nl7d6hk5ce5dh",
     "oauth": {},
     "aws_cognito_username_attributes": [
         "EMAIL"
     ],
     "aws_cognito_social_providers": [],
-    "aws_cognito_signup_attributes": [],
+    "aws_cognito_signup_attributes": [
+        "PROFILE"
+    ],
     "aws_cognito_mfa_configuration": "OFF",
     "aws_cognito_mfa_types": [
         "SMS"

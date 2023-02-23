@@ -8,10 +8,10 @@ import {
 import { Breadcrumb, Layout, Menu, Button, Avatar} from 'antd';
 import React, { useState } from 'react';
 import { Col, Row } from 'antd';
-import Cookies from "universal-cookie";
+// import Cookies from "universal-cookie";
 import CompartidoPage from './CompartidoPage';
 
-const cookies = new Cookies();
+// const cookies = new Cookies();
 
 const { Header, Content, Footer, Sider } = Layout;
 function getItem(label, key, icon, children) {
