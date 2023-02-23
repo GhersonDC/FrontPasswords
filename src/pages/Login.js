@@ -8,12 +8,12 @@ import { Amplify, Auth } from "aws-amplify";
 import awsExports from "../aws-exports";
 import { WebcamCapture } from "./CameraCapture";
 import Signup from "./Signup";
+import axios from 'axios';
 
 Amplify.configure(awsExports);
 Auth.configure(awsExports);
 
 const cookies = new Cookies();
-//const API_HOST = process.env.REACT_APP_API_HOST || "http://localhost:8000";
 
 export const Login = () => {
   const [inputs, setinputs] = useState({
@@ -22,40 +22,54 @@ export const Login = () => {
   });
 
   const [loading, setLoading] = useState(false);
-  const [upload, setUpload] = useState("");
-  const onAddCategory = (newCategory) => {
-    setUpload(newCategory);
-    console.log(newCategory);
-  };
-  const [message, setMessage] = React.useState();
-  const chooseMessage = (message) => {
+  const [jpeg64, setJpeg64] = useState("");
+  //webcam
+  const [catchImage, setcatchImage] = React.useState();
+
+  const receiveImage = (catchImage) => {
     //for preview
-    setMessage(message);
+    setcatchImage(catchImage);
     //for api gateway
-    let strImage = message.replace("data:image/jpeg;base64,", "");
+    setJpeg64(catchImage.replace("data:image/jpeg;base64,", ""));
   };
 
-  //falta corregir para invocar el dynamo
-  //const url = `${API_HOST}/api/login?email=${inputs.email}&password=${inputs.password}`;
+  const api = 'https://cors-anywhere.herokuapp.com/https://71ctdrooxd.execute-api.us-east-1.amazonaws.com/prod/search-face';
+
+  const handleSubmitLogin = (e) => {
+    // e.preventDefault();
+    const data = { "imgdata" : jpeg64 };
+    axios
+      .post(api, JSON.stringify(data),{
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Headers': 'POST, GET, PUT, DELETE, OPTIONS, HEAD, Authorization, Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers, Access-Control-Allow-Origin',
+          'Content-Type': 'application/json',
+        }
+      })
+      .then((response) => {
+        console.log(response);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
 
   const getData = async function signIn() {
+    
     try {
       //aws amplify
       const user = await Auth.signIn(inputs.email, inputs.password);
       console.log(user.username);
       setLoading(false);
-
-      // if (user) {
-      cookies.set("nombre", user.username, { secure: true, sameSite: "none" });
-      // localStorage.setItem('token',data.token);
-      localStorage.setItem("nombre", user.username);
-      window.location.href = "./menu";
-      // } else {
-      //   console.error('error 0000');
-      // }
+      if(user && handleSubmitLogin()){
+        console.log('success');
+        cookies.set("nombre", user.username, { secure: true, sameSite: "none" });
+        localStorage.setItem("nombre", user.username);
+        window.location.href = "./menu";
+      }
     } catch (error) {
       console.log(error.message);
-      // message.error(error.message);
+      message.error(error.message);
     }
   };
 
@@ -138,19 +152,19 @@ export const Login = () => {
               <Form.Item 
                 className="image_preview" 
                 valuePropName="checked" >
-                {!message ? (
+                {!catchImage ? (
                   "Recuerda tomar fotografia para continuar"
                 ) : (
                   
                   <Image  
                     className="space-align-block" 
                     width={100}
-                    src={message} 
+                    src={catchImage} 
                   />
                 )}
               </Form.Item>
               <Form.Item>
-                {!message ? (
+                {!catchImage ? (
                   <Button className="boton" type="primary" disabled>
                     Login
                   </Button>
@@ -160,6 +174,7 @@ export const Login = () => {
                     type="primary"
                     htmlType="submit"
                     loading={loading}
+                    // onClick={handleSubmitLogin}
                   >
                     Log In
                   </Button>
@@ -174,14 +189,11 @@ export const Login = () => {
             </Form>
           </div>
         </div>
-        {/* <div className="footer">
-          <span className="login-footer-label">Password project 2023.</span>
-        </div> */}
       </div>
       {/* imagen subir  */}
       <div className="total-login-images">
         <WebcamCapture
-          sendDataTo={chooseMessage}
+          sendDataTo={receiveImage}
         />
       </div>
     </div>
