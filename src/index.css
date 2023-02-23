@@ -143,9 +143,20 @@ body {
   /* background-color: cyan; */
   height: 10%;
   width: 100%;
-  padding: 3%;
+  padding: 1rem;
 }
-
+.image_preview{
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+.space-align-block {
+  flex: none;
+  margin: auto;
+  padding: 4px;
+  justify-items: center;
+  border: 1px solid #40a9ff;
+}
 .total-login-images {
   width: 50vw;
   height: 100vh;

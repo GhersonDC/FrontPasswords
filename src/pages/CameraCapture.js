@@ -1,10 +1,14 @@
 import React, { useCallback, useRef, useState } from "react";
 import {Button} from 'antd';
 import Webcam from "react-webcam";
+import  Login  from "./Login";
 import '../index.css'
 
-function WebcamImage() {
+export const WebcamCapture = ({sendDataTo})=>{
+  
+
   const [img, setImg] = useState(null);
+  const [upload, setUpload] =useState('');
   const webcamRef = useRef(null);
 
   const videoConstraints = {
@@ -35,11 +39,11 @@ function WebcamImage() {
       ) : (
         <>
           <img src={img} alt="screenshot" />
-          <Button onClick={() => setImg(null)} type="primary" danger>Retake</Button>
+          <Button onClick={() => setImg(null)} type="primary" danger>Retomar</Button>
+          <br />
+          <Button onClick={()=> sendDataTo(img)} type="primary">Adjuntar</Button>
         </>
       )}
     </div>
   );
 }
-
-export default WebcamImage;

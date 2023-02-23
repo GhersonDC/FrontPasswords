@@ -94,3 +94,9 @@ amplify configure
 amplify pull --appId d35yxyjkqddl0p --envName staging
 
 --congrats youre ready!
+
+# error deploy in aws epxorts solver for auth #SOLVED
+-----------------
+amplify configure
+amplify add auth
+amplify push
