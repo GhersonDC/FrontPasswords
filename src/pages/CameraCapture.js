@@ -4,7 +4,7 @@ import Webcam from "react-webcam";
 import  Login  from "./Login";
 import '../index.css'
 
-export const WebcamCapture = ({onNewCategory})=>{
+export const WebcamCapture = ({sendDataTo})=>{
   
 
   const [img, setImg] = useState(null);
@@ -21,16 +21,6 @@ export const WebcamCapture = ({onNewCategory})=>{
     const imageSrc = webcamRef.current.getScreenshot();
     setImg(imageSrc);
   }, [webcamRef]);
-
-  const sendDataTo = () =>{
-    // event.preventDefault();
-    console.log(img)
-    onNewCategory({img});
-
-    setImg = null;
-    
-    // setUpload(setImg);
-  }
 
   return (
     <div className="container_image">
@@ -51,11 +41,9 @@ export const WebcamCapture = ({onNewCategory})=>{
           <img src={img} alt="screenshot" />
           <Button onClick={() => setImg(null)} type="primary" danger>Retomar</Button>
           <br />
-          <Button onClick={()=> sendDataTo()} type="primary">Adjuntar</Button>
+          <Button onClick={()=> sendDataTo(img)} type="primary">Adjuntar</Button>
         </>
       )}
     </div>
   );
 }
-
-// export default WebcamImage({sendDataTo});

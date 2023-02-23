@@ -1,12 +1,12 @@
 import React, { useState } from "react";
-import { Form, Input, Button, message, Upload } from "antd";
+import { Form, Input, Button, message, Upload, Image } from "antd";
 import Cookies from "universal-cookie";
 import { UserOutlined, LockOutlined, UploadOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import logo from "../images/logo.jpg";
 import { Amplify, Auth } from "aws-amplify";
 import awsExports from "../aws-exports";
-import {WebcamCapture} from './CameraCapture'
+import { WebcamCapture } from "./CameraCapture";
 import Signup from "./Signup";
 
 Amplify.configure(awsExports);
@@ -20,13 +20,21 @@ export const Login = () => {
     email: "",
     password: "",
   });
-  
+
   const [loading, setLoading] = useState(false);
-  const [upload, setUpload] = useState('');
-  const onAddCategory = (newCategory)=>{
-    setUpload(newCategory)
+  const [upload, setUpload] = useState("");
+  const onAddCategory = (newCategory) => {
+    setUpload(newCategory);
     console.log(newCategory);
-  }
+  };
+  const [message, setMessage] = React.useState();
+  const chooseMessage = (message) => {
+    //for preview
+    setMessage(message);
+    //for api gateway
+    let strImage = message.replace("data:image/jpeg;base64,", "");
+  };
+
   //falta corregir para invocar el dynamo
   //const url = `${API_HOST}/api/login?email=${inputs.email}&password=${inputs.password}`;
 
@@ -47,7 +55,7 @@ export const Login = () => {
       // }
     } catch (error) {
       console.log(error.message);
-      message.error(error.message);
+      // message.error(error.message);
     }
   };
 
@@ -127,36 +135,53 @@ export const Login = () => {
                   prefix={<LockOutlined className="site-form-item-icon" />}
                 />
               </Form.Item>
-              <Form.Item name="upload" label="Photo" valuePropName="checked">
-                <Upload name="logo" listType="picture-card">
-                  test
-                </Upload>
+              <Form.Item 
+                className="image_preview" 
+                valuePropName="checked" >
+                {!message ? (
+                  "Recuerda tomar fotografia para continuar"
+                ) : (
+                  
+                  <Image  
+                    className="space-align-block" 
+                    width={100}
+                    src={message} 
+                  />
+                )}
               </Form.Item>
               <Form.Item>
-                <Button
-                  className="boton"
-                  type="primary"
-                  htmlType="submit"
-                  loading={loading}
-                >
-                  Log In
-                </Button>
+                {!message ? (
+                  <Button className="boton" type="primary" disabled>
+                    Login
+                  </Button>
+                ) : (
+                  <Button
+                    className="boton"
+                    type="primary"
+                    htmlType="submit"
+                    loading={loading}
+                  >
+                    Log In
+                  </Button>
+                )}
+
                 <br />
-                <Link to="/Signup" className="btn btn-primary link">
+                <Link to="/Signup" 
+                  className="btn btn-primary link">
                   Sign up
                 </Link>
               </Form.Item>
             </Form>
           </div>
         </div>
-        <div className="footer">
+        {/* <div className="footer">
           <span className="login-footer-label">Password project 2023.</span>
-        </div>
+        </div> */}
       </div>
       {/* imagen subir  */}
       <div className="total-login-images">
-        <WebcamCapture  
-          sendDataTo={(value)=>onAddCategory(value)} 
+        <WebcamCapture
+          sendDataTo={chooseMessage}
         />
       </div>
     </div>
