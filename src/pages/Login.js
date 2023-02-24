@@ -1,19 +1,21 @@
-import React, { useState } from "react";
-import { Form, Input, Button, message } from "antd";
-import Cookies from "universal-cookie";
-import { UserOutlined, LockOutlined } from "@ant-design/icons";
-import { Link } from 'react-router-dom'
-import logo from '../images/logo.jpg';
-import { Amplify, Auth } from "aws-amplify";
+import React, { useState, useEffect } from "react";
+import { Form, Input, Button, message, Upload, Image } from "antd";
+// import Cookies from "universal-cookie";
+import { UserOutlined, LockOutlined, UploadOutlined } from "@ant-design/icons";
+import { Link } from "react-router-dom";
+import logo from "../images/logo.jpg";
+import { Amplify, Auth, Hub} from "aws-amplify";
 import awsExports from "../aws-exports";
-import WebcamVideo from "./CameraCapture";
+import { WebcamCapture } from "./CameraCapture";
 import Signup from "./Signup";
+import axios from 'axios';
+import { useAuthenticator } from '@aws-amplify/ui-react';
 
 Amplify.configure(awsExports);
 Auth.configure(awsExports);
 
-const cookies = new Cookies();
-//const API_HOST = process.env.REACT_APP_API_HOST || "http://localhost:8000";
+// const cookies = new Cookies();
+
 
 export const Login = () => {
   const [inputs, setinputs] = useState({
@@ -22,30 +24,72 @@ export const Login = () => {
   });
 
   const [loading, setLoading] = useState(false);
+  const [jpeg64, setJpeg64] = useState("");
+  const [loginResp, setLoginResp] = useState("");
+  //webcam
+  const [catchImage, setcatchImage] = React.useState();
 
-  //falta corregir para invocar el dynamo
-  //const url = `${API_HOST}/api/login?email=${inputs.email}&password=${inputs.password}`;
+  const receiveImage = (catchImage) => {
+    //for preview
+    setcatchImage(catchImage);
+    //for api gateway
+    setJpeg64(catchImage.replace("data:image/jpeg;base64,", ""));
+  };
+
+  const api = 'https://cors-anywhere.herokuapp.com/https://71ctdrooxd.execute-api.us-east-1.amazonaws.com/prod/search-face';
+
+  async function handleSubmitLogin() {
+    
+    const data = { "imgdata" : jpeg64 };
+    axios
+      .post(api, JSON.stringify(data),{
+        headers: {
+          'Access-Control-Allow-Origin': '*',
+          'Access-Control-Allow-Headers': 'POST, GET, PUT, DELETE, OPTIONS, HEAD, Authorization, Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers, Access-Control-Allow-Origin',
+          'Content-Type': 'application/json',
+        }
+      })
+      .then((response) => {
+        setLoginResp(response.data.data.FaceMatches[0].Face.ImageId);
+      })
+      .catch((error) => {
+        message.error("Rostro no reconocido, intenta de nuevo");
+      });
+
+  };
 
   const getData = async function signIn() {
+    
     try {
       //aws amplify
       const user = await Auth.signIn(inputs.email, inputs.password);
-      console.log(user.username);
       setLoading(false);
 
-      // if (user) {
-        cookies.set("nombre", user.username, { secure: true, sameSite: "none" });
-        // localStorage.setItem('token',data.token);
-        localStorage.setItem("nombre", user.username);
+      if(!user){
+        return;
+      }
+      
+      await handleSubmitLogin();
+      
+      if(user.attributes.profile == loginResp){
+
+        console.log('success');
         window.location.href = "./menu";
-      // } else {
-      //   console.error('error 0000');
-      // }
+        
+      }
     } catch (error) {
       console.log(error.message);
       message.error(error.message);
     }
   };
+  //retrieve login credentials
+  async function check() {
+
+    const user = await Auth.currentAuthenticatedUser();
+    const { attributes } = user;
+    console.log(attributes)
+
+  }
 
   const onFinishFailed = () => {
     message.error("Try again. Input email and password correctly.");
@@ -123,29 +167,53 @@ export const Login = () => {
                   prefix={<LockOutlined className="site-form-item-icon" />}
                 />
               </Form.Item>
-
+              <Form.Item 
+                className="image_preview" 
+                valuePropName="checked" >
+                {!catchImage ? (
+                  "Recuerda tomar fotografia para continuar"
+                ) : (
+                  
+                  <Image  
+                    className="space-align-block" 
+                    width={100}
+                    src={catchImage} 
+                  />
+                )}
+              </Form.Item>
               <Form.Item>
-                <Button
-                  className="boton"
-                  type="primary"
-                  htmlType="submit"
-                  loading={loading}
-                >
-                  Log In
-                </Button>
+                {!catchImage ? (
+                  <Button className="boton" type="primary" disabled>
+                    Login
+                  </Button>
+                ) : (
+                  <Button
+                    className="boton"
+                    type="primary"
+                    htmlType="submit"
+                    loading={loading}
+                    // onClick={handleSubmitLogin}
+                  >
+                    Log In
+                  </Button>
+                )}
+
                 <br />
-                <Link to="/Signup" className="btn btn-primary link">Sign up</Link>
+                <Link to="/Signup" 
+                  className="btn btn-primary link">
+                  Sign up
+                </Link>
+                {/* <Button onClick={check}>check</Button> */}
               </Form.Item>
             </Form>
           </div>
         </div>
-        <div className="footer">
-          <span className="login-footer-label">Password project 2023.</span>
-        </div>
       </div>
       {/* imagen subir  */}
       <div className="total-login-images">
-        <WebcamVideo/>
+        <WebcamCapture
+          sendDataTo={receiveImage}
+        />
       </div>
     </div>
   );

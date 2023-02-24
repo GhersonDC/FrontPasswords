@@ -74,6 +74,8 @@ https://docs.amplify.aws/start/getting-started/auth/q/integration/react/#install
 amplify add auth
 ----------------------------------
 
+cli pwd reset
+
 # PARA AGREGAR LAS CREDENCIALES DE TRABAJO DEBEMOS BUSCARLAS DENTRO DE AMPLIFY
 
 --------------------------
@@ -94,3 +96,9 @@ amplify configure
 amplify pull --appId d35yxyjkqddl0p --envName staging
 
 --congrats youre ready!
+
+# error deploy in aws epxorts solver for auth #SOLVED
+-----------------
+amplify configure
+amplify add auth
+amplify push

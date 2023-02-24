@@ -6,12 +6,13 @@ import {
   LogoutOutlined,
 } from '@ant-design/icons';
 import { Breadcrumb, Layout, Menu, Button, Avatar} from 'antd';
+import { Auth } from 'aws-amplify';
 import React, { useState } from 'react';
 import { Col, Row } from 'antd';
-import Cookies from "universal-cookie";
+// import Cookies from "universal-cookie";
 import CompartidoPage from './CompartidoPage';
 
-const cookies = new Cookies();
+// const cookies = new Cookies();
 
 const { Header, Content, Footer, Sider } = Layout;
 function getItem(label, key, icon, children) {
@@ -83,6 +84,14 @@ const MenuPage = () => {
           </Col>
         <Col span={2}>
         <Button
+          onClick={ async function signOut() {
+            try {
+                await Auth.signOut();
+                window.location.href = "/";
+            } catch (error) {
+                console.log('error signing out: ', error);
+            }
+          }}
           style={{
             padding: 0,
             width:40

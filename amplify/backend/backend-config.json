@@ -1,6 +1,6 @@
 {
   "auth": {
-    "mytestcfe79d82": {
+    "FrontPasswords": {
       "customAuth": false,
       "dependsOn": [],
       "frontendAuthConfig": {
@@ -9,11 +9,16 @@
           "SMS"
         ],
         "passwordProtectionSettings": {
-          "passwordPolicyCharacters": [],
+          "passwordPolicyCharacters": [
+            "REQUIRES_LOWERCASE",
+            "REQUIRES_NUMBERS",
+            "REQUIRES_SYMBOLS",
+            "REQUIRES_UPPERCASE"
+          ],
           "passwordPolicyMinLength": 8
         },
         "signupAttributes": [
-          "EMAIL"
+          "PROFILE"
         ],
         "socialProviders": [],
         "usernameAttributes": [
@@ -25,13 +30,6 @@
       },
       "providerPlugin": "awscloudformation",
       "service": "Cognito"
-    }
-  },
-  "storage": {
-    "s3imagenesrekog": {
-      "dependsOn": [],
-      "providerPlugin": "awscloudformation",
-      "service": "S3"
     }
   }
 }
