@@ -1,13 +1,9 @@
 export type AmplifyDependentResourcesAttributes = {
-  "auth": {
-    "FrontPasswords": {
-      "AppClientID": "string",
-      "AppClientIDWeb": "string",
-      "IdentityPoolId": "string",
-      "IdentityPoolName": "string",
-      "UserPoolArn": "string",
-      "UserPoolId": "string",
-      "UserPoolName": "string"
+  "api": {
+    "frontpasswords": {
+      "GraphQLAPIEndpointOutput": "string",
+      "GraphQLAPIIdOutput": "string",
+      "GraphQLAPIKeyOutput": "string"
     }
   }
 }

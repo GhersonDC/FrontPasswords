@@ -2,10 +2,9 @@ import { Card, Button, Form, Input, Table, Popconfirm } from 'antd';
 import React, { useContext, useEffect, useRef, useState } from 'react';
 import { DeleteOutlined } from '@ant-design/icons';
 import { API, graphqlOperation } from 'aws-amplify';
-import { createPassword } from '../graphql/mutations';
+import { createPassword, updatePassword } from '../graphql/mutations';
 import { listPasswords } from '../graphql/queries';
 const EditableContext = React.createContext(null);
-
 const EditableRow = ({ index, ...props }) => {
     const [form] = Form.useForm();
     return (
@@ -16,7 +15,6 @@ const EditableRow = ({ index, ...props }) => {
       </Form>
     );
 };
-
 const EditableCell = ({  title, editable, children, dataIndex, record, handleSave, ...restProps }) => {
     const [editing, setEditing] = useState(false);
     const inputRef = useRef(null);
@@ -62,19 +60,15 @@ const EditableCell = ({  title, editable, children, dataIndex, record, handleSav
 
     return <td {...restProps}>{childNode}</td>; 
 }
-
 const onFinishFailed = (errorInfo) => {
     console.log('Failed:', errorInfo);
 };
-
 const CompartidoPage = () => {
-
     const [password, setPassword] = useState({
         password: "",
         link: "",
         description: "",
     })
-
     /** Funcion para añadir a la base de datos por medio de GraphQL y a AWS */
     const handleSubmit = async (e) => {
         console.log(password)
@@ -85,9 +79,7 @@ const CompartidoPage = () => {
             console.log(error)
         }
     }
-    
     const [passwords, setPasswords] = useState([])
-
     /** Funcion para obtener los password de AWS */
     useEffect(() => {
         async function loadPasswords() {
@@ -97,6 +89,14 @@ const CompartidoPage = () => {
         loadPasswords()
     })
 
+    // Agregar la propiedad key a cada elemento en la matriz passwords
+    /*const updatedPasswords = passwords.map((password) => {
+        return {
+            ...password,
+            key: password.id // utilizando el id como identificador único
+        };
+    });*/
+    //setPasswords(updatedPasswords);
 
     /* CAMBIAR EN FORM PARA TENERLO DE FORMA ESTATICA
         const onFinish = (values) => {
@@ -112,27 +112,27 @@ const CompartidoPage = () => {
         console.log(dataSource)
     }; */
 
-    const [dataSource, setDataSource] = useState([
+    /*const [dataSource, setDataSource] = useState([
         { key: 1, password: 'John Brown', link: "32", description: 'New York No. 1 Lake Park', },
         { key: 2, password: 'Jim Green', link: 42, description: 'London No. 1 Lake Park', },
         { key: '3', password: 'Joe Black', link: 32, description: 'Sydney No. 1 Lake Park', },
         { key: '4', password: 'Joe Black', link: 32, description: 'Sydney No. 1 Lake Park', },
         { key: '5', password: 'Ultimo', link: 32, description: 'Sydney No. 1 Lake Park', },
-    ])
+    ])*/
 
-    const handleDelete = (key) => {
-        console.log(key)
-        const newData = dataSource.filter((item) => item.key !== key);
-        setDataSource(newData);
+    const handleDelete = (id) => {
+        console.log("id",id)
+        const newData = passwords.filter((item) => item.id !== id);
+        setPasswords(newData);
     };
 
     const defaultColumns = [
         { title: 'Password', dataIndex: 'password', key: 'password', editable: true,},
         { title: 'Link',  dataIndex: 'link', key: 'link', },
         { title: 'Description', dataIndex: 'description', key: 'description', },
-        { title: 'Action', key: 'action', render: (_, record) => dataSource.length >= 1 ? (
+        { title: 'Action', key: 'action', render: (_, record) => passwords.length >= 1 ? (
             <span>
-                <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record.key)}>
+                <Popconfirm title="Sure to delete?" onConfirm={() => handleDelete(record.id)}>
                     <Button shape="circle" icon={<DeleteOutlined />}></Button>
                 </Popconfirm>
             </span>
@@ -141,17 +141,17 @@ const CompartidoPage = () => {
         },
     ]
 
-    const handleSave = (row) => {
-        console.log(row)
-        const newData = [...dataSource];
-        const index = newData.findIndex((item) => row.key === item.key);
+    const handleSave = async (row) => {
+        const newData = [...passwords];
+        const index = newData.findIndex((item) => row.id === item.id);
         const item = newData[index];
+        const response = await API.graphql(graphqlOperation(updatePassword, { input: row }));
         newData.splice(index, 1, {
           ...item,
           ...row,
         });
-        console.log(newData)
-        setDataSource(newData);
+        console.log("newData:",newData)
+        setPasswords(newData);
     };
 
     const components = {
@@ -168,6 +168,7 @@ const CompartidoPage = () => {
         return {
           ...col,
           onCell: (record) => ({
+            key : col.key,
             record,
             editable: col.editable,
             dataIndex: col.dataIndex,
