@@ -1,21 +1,18 @@
-import React, { useState, useEffect } from "react";
-import { Form, Input, Button, message, Upload, Image } from "antd";
+import React, { useState } from "react";
+import { Form, Input, Button, message, Image } from "antd";
 // import Cookies from "universal-cookie";
-import { UserOutlined, LockOutlined, UploadOutlined } from "@ant-design/icons";
+import { UserOutlined, LockOutlined } from "@ant-design/icons";
 import { Link } from "react-router-dom";
 import logo from "../images/logo.jpg";
-import { Amplify, Auth, Hub} from "aws-amplify";
+import { Amplify, Auth} from "aws-amplify";
 import awsExports from "../aws-exports";
 import { WebcamCapture } from "./CameraCapture";
-import Signup from "./Signup";
 import axios from 'axios';
-import { useAuthenticator } from '@aws-amplify/ui-react';
 
 Amplify.configure(awsExports);
 Auth.configure(awsExports);
 
 // const cookies = new Cookies();
-
 
 export const Login = () => {
   const [inputs, setinputs] = useState({
@@ -71,7 +68,7 @@ export const Login = () => {
       
       await handleSubmitLogin();
       
-      if(user.attributes.profile == loginResp){
+      if(user.attributes.profile === loginResp){
 
         console.log('success');
         window.location.href = "./menu";
@@ -82,14 +79,15 @@ export const Login = () => {
       message.error(error.message);
     }
   };
-  //retrieve login credentials
-  async function check() {
+  //retrieve login credentials for testing
 
-    const user = await Auth.currentAuthenticatedUser();
-    const { attributes } = user;
-    console.log(attributes)
+  // async function check() {
 
-  }
+  //   const user = await Auth.currentAuthenticatedUser();
+  //   const { attributes } = user;
+  //   console.log(attributes)
+
+  // }
 
   const onFinishFailed = () => {
     message.error("Try again. Input email and password correctly.");
@@ -107,7 +105,7 @@ export const Login = () => {
       <div className="total-login">
         <div className="header">
           <div className="main_root_logo">
-            <img src={logo} className="logo" />
+            <img src={logo} alt="imagen de logo" className="logo" />
             <p className="main_name_menu"> System Auth </p>
           </div>
           <div className="main_root_header_text">
@@ -199,9 +197,9 @@ export const Login = () => {
                 )}
 
                 <br />
-                <Link to="/Signup" 
+                <Link to="/register" 
                   className="btn btn-primary link">
-                  Sign up
+                  Sign up now!
                 </Link>
                 {/* <Button onClick={check}>check</Button> */}
               </Form.Item>

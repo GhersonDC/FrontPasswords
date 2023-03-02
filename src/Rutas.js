@@ -1,7 +1,7 @@
 import "antd/dist/antd.less";
-import { BrowserRouter, Routes, Route,Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import { Login }  from "./pages/Login";
-import SignUp from "./pages/Signup";
+import { Register } from "./pages/Register";
 import Menu from "./pages/MenuPage";
 import  Error  from "./pages/Error";
 // import Cookies from "universal-cookie";
@@ -13,7 +13,7 @@ function Rutas() {
     <BrowserRouter>
       <Routes>
         <Route exact path="/" element={<Login/>}/>
-        <Route exact path="/Signup" element={<SignUp/>}/>
+        <Route exact path="/Register" element={<Register/>}/>
         <Route exact path="/menu" element={<Menu/>}/*element={cookies.get('clientid') ? (<Formulario />):( <Navigate to="/" />)}*//>
         <Route path="*"  element={<Error/>}/>
       </Routes>

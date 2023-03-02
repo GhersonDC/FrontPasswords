@@ -150,6 +150,9 @@ body {
   flex-wrap: wrap;
   align-items: flex-start;
 }
+.ant-btn{
+ padding: 0;
+}
 .space-align-block {
   flex: none;
   margin: auto;

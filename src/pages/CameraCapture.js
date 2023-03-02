@@ -1,14 +1,13 @@
 import React, { useCallback, useRef, useState } from "react";
 import {Button} from 'antd';
 import Webcam from "react-webcam";
-import  Login  from "./Login";
+import { Register } from "./Register";
 import '../index.css'
 
 export const WebcamCapture = ({sendDataTo})=>{
   
 
   const [img, setImg] = useState(null);
-  const [upload, setUpload] =useState('');
   const webcamRef = useRef(null);
 
   const videoConstraints = {
@@ -22,6 +21,13 @@ export const WebcamCapture = ({sendDataTo})=>{
     setImg(imageSrc);
   }, [webcamRef]);
 
+  const [imageIsSet, setimageIsSet] = React.useState(false);
+
+  const setImage = (imageIsSet) => {
+    console.log(imageIsSet)
+    setimageIsSet(imageIsSet);
+  };
+  
   return (
     <div className="container_image">
       {img === null ? (
@@ -39,9 +45,15 @@ export const WebcamCapture = ({sendDataTo})=>{
       ) : (
         <>
           <img src={img} alt="screenshot" />
+          
           <Button onClick={() => setImg(null)} type="primary" danger>Retomar</Button>
           <br />
-          <Button onClick={()=> sendDataTo(img)} type="primary">Adjuntar</Button>
+          {
+            imageIsSet=== null ?  
+            (<Button onClick={()=> sendDataTo(img)} type="primary">Adjuntar</Button>)
+            :
+            (<Button type="primary">Agregar a collection</Button>)
+          }
         </>
       )}
     </div>
